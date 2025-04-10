@@ -1,25 +1,68 @@
 package router
 
 import (
-	"github.com/Wafer233/msproject-be/project-user/api/login"
+	"github.com/Wafer233/msproject-be/project-user/config"
+	loginService "github.com/Wafer233/msproject-be/project-user/pkg/service/login.service"
 	"github.com/gin-gonic/gin"
+	"google.golang.org/grpc"
+	"log"
+	"net"
 )
 
+// Router 接口
 type Router interface {
-	Register(r *gin.Engine)
+	Route(r *gin.Engine)
 }
+
 type RegisterRouter struct {
 }
 
-func New() RegisterRouter {
-	return RegisterRouter{}
-}
-func (RegisterRouter) Route(router Router, r *gin.Engine) {
-	router.Register(r)
+func New() *RegisterRouter {
+	return &RegisterRouter{}
 }
 
+func (*RegisterRouter) Route(ro Router, r *gin.Engine) {
+	ro.Route(r)
+}
+
+var routers []Router
+
 func InitRouter(r *gin.Engine) {
-	router := New()
-	//以后的模块路由在这进行注册
-	router.Route(&login.RouterLogin{}, r)
+	//rg := New()
+	//rg.Route(&user.RouterUser{}, r)
+	for _, ro := range routers {
+		ro.Route(r)
+	}
+}
+
+func Register(ro ...Router) {
+	routers = append(routers, ro...)
+}
+
+type gRPCConfig struct {
+	Addr         string
+	RegisterFunc func(*grpc.Server)
+}
+
+func RegisterGrpc() *grpc.Server {
+	c := gRPCConfig{
+		Addr: config.C.GC.Addr,
+		RegisterFunc: func(g *grpc.Server) {
+			loginService.RegisterLoginServiceServer(g, &loginService.LoginService{})
+		}}
+	s := grpc.NewServer()
+	c.RegisterFunc(s)
+	lis, err := net.Listen("tcp", c.Addr)
+	if err != nil {
+		log.Println("cannot listen")
+	}
+	go func() {
+		log.Printf("grpc server started as: %s \n", c.Addr)
+		err = s.Serve(lis)
+		if err != nil {
+			log.Println("server started error", err)
+			return
+		}
+	}()
+	return s
 }
