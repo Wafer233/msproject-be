@@ -1,0 +1,23 @@
+zap:
+  DebugFileName: ".\\logs\\debug\\project-debug.log"
+  InfoFileName:  ".\\logs\\info\\project-info.log"
+  WarnFileName:  ".\\logs\\error\\project-error.log"
+  MaxSize:       500
+  MaxAge:        28
+  MaxBackups:    3
+
+redis:
+  host: "localhost"
+  port: 16379
+  password: ""
+  db: 0
+
+server:
+  name: "user-service"
+  addr: "127.0.0.1:8080"
+
+#grpc:
+#  addr: "127.0.0.1:8881"
+#  name: "user"
+#  version: "1.0.0"
+#  weight: 2

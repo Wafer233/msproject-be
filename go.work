@@ -1,7 +1,7 @@
 go 1.23.7
 
 use (
-	./project-common
-	./project-user
-	./project-api
+	./common
+	./api-gateway
+	./user-service
 )
