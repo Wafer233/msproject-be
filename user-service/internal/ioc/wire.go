@@ -6,8 +6,7 @@ import (
 	"github.com/google/wire"
 )
 
-var captchaTest = wire.NewSet( // 第三方依赖
-
+var captchaTest = wire.NewSet( // 这里是第一次构建项目的验证码
 	ProvideRedisCache,
 	ProvideCachedCaptchaRepo,
 	ProvideCachedCaptchaService,

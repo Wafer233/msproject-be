@@ -5,6 +5,7 @@ import (
 	"github.com/Wafer233/msproject-be/user-service/internal/application/service"
 	"github.com/Wafer233/msproject-be/user-service/internal/domain/model"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"net/http"
 )
 
@@ -22,6 +23,9 @@ func (hl *CaptchaHandler) GetCaptcha(ctx *gin.Context) {
 
 	if !common.VerifyMobile(mobile) {
 		ctx.JSON(http.StatusOK, result.Fail(model.LoginMobileNotLegal, "手机号不合法"))
+		go func() {
+			zap.L().Warn("手机号不合法")
+		}()
 		return
 	}
 
@@ -29,8 +33,15 @@ func (hl *CaptchaHandler) GetCaptcha(ctx *gin.Context) {
 	code, err := hl.cs.GenerateCaptcha(ctx, mobile)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, result.Fail(model.LoginSendCodeFail, "发送失败"))
+		go func() {
+			zap.L().Warn("发送失败")
+		}()
+
 		return
 	}
 
 	ctx.JSON(http.StatusOK, result.Success(code))
+	go func() {
+		zap.L().Info("验证码发送成功", zap.String("mobile", mobile), zap.String("code", code))
+	}()
 }
