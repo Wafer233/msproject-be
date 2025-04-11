@@ -6,6 +6,10 @@
 
 package ioc
 
+import (
+	"github.com/google/wire"
+)
+
 // Injectors from wire.go:
 
 func InitApp() *App {
@@ -23,3 +27,16 @@ func InitApp() *App {
 	}
 	return app
 }
+
+// wire.go:
+
+var captchaTest = wire.NewSet(
+
+	ProvideRedisCache,
+	ProvideCachedCaptchaRepo,
+	ProvideCachedCaptchaService,
+	ProvideEngine,
+	ProvideMiddlewares,
+	ProvideCaptchaHandler,
+	ProvideCaptchaRouter,
+)
