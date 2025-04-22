@@ -5,6 +5,10 @@ import (
 	"github.com/Wafer233/msproject-be/user-service/internal/interface/rest/router"
 )
 
-func ProvideCaptchaRouter(hdl *handler.CaptchaHandler) *router.CaptchaRouter {
-	return router.NewCaptchaRouter(hdl)
+func ProvideAuthRouter(
+	ch *handler.CaptchaHandler,
+	lr *handler.LoginHandler,
+	rh *handler.RegisterHandler,
+) *router.AuthRouter {
+	return router.NewAuthRouter(ch, lr, rh)
 }

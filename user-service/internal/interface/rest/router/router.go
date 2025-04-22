@@ -5,15 +5,26 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type CaptchaRouter struct {
-	ch *handler.CaptchaHandler
+type AuthRouter struct {
+	captchaHandler  *handler.CaptchaHandler
+	loginHandler    *handler.LoginHandler
+	registerHandler *handler.RegisterHandler
 }
 
-func NewCaptchaRouter(ch *handler.CaptchaHandler) *CaptchaRouter {
-	return &CaptchaRouter{ch: ch}
+func NewAuthRouter(ch *handler.CaptchaHandler,
+	lr *handler.LoginHandler,
+	rh *handler.RegisterHandler,
+) *AuthRouter {
+	return &AuthRouter{
+		captchaHandler:  ch,
+		loginHandler:    lr,
+		registerHandler: rh,
+	}
 }
 
-func (cr *CaptchaRouter) Register(engine *gin.Engine) {
-	group := engine.Group("/project/login")
-	group.POST("/getCaptcha", cr.ch.GetCaptcha)
+func (ar *AuthRouter) Register(engine *gin.Engine) {
+	group := engine.Group("/project")
+	group.POST("/login/getCaptcha", ar.captchaHandler.GetCaptcha)
+	group.POST("/login/register", ar.registerHandler.Register)
+	//group.POST("/login", ar.loginHandler.Login)
 }
