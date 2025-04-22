@@ -24,14 +24,14 @@ func InitApp() *App {
 		//redis
 		ProvideRedisClient,
 		//repositories
-		ProvideCachedCaptchaRepo,
-		ProvideCachedMemberRepository,
-		ProvideCachedOrganizationRepository,
+		ProvideRedisCaptchaRepository,
+		ProvideGORMMemberRepository,
+		ProvideGORMOrganizationRepository,
 		//routers
 		ProvideAuthRouter,
 		//services
-		ProvideCachedCaptchaService,
-		ProvideCachedAuthService,
+		ProvideDefaultCaptchaService,
+		ProvideDefaultAuthService,
 		ProvidePasswordService,
 
 		wire.Struct(new(App), "*"),

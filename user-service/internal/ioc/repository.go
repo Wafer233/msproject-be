@@ -7,14 +7,14 @@ import (
 	"gorm.io/gorm"
 )
 
-func ProvideCachedCaptchaRepo(redisClient *cache.RedisCache) repository.CaptchaRepository {
-	return impl.NewCachedCaptchaRepository(redisClient)
+func ProvideRedisCaptchaRepository(rc *cache.RedisCache) repository.CaptchaRepository {
+	return impl.NewRedisCaptchaRepository(rc)
 }
 
-func ProvideCachedMemberRepository(db *gorm.DB) repository.MemberRepository {
-	return impl.NewCachedMemberRepository(db)
+func ProvideGORMMemberRepository(db *gorm.DB) repository.MemberRepository {
+	return impl.NewGORMMemberRepository(db)
 }
 
-func ProvideCachedOrganizationRepository(db *gorm.DB) repository.OrganizationRepository {
-	return impl.NewCachedOrganizationRepository(db)
+func ProvideGORMOrganizationRepository(db *gorm.DB) repository.OrganizationRepository {
+	return impl.NewGORMOrganizationRepository(db)
 }

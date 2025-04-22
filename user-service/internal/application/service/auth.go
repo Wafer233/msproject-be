@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type CachedAuthService struct {
+type DefaultAuthService struct {
 	mr repository.MemberRepository
 	or repository.OrganizationRepository
 	ps *domainService.PasswordService
@@ -18,13 +18,13 @@ type CachedAuthService struct {
 }
 
 // NewAuthService 创建认证服务
-func NewCachedAuthService(
+func NewDefaultAuthService(
 	mr repository.MemberRepository,
 	or repository.OrganizationRepository,
 	ps *domainService.PasswordService,
 	cr repository.CaptchaRepository,
 ) AuthService {
-	return &CachedAuthService{
+	return &DefaultAuthService{
 		mr: mr,
 		or: or,
 		ps: ps,
@@ -33,10 +33,10 @@ func NewCachedAuthService(
 }
 
 // Register 用户注册
-func (s *CachedAuthService) Register(ctx context.Context, req dto.RegisterRequest) error {
+func (das *DefaultAuthService) Register(ctx context.Context, req dto.RegisterRequest) error {
 
 	// 验证验证码
-	code, err := s.cr.GetCaptcha(ctx, "REGISTER_"+req.Mobile)
+	code, err := das.cr.GetCaptcha(ctx, "REGISTER_"+req.Mobile)
 	if err != nil {
 		return errors.New("验证码获取失败")
 	}
@@ -45,7 +45,7 @@ func (s *CachedAuthService) Register(ctx context.Context, req dto.RegisterReques
 	}
 
 	// 检查用户是否已存在
-	exists, err := s.mr.FindMemberByAccount(ctx, req.Name)
+	exists, err := das.mr.FindMemberByAccount(ctx, req.Name)
 	if err != nil {
 		return errors.New("系统错误")
 	}
@@ -56,7 +56,7 @@ func (s *CachedAuthService) Register(ctx context.Context, req dto.RegisterReques
 	// 创建新用户
 	member := &model.Member{
 		Account:       req.Name,
-		Password:      s.ps.EncryptPassword(req.Password),
+		Password:      das.ps.EncryptPassword(req.Password),
 		Name:          req.Name,
 		Mobile:        req.Mobile,
 		Email:         req.Email,
@@ -66,13 +66,13 @@ func (s *CachedAuthService) Register(ctx context.Context, req dto.RegisterReques
 	}
 
 	// 保存用户
-	if err := s.mr.SaveMember(ctx, member); err != nil {
+	if err := das.mr.SaveMember(ctx, member); err != nil {
 		return errors.New("注册失败")
 	}
 
 	// 创建个人组织
 	org := &model.Organization{
-		Name:       member.Name + "个人项目",
+		Name:       member.Name + "_organization",
 		MemberId:   member.Id,
 		CreateTime: time.Now().UnixMilli(),
 		Personal:   1,
@@ -80,7 +80,7 @@ func (s *CachedAuthService) Register(ctx context.Context, req dto.RegisterReques
 	}
 
 	// 保存组织
-	if err := s.or.SaveOrganization(ctx, org); err != nil {
+	if err := das.or.SaveOrganization(ctx, org); err != nil {
 		return errors.New("注册失败")
 	}
 

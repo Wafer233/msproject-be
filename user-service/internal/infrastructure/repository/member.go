@@ -8,28 +8,28 @@ import (
 	"gorm.io/gorm"
 )
 
-type CacheMemberRepository struct {
+type GORMMemberRepository struct {
 	db *gorm.DB
 }
 
-func NewCachedMemberRepository(db *gorm.DB) repository.MemberRepository {
-	return &CacheMemberRepository{db: db}
+func NewGORMMemberRepository(db *gorm.DB) repository.MemberRepository {
+	return &GORMMemberRepository{db: db}
 }
 
-func (cmr CacheMemberRepository) FindMemberByAccount(ctx context.Context, account string) (bool, error) {
+func (gmr GORMMemberRepository) FindMemberByAccount(ctx context.Context, account string) (bool, error) {
 	var count int64
-	err := cmr.db.WithContext(ctx).Model(&entity.MemberEntity{}).
+	err := gmr.db.WithContext(ctx).Model(&entity.MemberEntity{}).
 		Where("account = ?", account).
 		Count(&count).Error
 
 	return count > 0, err
 }
 
-func (cmr CacheMemberRepository) SaveMember(ctx context.Context, member *model.Member) error {
+func (gmr GORMMemberRepository) SaveMember(ctx context.Context, member *model.Member) error {
 	var entity entity.MemberEntity
 	entity.FromModel(member)
 
-	err := cmr.db.WithContext(ctx).Create(&entity).Error
+	err := gmr.db.WithContext(ctx).Create(&entity).Error
 	if err != nil {
 		return err
 	}

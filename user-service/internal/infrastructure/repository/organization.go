@@ -8,19 +8,19 @@ import (
 	"gorm.io/gorm"
 )
 
-type CacheOrganizationRepository struct {
+type GORMOrganizationRepository struct {
 	db *gorm.DB
 }
 
-func NewCachedOrganizationRepository(db *gorm.DB) repository.OrganizationRepository {
-	return &CacheOrganizationRepository{db: db}
+func NewGORMOrganizationRepository(db *gorm.DB) repository.OrganizationRepository {
+	return &GORMOrganizationRepository{db: db}
 }
 
-func (cor CacheOrganizationRepository) SaveOrganization(ctx context.Context, org *model.Organization) error {
+func (gor GORMOrganizationRepository) SaveOrganization(ctx context.Context, org *model.Organization) error {
 	var entity entity.OrganizationEntity
 	entity.FromModel(org)
 
-	err := cor.db.WithContext(ctx).Create(&entity).Error
+	err := gor.db.WithContext(ctx).Create(&entity).Error
 	if err != nil {
 		return err
 	}

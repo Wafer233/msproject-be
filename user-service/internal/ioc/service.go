@@ -6,17 +6,17 @@ import (
 	domainService "github.com/Wafer233/msproject-be/user-service/internal/domain/service"
 )
 
-func ProvideCachedCaptchaService(captchaRepo repository.CaptchaRepository) service.CaptchaService {
-	return service.NewCachedCaptchaService(captchaRepo)
+func ProvideDefaultCaptchaService(cr repository.CaptchaRepository) service.CaptchaService {
+	return service.NewDefaultCaptchaService(cr)
 }
 
-func ProvideCachedAuthService(
+func ProvideDefaultAuthService(
 	mr repository.MemberRepository,
 	or repository.OrganizationRepository,
 	ps *domainService.PasswordService,
 	cr repository.CaptchaRepository,
 ) service.AuthService {
-	return service.NewCachedAuthService(mr, or, ps, cr)
+	return service.NewDefaultAuthService(mr, or, ps, cr)
 }
 
 func ProvidePasswordService() *domainService.PasswordService {

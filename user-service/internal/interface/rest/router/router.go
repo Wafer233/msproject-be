@@ -6,25 +6,26 @@ import (
 )
 
 type AuthRouter struct {
-	captchaHandler  *handler.CaptchaHandler
-	loginHandler    *handler.LoginHandler
-	registerHandler *handler.RegisterHandler
+	ch *handler.CaptchaHandler
+	lh *handler.LoginHandler
+	rh *handler.RegisterHandler
 }
 
-func NewAuthRouter(ch *handler.CaptchaHandler,
-	lr *handler.LoginHandler,
+func NewAuthRouter(
+	ch *handler.CaptchaHandler,
+	lh *handler.LoginHandler,
 	rh *handler.RegisterHandler,
 ) *AuthRouter {
 	return &AuthRouter{
-		captchaHandler:  ch,
-		loginHandler:    lr,
-		registerHandler: rh,
+		ch: ch,
+		lh: lh,
+		rh: rh,
 	}
 }
 
 func (ar *AuthRouter) Register(engine *gin.Engine) {
 	group := engine.Group("/project")
-	group.POST("/login/getCaptcha", ar.captchaHandler.GetCaptcha)
-	group.POST("/login/register", ar.registerHandler.Register)
+	group.POST("/login/getCaptcha", ar.ch.GetCaptcha)
+	group.POST("/login/register", ar.rh.Register)
 	//group.POST("/login", ar.loginHandler.Login)
 }
