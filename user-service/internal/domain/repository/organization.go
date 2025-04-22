@@ -7,4 +7,5 @@ import (
 
 type OrganizationRepository interface {
 	SaveOrganization(ctx context.Context, org *model.Organization) error
+	FindOrganizationsByMemberId(ctx context.Context, memberId int64) ([]model.Organization, error)
 }

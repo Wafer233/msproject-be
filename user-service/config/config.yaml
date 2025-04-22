@@ -23,6 +23,11 @@ mysql:
   password: "root"
   dbname: "user-service"
 
+jwt:
+  secretKey: "wafer-secret"
+  accessTokenDuration: 15m
+  refreshTokenDuration: 168h
+
 #grpc:
 #  addr: "127.0.0.1:8881"
 #  name: "user"

@@ -29,3 +29,23 @@ func (gor GORMOrganizationRepository) SaveOrganization(ctx context.Context, org 
 	org.Id = entity.ID
 	return nil
 }
+
+func (gor GORMOrganizationRepository) FindOrganizationsByMemberId(ctx context.Context, memberId int64) ([]model.Organization, error) {
+	var entities []entity.OrganizationEntity
+	err := gor.db.WithContext(ctx).
+		Where("member_id = ?", memberId).
+		Find(&entities).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	// 转换为领域模型
+	organizations := make([]model.Organization, len(entities))
+	for i, e := range entities {
+		org := e.ToModel()
+		organizations[i] = *org
+	}
+
+	return organizations, nil
+}

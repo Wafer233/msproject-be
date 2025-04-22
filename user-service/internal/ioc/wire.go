@@ -33,6 +33,7 @@ func InitApp() *App {
 		ProvideDefaultCaptchaService,
 		ProvideDefaultAuthService,
 		ProvidePasswordService,
+		ProvideJWTTokenService,
 
 		wire.Struct(new(App), "*"),
 	)

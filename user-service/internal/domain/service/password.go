@@ -5,7 +5,8 @@ import (
 	"encoding/hex"
 )
 
-type PasswordService struct{}
+type PasswordService struct {
+}
 
 // NewPasswordService 创建密码服务
 func NewPasswordService() *PasswordService {

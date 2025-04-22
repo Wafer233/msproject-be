@@ -8,4 +8,5 @@ import (
 type MemberRepository interface {
 	FindMemberByAccount(ctx context.Context, account string) (bool, error)
 	SaveMember(ctx context.Context, member *model.Member) error
+	FindMember(ctx context.Context, account, password string) (*model.Member, error)
 }

@@ -7,6 +7,8 @@ import (
 	"github.com/Wafer233/msproject-be/user-service/internal/domain/model"
 	"github.com/Wafer233/msproject-be/user-service/internal/domain/repository"
 	domainService "github.com/Wafer233/msproject-be/user-service/internal/domain/service"
+	"github.com/jinzhu/copier"
+	"strconv"
 	"time"
 )
 
@@ -15,6 +17,7 @@ type DefaultAuthService struct {
 	or repository.OrganizationRepository
 	ps *domainService.PasswordService
 	cr repository.CaptchaRepository
+	ts domainService.TokenService
 }
 
 // NewAuthService 创建认证服务
@@ -23,12 +26,14 @@ func NewDefaultAuthService(
 	or repository.OrganizationRepository,
 	ps *domainService.PasswordService,
 	cr repository.CaptchaRepository,
+	ts domainService.TokenService,
 ) AuthService {
 	return &DefaultAuthService{
 		mr: mr,
 		or: or,
 		ps: ps,
 		cr: cr,
+		ts: ts,
 	}
 }
 
@@ -85,4 +90,60 @@ func (das *DefaultAuthService) Register(ctx context.Context, req dto.RegisterReq
 	}
 
 	return nil
+}
+
+func (das *DefaultAuthService) Login(ctx context.Context, req dto.LoginRequest) (*dto.LoginResponse, error) {
+	// 加密密码
+	pwd := das.ps.EncryptPassword(req.Password)
+
+	// 查找用户
+	member, err := das.mr.FindMember(ctx, req.Account, pwd)
+	if err != nil {
+		return nil, errors.New("账号或密码错误")
+	}
+
+	// 检查用户状态
+	if !member.IsValid() {
+		return nil, errors.New("账号已被禁用")
+	}
+
+	// 查找组织
+	organizations, err := das.or.FindOrganizationsByMemberId(ctx, member.Id)
+	if err != nil {
+		return nil, errors.New("获取组织信息失败")
+	}
+
+	// 生成令牌
+	accessToken, refreshToken, accessExp := das.ts.GenerateTokens(strconv.FormatInt(member.Id, 10))
+
+	// 构建响应
+	response := &dto.LoginResponse{
+		Member: dto.MemberDTO{
+			Id:            member.Id,
+			Account:       member.Account,
+			Name:          member.Name,
+			Mobile:        member.Mobile,
+			Status:        member.Status,
+			LastLoginTime: member.LastLoginTime,
+			Email:         member.Email,
+			Avatar:        member.Avatar,
+		},
+		TokenList: dto.TokenDTO{
+			AccessToken:    accessToken,
+			RefreshToken:   refreshToken,
+			TokenType:      "bearer",
+			AccessTokenExp: accessExp,
+		},
+	}
+
+	// 转换组织列表
+	var orgDTOs []dto.OrganizationDTO
+	for _, org := range organizations {
+		var orgDTO dto.OrganizationDTO
+		_ = copier.Copy(&orgDTO, org)
+		orgDTOs = append(orgDTOs, orgDTO)
+	}
+	response.OrganizationList = orgDTOs
+
+	return response, nil
 }

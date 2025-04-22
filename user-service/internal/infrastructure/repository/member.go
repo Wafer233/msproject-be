@@ -2,6 +2,7 @@ package impl
 
 import (
 	"context"
+	"errors"
 	"github.com/Wafer233/msproject-be/user-service/internal/domain/model"
 	"github.com/Wafer233/msproject-be/user-service/internal/domain/repository"
 	"github.com/Wafer233/msproject-be/user-service/internal/infrastructure/persistence/entity"
@@ -37,4 +38,20 @@ func (gmr GORMMemberRepository) SaveMember(ctx context.Context, member *model.Me
 	// 更新ID
 	member.Id = entity.ID
 	return nil
+}
+
+func (gmr GORMMemberRepository) FindMember(ctx context.Context, account, password string) (*model.Member, error) {
+	var entity entity.MemberEntity
+	err := gmr.db.WithContext(ctx).
+		Where("account = ? AND password = ?", account, password).
+		First(&entity).Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("用户不存在或密码错误")
+		}
+		return nil, err
+	}
+
+	return entity.ToModel(), nil
 }

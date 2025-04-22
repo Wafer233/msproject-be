@@ -2,11 +2,9 @@ package entity
 
 import (
 	"github.com/Wafer233/msproject-be/user-service/internal/domain/model"
-	"gorm.io/gorm"
 )
 
 type OrganizationEntity struct {
-	gorm.Model
 	ID          int64  `gorm:"column:id;primaryKey;autoIncrement"`
 	Name        string `gorm:"column:name;type:varchar(255)"`
 	Avatar      string `gorm:"column:avatar;type:varchar(511)"`
