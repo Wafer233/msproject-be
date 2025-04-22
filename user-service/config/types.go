@@ -12,6 +12,7 @@ type Config struct {
 	Redis  RedisConfig
 	Zap    logs.LogConfig
 	viper  *viper.Viper
+	JWT    JWTConfig
 }
 
 type ServerConfig struct {
@@ -39,4 +40,10 @@ type RedisConfig struct {
 	Port     string
 	Password string
 	DB       int
+}
+
+type JWTConfig struct {
+	SecretKey            string
+	AccessTokenDuration  string
+	RefreshTokenDuration string
 }

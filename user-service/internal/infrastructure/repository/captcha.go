@@ -8,22 +8,22 @@ import (
 	"time"
 )
 
-type CachedCaptchaRepository struct {
-	RedisCache *cache.RedisCache
+type RedisCaptchaRepository struct {
+	rc *cache.RedisCache
 }
 
-func NewCachedCaptchaRepository(redisClient *cache.RedisCache) repository.CaptchaRepository {
-	return &CachedCaptchaRepository{
-		RedisCache: redisClient,
+func NewRedisCaptchaRepository(rc *cache.RedisCache) repository.CaptchaRepository {
+	return &RedisCaptchaRepository{
+		rc: rc,
 	}
 }
 
-func (r *CachedCaptchaRepository) SaveCaptcha(ctx context.Context, mobile string, code string, expiration time.Duration) error {
+func (rcr *RedisCaptchaRepository) SaveCaptcha(ctx context.Context, mobile string, code string, expiration time.Duration) error {
 	key := fmt.Sprintf("REGISTER_%s", mobile)
-	return r.RedisCache.Put(ctx, key, code, expiration)
+	return rcr.rc.Put(ctx, key, code, expiration)
 }
 
-func (r *CachedCaptchaRepository) GetCaptcha(ctx context.Context, mobile string) (string, error) {
+func (rcr *RedisCaptchaRepository) GetCaptcha(ctx context.Context, mobile string) (string, error) {
 	key := fmt.Sprintf("REGISTER_%s", mobile)
-	return r.RedisCache.Get(ctx, key)
+	return rcr.rc.Get(ctx, key)
 }

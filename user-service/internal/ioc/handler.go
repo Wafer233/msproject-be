@@ -8,3 +8,10 @@ import (
 func ProvideCaptchaHandler(svc service.CaptchaService) *handler.CaptchaHandler {
 	return handler.NewCaptchaHandler(svc)
 }
+
+func ProvideRegisterHandler(as service.AuthService) *handler.RegisterHandler {
+	return handler.NewRegisterHandler(as)
+}
+func ProvideLoginHandler(as service.AuthService) *handler.LoginHandler {
+	return handler.NewLoginHandler(as)
+}

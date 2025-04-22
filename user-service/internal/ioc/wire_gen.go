@@ -6,10 +6,6 @@
 
 package ioc
 
-import (
-	"github.com/google/wire"
-)
-
 // Injectors from wire.go:
 
 func InitApp() *App {
@@ -17,26 +13,21 @@ func InitApp() *App {
 	config := ProvideViperConfig()
 	client := ProvideRedisClient(config)
 	redisCache := ProvideRedisCache(client)
-	captchaRepository := ProvideCachedCaptchaRepo(redisCache)
-	captchaService := ProvideCachedCaptchaService(captchaRepository)
+	captchaRepository := ProvideRedisCaptchaRepository(redisCache)
+	captchaService := ProvideDefaultCaptchaService(captchaRepository)
 	captchaHandler := ProvideCaptchaHandler(captchaService)
-	captchaRouter := ProvideCaptchaRouter(captchaHandler)
-	engine := ProvideEngine(v, captchaRouter)
+	db := ProvideDB(config)
+	memberRepository := ProvideGORMMemberRepository(db)
+	organizationRepository := ProvideGORMOrganizationRepository(db)
+	passwordService := ProvidePasswordService()
+	tokenService := ProvideJWTTokenService(config)
+	authService := ProvideDefaultAuthService(memberRepository, organizationRepository, passwordService, captchaRepository, tokenService)
+	loginHandler := ProvideLoginHandler(authService)
+	registerHandler := ProvideRegisterHandler(authService)
+	authRouter := ProvideAuthRouter(captchaHandler, loginHandler, registerHandler)
+	engine := ProvideEngine(v, authRouter)
 	app := &App{
 		Server: engine,
 	}
 	return app
 }
-
-// wire.go:
-
-var captchaTest = wire.NewSet(
-
-	ProvideRedisCache,
-	ProvideCachedCaptchaRepo,
-	ProvideCachedCaptchaService,
-	ProvideEngine,
-	ProvideMiddlewares,
-	ProvideCaptchaHandler,
-	ProvideCaptchaRouter,
-)

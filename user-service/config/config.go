@@ -29,6 +29,7 @@ func NewConfig() *Config {
 	cfg.loadMySQL()
 	cfg.loadRedis()
 	cfg.loadZap()
+	cfg.loadJWT()
 
 	return cfg
 }
@@ -79,5 +80,13 @@ func (cfg *Config) loadZap() {
 	}
 	if err := logs.InitLogger(&cfg.Zap); err != nil {
 		log.Fatalln("failed to init zap logger:", err)
+	}
+}
+
+func (cfg *Config) loadJWT() {
+	cfg.JWT = JWTConfig{
+		SecretKey:            cfg.viper.GetString("jwt.secretKey"),
+		AccessTokenDuration:  cfg.viper.GetString("jwt.accessTokenDuration"),
+		RefreshTokenDuration: cfg.viper.GetString("jwt.refreshTokenDuration"),
 	}
 }

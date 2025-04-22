@@ -14,6 +14,6 @@ func ProvideMiddlewares() []gin.HandlerFunc {
 	}
 }
 
-func ProvideEngine(middlewares []gin.HandlerFunc, captchaRouter *router.CaptchaRouter) *gin.Engine {
-	return rest.InitWeb(middlewares, captchaRouter)
+func ProvideEngine(middlewares []gin.HandlerFunc, authRouter *router.AuthRouter) *gin.Engine {
+	return rest.InitWeb(middlewares, authRouter)
 }

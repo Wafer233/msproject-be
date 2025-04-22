@@ -6,22 +6,34 @@ import (
 	"github.com/google/wire"
 )
 
-var captchaTest = wire.NewSet( // 这里是第一次构建项目的验证码
-	ProvideRedisCache,
-	ProvideCachedCaptchaRepo,
-	ProvideCachedCaptchaService,
-	ProvideEngine,
-	ProvideMiddlewares,
-	ProvideCaptchaHandler,
-	ProvideCaptchaRouter,
-)
-
 func InitApp() *App {
 	wire.Build(
+		//cache
+		ProvideRedisCache,
+		//config
 		ProvideViperConfig,
+		//db
+		ProvideDB,
+		//engine
+		ProvideMiddlewares,
+		ProvideEngine,
+		//handlers
+		ProvideCaptchaHandler,
+		ProvideRegisterHandler,
+		ProvideLoginHandler,
+		//redis
 		ProvideRedisClient,
-
-		captchaTest,
+		//repositories
+		ProvideRedisCaptchaRepository,
+		ProvideGORMMemberRepository,
+		ProvideGORMOrganizationRepository,
+		//routers
+		ProvideAuthRouter,
+		//services
+		ProvideDefaultCaptchaService,
+		ProvideDefaultAuthService,
+		ProvidePasswordService,
+		ProvideJWTTokenService,
 
 		wire.Struct(new(App), "*"),
 	)
