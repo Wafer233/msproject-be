@@ -1,0 +1,14 @@
+server:
+  name: "api-gateway"
+  addr: ":80"
+
+userService:
+  grpcAddr: "127.0.0.1:8081"
+
+zap:
+  debugFileName: "C:\\logs\\debug\\api-gateway-debug.log"
+  infoFileName: "C:\\logs\\info\\api-gateway-info.log"
+  warnFileName: "C:\\logs\\error\\api-gateway-error.log"
+  maxSize: 500
+  maxAge: 28
+  maxBackups: 3

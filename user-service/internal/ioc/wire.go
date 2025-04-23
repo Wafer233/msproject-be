@@ -14,21 +14,14 @@ func InitApp() *App {
 		ProvideViperConfig,
 		//db
 		ProvideDB,
-		//engine
-		ProvideMiddlewares,
-		ProvideEngine,
-		//handlers
-		ProvideCaptchaHandler,
-		ProvideRegisterHandler,
-		ProvideLoginHandler,
+		//grpc
+		ProvideGrpcServer,
 		//redis
 		ProvideRedisClient,
 		//repositories
 		ProvideRedisCaptchaRepository,
 		ProvideGORMMemberRepository,
 		ProvideGORMOrganizationRepository,
-		//routers
-		ProvideAuthRouter,
 		//services
 		ProvideDefaultCaptchaService,
 		ProvideDefaultAuthService,

@@ -1,10 +1,10 @@
 package ioc
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/Wafer233/msproject-be/user-service/internal/interface/grpc"
 )
 
 type App struct {
-	Server *gin.Engine
+	GrpcServer *grpc.GrpcServer
 	// 可能还有其他东西
 }

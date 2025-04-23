@@ -24,7 +24,6 @@ func NewConfig() *Config {
 		log.Fatalln("failed to read config file:", err)
 	}
 
-	cfg.loadServer()
 	cfg.loadGRPC()
 	cfg.loadMySQL()
 	cfg.loadRedis()
@@ -32,13 +31,6 @@ func NewConfig() *Config {
 	cfg.loadJWT()
 
 	return cfg
-}
-
-func (cfg *Config) loadServer() {
-	cfg.Server = ServerConfig{
-		Name: cfg.viper.GetString("server.name"),
-		Addr: cfg.viper.GetString("server.addr"),
-	}
 }
 
 func (cfg *Config) loadGRPC() {

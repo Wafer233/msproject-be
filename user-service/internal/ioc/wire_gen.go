@@ -9,25 +9,20 @@ package ioc
 // Injectors from wire.go:
 
 func InitApp() *App {
-	v := ProvideMiddlewares()
 	config := ProvideViperConfig()
-	client := ProvideRedisClient(config)
-	redisCache := ProvideRedisCache(client)
-	captchaRepository := ProvideRedisCaptchaRepository(redisCache)
-	captchaService := ProvideDefaultCaptchaService(captchaRepository)
-	captchaHandler := ProvideCaptchaHandler(captchaService)
 	db := ProvideDB(config)
 	memberRepository := ProvideGORMMemberRepository(db)
 	organizationRepository := ProvideGORMOrganizationRepository(db)
 	passwordService := ProvidePasswordService()
+	client := ProvideRedisClient(config)
+	redisCache := ProvideRedisCache(client)
+	captchaRepository := ProvideRedisCaptchaRepository(redisCache)
 	tokenService := ProvideJWTTokenService(config)
 	authService := ProvideDefaultAuthService(memberRepository, organizationRepository, passwordService, captchaRepository, tokenService)
-	loginHandler := ProvideLoginHandler(authService)
-	registerHandler := ProvideRegisterHandler(authService)
-	authRouter := ProvideAuthRouter(captchaHandler, loginHandler, registerHandler)
-	engine := ProvideEngine(v, authRouter)
+	captchaService := ProvideDefaultCaptchaService(captchaRepository)
+	grpcServer := ProvideGrpcServer(config, authService, captchaService)
 	app := &App{
-		Server: engine,
+		GrpcServer: grpcServer,
 	}
 	return app
 }

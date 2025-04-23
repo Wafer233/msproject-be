@@ -1,14 +1,10 @@
-server:
-  name: "user-service"
-  addr: "127.0.0.1:8080"
-
 zap:
-  DebugFileName: "C:\\logs\\debug\\project-debug.log"
-  InfoFileName:  "C:\\logs\\info\\project-info.log"
-  WarnFileName:  "C:\\logs\\error\\project-error.log"
-  MaxSize:       500
-  MaxAge:        28
-  MaxBackups:    3
+  DebugFileName: "C:\\logs\\debug\\user-service-debug.log"
+  InfoFileName: "C:\\logs\\info\\user-service-info.log"
+  WarnFileName: "C:\\logs\\error\\user-service-error.log"
+  MaxSize: 500
+  MaxAge: 28
+  MaxBackups: 3
 
 redis:
   host: "localhost"
@@ -28,9 +24,9 @@ jwt:
   accessTokenDuration: 15m
   refreshTokenDuration: 168h
 
-#grpc:
-#  addr: "127.0.0.1:8881"
-#  name: "user"
-#  version: "1.0.0"
-#  weight: 2
+grpc:
+  addr: "127.0.0.1:8081"
+  name: "user-service"
+  version: "1.0.0"
+  weight: 2
 

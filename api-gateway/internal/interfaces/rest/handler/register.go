@@ -1,20 +1,20 @@
 package handler
 
 import (
+	"github.com/Wafer233/msproject-be/api-gateway/internal/application/dto"
+	"github.com/Wafer233/msproject-be/api-gateway/internal/application/service"
 	"github.com/Wafer233/msproject-be/common"
-	"github.com/Wafer233/msproject-be/user-service/internal/application/dto"
-	"github.com/Wafer233/msproject-be/user-service/internal/application/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 // RegisterHandler 处理注册相关请求
 type RegisterHandler struct {
-	as service.AuthService
+	as *service.AuthService
 }
 
 // NewRegisterHandler 创建注册处理器
-func NewRegisterHandler(as service.AuthService) *RegisterHandler {
+func NewRegisterHandler(as *service.AuthService) *RegisterHandler {
 	return &RegisterHandler{
 		as: as,
 	}
