@@ -1,8 +1,8 @@
 package ioc
 
 import (
-	"github.com/Wafer233/msproject-be/user-service/internal/application/service"
-	"github.com/Wafer233/msproject-be/user-service/internal/interface/rest/handler"
+	"github.com/Wafer233/msproject-be/api-gateway/internal/application/service"
+	"github.com/Wafer233/msproject-be/api-gateway/internal/interfaces/rest/handler"
 )
 
 func ProvideCaptchaHandler(svc service.CaptchaService) *handler.CaptchaHandler {

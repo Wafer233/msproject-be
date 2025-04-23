@@ -1,7 +1,7 @@
 package rest
 
 import (
-	"github.com/Wafer233/msproject-be/user-service/internal/interface/rest/router"
+	"github.com/Wafer233/msproject-be/api-gateway/internal/interfaces/rest/router"
 	"github.com/gin-gonic/gin"
 )
 

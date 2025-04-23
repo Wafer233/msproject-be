@@ -1,0 +1,17 @@
+syntax = "proto3";
+package captcha.service.v1;
+option go_package = "github.com/Wafer233/msproject-be/user-service/proto/captcha";
+
+message GetCaptchaRequest {
+  string mobile = 1;
+}
+
+message GetCaptchaResponse {
+  bool success = 1;
+  string message = 2;
+  string code = 3;
+}
+
+service CaptchaService {
+  rpc GetCaptcha(GetCaptchaRequest) returns (GetCaptchaResponse) {}
+}

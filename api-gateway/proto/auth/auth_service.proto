@@ -1,0 +1,65 @@
+syntax = "proto3";
+package auth.service.v1;
+option go_package = "github.com/Wafer233/msproject-be/user-service/proto/auth";
+
+message RegisterRequest {
+  string email = 1;
+  string name = 2;
+  string password = 3;
+  string password2 = 4;
+  string mobile = 5;
+  string captcha = 6;
+}
+
+message RegisterResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message LoginRequest {
+  string account = 1;
+  string password = 2;
+}
+
+message MemberDTO {
+  int64 id = 1;
+  string account = 2;
+  string name = 3;
+  string mobile = 4;
+  int32 status = 5;
+  int64 last_login_time = 6;
+  string email = 7;
+  string avatar = 8;
+}
+
+message TokenDTO {
+  string access_token = 1;
+  string refresh_token = 2;
+  string token_type = 3;
+  int64 access_token_exp = 4;
+}
+
+message OrganizationDTO {
+  int64 id = 1;
+  string name = 2;
+  string avatar = 3;
+  string description = 4;
+  int64 member_id = 5;
+  int64 create_time = 6;
+  int32 personal = 7;
+  string address = 8;
+  int32 province = 9;
+  int32 city = 10;
+  int32 area = 11;
+}
+
+message LoginResponse {
+  MemberDTO member = 1;
+  TokenDTO token_list = 2;
+  repeated OrganizationDTO organization_list = 3;
+}
+
+service AuthService {
+  rpc Register(RegisterRequest) returns (RegisterResponse) {}
+  rpc Login(LoginRequest) returns (LoginResponse) {}
+}

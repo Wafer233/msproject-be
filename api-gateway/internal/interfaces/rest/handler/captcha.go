@@ -1,9 +1,9 @@
 package handler
 
 import (
+	"github.com/Wafer233/msproject-be/api-gateway/internal/application/service"
+	"github.com/Wafer233/msproject-be/api-gateway/internal/domain/model"
 	"github.com/Wafer233/msproject-be/common"
-	"github.com/Wafer233/msproject-be/user-service/internal/application/service"
-	"github.com/Wafer233/msproject-be/user-service/internal/domain/model"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"net/http"
