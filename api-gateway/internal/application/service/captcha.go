@@ -17,18 +17,18 @@ func NewCaptchaService(client captchapb.CaptchaServiceClient) *CaptchaService {
 }
 
 func (s *CaptchaService) GenerateCaptcha(ctx context.Context, mobile string) (string, error) {
-	// Create gRPC request
+	// 创建gRPC请求
 	req := &captchapb.GetCaptchaRequest{
 		Mobile: mobile,
 	}
 
-	// Call gRPC service
+	// 调用gRPC服务
 	resp, err := s.client.GetCaptcha(ctx, req)
 	if err != nil {
 		return "", err
 	}
 
-	// Check response
+	// 检查响应
 	if !resp.Success {
 		return "", errors.New(resp.Message)
 	}

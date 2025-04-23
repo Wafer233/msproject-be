@@ -5,13 +5,13 @@ import (
 	"github.com/Wafer233/msproject-be/api-gateway/internal/interfaces/rest/handler"
 )
 
-func ProvideCaptchaHandler(svc service.CaptchaService) *handler.CaptchaHandler {
+func ProvideCaptchaHandler(svc *service.CaptchaService) *handler.CaptchaHandler {
 	return handler.NewCaptchaHandler(svc)
 }
 
-func ProvideRegisterHandler(as service.AuthService) *handler.RegisterHandler {
+func ProvideRegisterHandler(as *service.AuthService) *handler.RegisterHandler {
 	return handler.NewRegisterHandler(as)
 }
-func ProvideLoginHandler(as service.AuthService) *handler.LoginHandler {
+func ProvideLoginHandler(as *service.AuthService) *handler.LoginHandler {
 	return handler.NewLoginHandler(as)
 }

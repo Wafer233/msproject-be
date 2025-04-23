@@ -10,10 +10,10 @@ import (
 )
 
 type CaptchaHandler struct {
-	cs service.CaptchaService
+	cs *service.CaptchaService
 }
 
-func NewCaptchaHandler(cs service.CaptchaService) *CaptchaHandler {
+func NewCaptchaHandler(cs *service.CaptchaService) *CaptchaHandler {
 	return &CaptchaHandler{cs: cs}
 }
 

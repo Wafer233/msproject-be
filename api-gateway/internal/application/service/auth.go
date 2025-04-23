@@ -1,3 +1,4 @@
+// auth.go
 package service
 
 import (
@@ -19,7 +20,7 @@ func NewAuthService(client authpb.AuthServiceClient) *AuthService {
 }
 
 func (s *AuthService) Register(ctx context.Context, req dto.RegisterRequest) error {
-	// Convert to gRPC request
+	// 转换到gRPC请求
 	grpcReq := &authpb.RegisterRequest{
 		Email:     req.Email,
 		Name:      req.Name,
@@ -29,13 +30,13 @@ func (s *AuthService) Register(ctx context.Context, req dto.RegisterRequest) err
 		Captcha:   req.Captcha,
 	}
 
-	// Call gRPC service
+	// 调用gRPC服务
 	resp, err := s.client.Register(ctx, grpcReq)
 	if err != nil {
 		return err
 	}
 
-	// Check response
+	// 检查响应
 	if !resp.Success {
 		return errors.New(resp.Message)
 	}
@@ -44,22 +45,22 @@ func (s *AuthService) Register(ctx context.Context, req dto.RegisterRequest) err
 }
 
 func (s *AuthService) Login(ctx context.Context, req dto.LoginRequest) (*dto.LoginResponse, error) {
-	// Convert to gRPC request
+	// 转换到gRPC请求
 	grpcReq := &authpb.LoginRequest{
 		Account:  req.Account,
 		Password: req.Password,
 	}
 
-	// Call gRPC service
+	// 调用gRPC服务
 	grpcResp, err := s.client.Login(ctx, grpcReq)
 	if err != nil {
 		return nil, err
 	}
 
-	// Convert to DTO
+	// 转换到DTO
 	resp := &dto.LoginResponse{}
 
-	// Convert member
+	// 转换用户信息
 	resp.Member = dto.MemberDTO{
 		Id:            grpcResp.Member.Id,
 		Account:       grpcResp.Member.Account,
@@ -71,7 +72,7 @@ func (s *AuthService) Login(ctx context.Context, req dto.LoginRequest) (*dto.Log
 		Avatar:        grpcResp.Member.Avatar,
 	}
 
-	// Convert token
+	// 转换令牌
 	resp.TokenList = dto.TokenDTO{
 		AccessToken:    grpcResp.TokenList.AccessToken,
 		RefreshToken:   grpcResp.TokenList.RefreshToken,
@@ -79,7 +80,7 @@ func (s *AuthService) Login(ctx context.Context, req dto.LoginRequest) (*dto.Log
 		AccessTokenExp: grpcResp.TokenList.AccessTokenExp,
 	}
 
-	// Convert organizations
+	// 转换组织列表
 	resp.OrganizationList = make([]dto.OrganizationDTO, 0, len(grpcResp.OrganizationList))
 	for _, org := range grpcResp.OrganizationList {
 		var orgDTO dto.OrganizationDTO

@@ -10,11 +10,11 @@ import (
 
 // RegisterHandler 处理注册相关请求
 type RegisterHandler struct {
-	as service.AuthService
+	as *service.AuthService
 }
 
 // NewRegisterHandler 创建注册处理器
-func NewRegisterHandler(as service.AuthService) *RegisterHandler {
+func NewRegisterHandler(as *service.AuthService) *RegisterHandler {
 	return &RegisterHandler{
 		as: as,
 	}
