@@ -5,6 +5,7 @@ import (
 	"github.com/Wafer233/msproject-be/api-gateway/internal/application/dto"
 	menupb "github.com/Wafer233/msproject-be/api-gateway/proto/menu"
 	"github.com/jinzhu/copier"
+	"go.uber.org/zap"
 )
 
 // ProjectService 处理项目相关的服务
@@ -19,13 +20,14 @@ func NewMenuService(client menupb.MenuServiceClient) *MenuService {
 	}
 }
 
-// GetMenus 获取菜单导航
 func (s *MenuService) GetMenus(ctx context.Context, token string) (*dto.MenuResponse, error) {
 	// 调用gRPC服务
 	resp, err := s.client.Index(ctx, &menupb.IndexMessage{
 		Token: token,
 	})
+
 	if err != nil {
+		zap.L().Error("调用gRPC服务,获取菜单导航失败", zap.Error(err))
 		return nil, err
 	}
 
@@ -36,16 +38,18 @@ func (s *MenuService) GetMenus(ctx context.Context, token string) (*dto.MenuResp
 	// 递归转换菜单树
 	for _, menu := range resp.Menus {
 		menuDTO := &dto.MenuDTO{}
-		err := copier.Copy(menuDTO, menu)
-		if err != nil {
-			return nil, err
+		er := copier.Copy(menuDTO, menu)
+		if er != nil {
+			zap.L().Error("递归转换菜单树失败", zap.Error(er))
+			return nil, er
 		}
 
 		// 递归处理子菜单
 		if len(menu.Children) > 0 {
 			var children []*dto.MenuDTO
-			err = s.convertMenuTree(menu.Children, &children)
+			err = s.ConvertMenuTree(menu.Children, &children)
 			if err != nil {
+				zap.L().Error("递归处理子菜单失败", zap.Error(err))
 				return nil, err
 			}
 			menuDTO.Children = children
@@ -59,7 +63,7 @@ func (s *MenuService) GetMenus(ctx context.Context, token string) (*dto.MenuResp
 }
 
 // convertMenuTree 递归转换菜单树
-func (s *MenuService) convertMenuTree(pbMenus []*menupb.MenuMessage, menuDTOs *[]*dto.MenuDTO) error {
+func (s *MenuService) ConvertMenuTree(pbMenus []*menupb.MenuMessage, menuDTOs *[]*dto.MenuDTO) error {
 	for _, pbMenu := range pbMenus {
 		menuDTO := &dto.MenuDTO{}
 		err := copier.Copy(menuDTO, pbMenu)
@@ -70,7 +74,7 @@ func (s *MenuService) convertMenuTree(pbMenus []*menupb.MenuMessage, menuDTOs *[
 		// 递归处理子菜单
 		if len(pbMenu.Children) > 0 {
 			var children []*dto.MenuDTO
-			err = s.convertMenuTree(pbMenu.Children, &children)
+			err = s.ConvertMenuTree(pbMenu.Children, &children)
 			if err != nil {
 				return err
 			}

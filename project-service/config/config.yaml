@@ -7,7 +7,7 @@ zap:
   maxBackups: 3
 
 grpc:
-  addr: "127.0.0.1:8083"
+  addr: "127.0.0.1:8081"
   name: "project-service"
   version: "1.0.0"
   weight: 2

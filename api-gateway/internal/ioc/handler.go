@@ -19,6 +19,6 @@ func ProvideLoginHandler(as *service.AuthService) *handler.LoginHandler {
 	return handler.NewLoginHandler(as)
 }
 
-func ProvideMenuHandler(ms *service.MenuService) *handler.MenuHandler {
-	return handler.NewMenuHandler(ms)
+func ProvideMenuHandler(msvc *service.MenuService) *handler.MenuHandler {
+	return handler.NewMenuHandler(msvc)
 }

@@ -5,37 +5,51 @@ import (
 	authpb "github.com/Wafer233/msproject-be/api-gateway/proto/auth"
 	captchapb "github.com/Wafer233/msproject-be/api-gateway/proto/captcha"
 	menupb "github.com/Wafer233/msproject-be/api-gateway/proto/menu"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 type GrpcClientManager struct {
-	conn *grpc.ClientConn
-	// ----------------- add clients here -----------------
+	// ----------------  添加服务需要在这里新增连接 ----------------
+	UserConn    *grpc.ClientConn
+	ProjectConn *grpc.ClientConn
+	// ----------------  添加服务需要在这里新增客户端 ----------------
 	AuthClient    authpb.AuthServiceClient
 	CaptchaClient captchapb.CaptchaServiceClient
 	MenuClient    menupb.MenuServiceClient
 }
 
 func NewGrpcClientManager(cfg *config.Config) (*GrpcClientManager, error) {
-	// Create connection to user service
-	conn, err := grpc.Dial(
+	userConn, err := grpc.Dial(
+		// ----------------  添加服务需要在这里新增配置 ----------------
 		cfg.UserService.GrpcAddr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
+		zap.L().Error("无法连接 user-service", zap.Error(err))
 		return nil, err
 	}
 
-	// Create clients
-	// ----------------- add clients here -----------------
-	authClient := authpb.NewAuthServiceClient(conn)
-	captchaClient := captchapb.NewCaptchaServiceClient(conn)
-	menuClient := menupb.NewMenuServiceClient(conn)
+	// 连接 project-service（包含 MenuService）
+	projectConn, err := grpc.Dial(
+		// ----------------  添加服务需要在这里新增配置 ----------------
+		cfg.ProjectService.GrpcAddr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+	if err != nil {
+		zap.L().Error("无法连接 project-service", zap.Error(err))
+		return nil, err
+	}
+
+	// ----------------  添加服务需要在这里新增客服端的实现 ----------------
+	authClient := authpb.NewAuthServiceClient(userConn)
+	captchaClient := captchapb.NewCaptchaServiceClient(userConn)
+	menuClient := menupb.NewMenuServiceClient(projectConn)
 
 	return &GrpcClientManager{
-		conn: conn,
-		// ----------------- add clients here -----------------
+		UserConn:      userConn,
+		ProjectConn:   projectConn,
 		AuthClient:    authClient,
 		CaptchaClient: captchaClient,
 		MenuClient:    menuClient,
@@ -43,8 +57,15 @@ func NewGrpcClientManager(cfg *config.Config) (*GrpcClientManager, error) {
 }
 
 func (m *GrpcClientManager) Close() error {
-	if m.conn != nil {
-		return m.conn.Close()
+	var err error
+	if m.UserConn != nil {
+		err = m.UserConn.Close()
 	}
-	return nil
+	if m.ProjectConn != nil {
+		err2 := m.ProjectConn.Close()
+		if err == nil {
+			err = err2
+		}
+	}
+	return err
 }

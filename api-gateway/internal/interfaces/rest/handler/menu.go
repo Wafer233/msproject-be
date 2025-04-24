@@ -9,15 +9,13 @@ import (
 	"net/http"
 )
 
-// ProjectHandler 处理项目相关的请求
 type MenuHandler struct {
-	ps *service.MenuService
+	ms *service.MenuService
 }
 
-// NewProjectHandler 创建一个新的项目处理器
-func NewMenuHandler(ps *service.MenuService) *MenuHandler {
+func NewMenuHandler(ms *service.MenuService) *MenuHandler {
 	return &MenuHandler{
-		ps: ps,
+		ms: ms,
 	}
 }
 
@@ -27,9 +25,10 @@ func (h *MenuHandler) Index(c *gin.Context) {
 
 	// 获取令牌
 	token := c.GetHeader("Authorization")
+	zap.S().Info("token:" + token)
 
 	// 调用服务
-	menuResponse, err := h.ps.GetMenus(c, token)
+	menuResponse, err := h.ms.GetMenus(c, token)
 	if err != nil {
 		zap.L().Error("获取菜单失败", zap.Error(err))
 		c.JSON(http.StatusOK, result.Fail(model.SystemError, "获取菜单失败"))

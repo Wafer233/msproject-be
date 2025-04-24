@@ -6,6 +6,7 @@ import (
 	"github.com/Wafer233/msproject-be/project-service/internal/application/dto/convert"
 	"github.com/Wafer233/msproject-be/project-service/internal/domain/model"
 	"github.com/Wafer233/msproject-be/project-service/internal/domain/repository"
+	"go.uber.org/zap"
 )
 
 type DefaultMenuService struct {
@@ -23,6 +24,7 @@ func (s *DefaultMenuService) GetMenus(ctx context.Context) (*dto.MenuResponse, e
 	// 调用仓库获取领域模型
 	menus, err := s.menuRepo.FindAll(ctx)
 	if err != nil {
+		zap.L().Error("project-service调用仓库获取领域模型", zap.Error(err))
 		return nil, err
 	}
 

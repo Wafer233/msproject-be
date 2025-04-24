@@ -7,8 +7,8 @@ zap:
   maxBackups: 3
 
 userService:
-  grpcAddr: "127.0.0.1:8081"
+  grpcAddr: "127.0.0.1:8080"
 
 projectService:
-  grpcAddr: "127.0.0.1:8083"
+  grpcAddr: "127.0.0.1:8081"
 
