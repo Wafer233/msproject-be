@@ -1,0 +1,29 @@
+zap:
+  debugFileName: "C:\\logs\\debug\\project-service-debug.log"
+  infoFileName: "C:\\logs\\info\\project-service-info.log"
+  warnFileName: "C:\\logs\\error\\project-service-error.log"
+  maxSize: 500
+  maxAge: 28
+  maxBackups: 3
+
+grpc:
+  addr: "127.0.0.1:8083"
+  name: "project-service"
+  version: "1.0.0"
+  weight: 2
+
+redis:
+  host: "localhost"
+  port: 6379
+  password: ""
+  db: 0
+
+mysql:
+  host: "localhost"
+  port: 3307
+  user: "root"
+  password: "root"
+  dbname: "project-service"
+
+
+

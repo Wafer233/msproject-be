@@ -6,14 +6,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// add middlewares here if needed, engine no need
+
 func ProvideMiddlewares() []gin.HandlerFunc {
 	return []gin.HandlerFunc{
 		gin.Logger(),
 		gin.Recovery(),
-		// 你可以加入 CORS、JWT 等中间件
+		// add here
 	}
 }
 
-func ProvideGinEngine(middlewares []gin.HandlerFunc, ar *router.AuthRouter) *gin.Engine {
-	return rest.InitWeb(middlewares, ar)
+func ProvideGinEngine(middlewares []gin.HandlerFunc, routers []router.Router) *gin.Engine {
+	return rest.InitWeb(middlewares, routers) // 直接传递所有路由器
 }

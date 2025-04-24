@@ -12,3 +12,20 @@ func ProvideAuthRouter(
 ) *router.AuthRouter {
 	return router.NewAuthRouter(ch, lr, rh)
 }
+
+func ProvideMenuRouter(
+	mh *handler.MenuHandler,
+) *router.MenuRouter {
+	return router.NewMenuRouter(mh)
+}
+
+func ProvideRouters(
+	authRouter *router.AuthRouter,
+	menuRouter *router.MenuRouter,
+	// add here
+) []router.Router {
+	return []router.Router{
+		authRouter,
+		menuRouter,
+	}
+}

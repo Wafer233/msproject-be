@@ -6,5 +6,4 @@ import (
 
 type App struct {
 	GrpcServer *grpc.GrpcServer
-	// 可能还有其他东西
 }

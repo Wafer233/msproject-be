@@ -6,10 +6,12 @@ import (
 )
 
 type Config struct {
-	Server      ServerConfig
-	UserService UserServiceConfig
-	Zap         logs.LogConfig
-	viper       *viper.Viper
+	Server ServerConfig
+	Zap    logs.LogConfig
+	viper  *viper.Viper
+	// --- add here ---
+	UserService    UserServiceConfig
+	ProjectService ProjectServiceConfig
 }
 
 type ServerConfig struct {
@@ -18,5 +20,9 @@ type ServerConfig struct {
 }
 
 type UserServiceConfig struct {
+	GrpcAddr string
+}
+
+type ProjectServiceConfig struct {
 	GrpcAddr string
 }

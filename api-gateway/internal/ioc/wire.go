@@ -18,11 +18,15 @@ func InitApp() (*App, error) {
 		ProvideCaptchaHandler,
 		ProvideRegisterHandler,
 		ProvideLoginHandler,
+		ProvideMenuHandler,
 		//router
 		ProvideAuthRouter,
+		ProvideMenuRouter,
+		ProvideRouters,
 		//service
 		ProvideAuthService,
 		ProvideCaptchaService,
+		ProvideMenuService,
 
 		wire.Struct(new(App), "*"),
 	)

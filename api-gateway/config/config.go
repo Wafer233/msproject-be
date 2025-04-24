@@ -24,24 +24,11 @@ func NewConfig() *Config {
 		log.Fatalln("failed to read config file:", err)
 	}
 
-	cfg.loadServer()
-	cfg.loadUserService()
 	cfg.loadZap()
+	cfg.loadUserService()
+	cfg.loadProjectService()
 
 	return cfg
-}
-
-func (cfg *Config) loadServer() {
-	cfg.Server = ServerConfig{
-		Name: cfg.viper.GetString("server.name"),
-		Addr: cfg.viper.GetString("server.addr"),
-	}
-}
-
-func (cfg *Config) loadUserService() {
-	cfg.UserService = UserServiceConfig{
-		GrpcAddr: cfg.viper.GetString("userService.grpcAddr"),
-	}
 }
 
 func (cfg *Config) loadZap() {
@@ -55,5 +42,17 @@ func (cfg *Config) loadZap() {
 	}
 	if err := logs.InitLogger(&cfg.Zap); err != nil {
 		log.Fatalln("failed to init zap logger:", err)
+	}
+}
+
+func (cfg *Config) loadUserService() {
+	cfg.UserService = UserServiceConfig{
+		GrpcAddr: cfg.viper.GetString("userService.grpcAddr"),
+	}
+}
+
+func (cfg *Config) loadProjectService() {
+	cfg.ProjectService = ProjectServiceConfig{
+		GrpcAddr: cfg.viper.GetString("projectService.grpcAddr"),
 	}
 }
