@@ -12,3 +12,10 @@ userService:
 projectService:
   grpcAddr: "127.0.0.1:8081"
 
+metrics:
+  enabled: true
+  path: "/metrics"
+  namespace: "api_gateway"
+  subsystem: "gin_metric"
+
+

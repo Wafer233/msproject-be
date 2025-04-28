@@ -19,6 +19,8 @@ func InitApp() (*App, error) {
 		ProvideRegisterHandler,
 		ProvideLoginHandler,
 		ProvideMenuHandler,
+		//metrics
+		ProvideMetricsCollector,
 		//router
 		ProvideAuthRouter,
 		ProvideMenuRouter,

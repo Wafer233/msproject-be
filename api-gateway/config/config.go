@@ -24,9 +24,11 @@ func NewConfig() *Config {
 		log.Fatalln("failed to read config file:", err)
 	}
 
+	// -------add here-------
 	cfg.loadZap()
 	cfg.loadUserService()
 	cfg.loadProjectService()
+	cfg.loadMetrics() // 添加指标加载
 
 	return cfg
 }
@@ -54,5 +56,15 @@ func (cfg *Config) loadUserService() {
 func (cfg *Config) loadProjectService() {
 	cfg.ProjectService = ProjectServiceConfig{
 		GrpcAddr: cfg.viper.GetString("projectService.grpcAddr"),
+	}
+}
+
+// 添加指标加载函数
+func (cfg *Config) loadMetrics() {
+	cfg.Metrics = MetricsConfig{
+		Enabled:   cfg.viper.GetBool("metrics.enabled"),
+		Path:      cfg.viper.GetString("metrics.path"),
+		Namespace: cfg.viper.GetString("metrics.namespace"),
+		Subsystem: cfg.viper.GetString("metrics.subsystem"),
 	}
 }

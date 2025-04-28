@@ -12,6 +12,8 @@ type Config struct {
 	// --- add here ---
 	UserService    UserServiceConfig
 	ProjectService ProjectServiceConfig
+	// --- metrics ---
+	Metrics MetricsConfig
 }
 
 type ServerConfig struct {
@@ -25,4 +27,12 @@ type UserServiceConfig struct {
 
 type ProjectServiceConfig struct {
 	GrpcAddr string
+}
+
+// MetricsConfig Prometheus 指标配置
+type MetricsConfig struct {
+	Enabled   bool   // 是否启用指标收集
+	Path      string // 指标访问的HTTP路径
+	Namespace string // 指标命名空间前缀
+	Subsystem string // 指标子系统名称
 }

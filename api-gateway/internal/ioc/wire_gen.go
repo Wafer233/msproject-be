@@ -9,8 +9,9 @@ package ioc
 // Injectors from wire.go:
 
 func InitApp() (*App, error) {
-	v := ProvideMiddlewares()
 	config := ProvideViperConfig()
+	metricsCollector := ProvideMetricsCollector(config)
+	v := ProvideMiddlewares(config, metricsCollector)
 	grpcClientManager, err := ProvideGrpcClientManager(config)
 	if err != nil {
 		return nil, err
@@ -25,7 +26,7 @@ func InitApp() (*App, error) {
 	menuHandler := ProvideMenuHandler(menuService)
 	menuRouter := ProvideMenuRouter(menuHandler)
 	v2 := ProvideRouters(authRouter, menuRouter)
-	engine := ProvideGinEngine(v, v2)
+	engine := ProvideGinEngine(config, v, v2, metricsCollector)
 	app := &App{
 		Server: engine,
 	}
