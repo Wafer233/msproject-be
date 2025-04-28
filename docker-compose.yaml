@@ -21,6 +21,9 @@ services:
     networks:
       - ms-network
 
+
+
+
 networks:
   ms-network:
     name: ms-network
