@@ -8,6 +8,7 @@ import (
 	"github.com/Wafer233/msproject-be/user-service/internal/domain/repository"
 	domainService "github.com/Wafer233/msproject-be/user-service/internal/domain/service"
 	"github.com/jinzhu/copier"
+	"strconv"
 	"time"
 )
 
@@ -59,8 +60,9 @@ func (das *DefaultAuthService) Register(ctx context.Context, req dto.RegisterReq
 
 	// 创建新用户
 	member := &model.Member{
-		Account:       req.Name,
-		Password:      das.ps.EncryptPassword(req.Password),
+		Account: req.Name,
+		//Password:      das.ps.EncryptPassword(req.Password),
+		Password:      req.Password,
 		Name:          req.Name,
 		Mobile:        req.Mobile,
 		Email:         req.Email,
@@ -93,8 +95,8 @@ func (das *DefaultAuthService) Register(ctx context.Context, req dto.RegisterReq
 
 func (das *DefaultAuthService) Login(ctx context.Context, req dto.LoginRequest) (*dto.LoginResponse, error) {
 	// 加密密码
-	pwd := das.ps.EncryptPassword(req.Password)
-
+	//pwd := das.ps.EncryptPassword(req.Password)
+	pwd := req.Password
 	// 查找用户
 	member, err := das.mr.FindMember(ctx, req.Account, pwd)
 	if err != nil {
@@ -113,7 +115,7 @@ func (das *DefaultAuthService) Login(ctx context.Context, req dto.LoginRequest) 
 	}
 
 	// 生成令牌
-	//accessToken, refreshToken, accessExp := das.ts.GenerateTokens(strconv.FormatInt(member.Id, 10))
+	accessToken, refreshToken, accessExp := das.ts.GenerateTokens(strconv.FormatInt(member.Id, 10))
 
 	// 构建响应
 	response := &dto.LoginResponse{
@@ -127,12 +129,12 @@ func (das *DefaultAuthService) Login(ctx context.Context, req dto.LoginRequest) 
 			Email:         member.Email,
 			Avatar:        member.Avatar,
 		},
-		//TokenList: dto.TokenDTO{
-		//	AccessToken:    accessToken,
-		//	RefreshToken:   refreshToken,
-		//	TokenType:      "bearer",
-		//	AccessTokenExp: accessExp,
-		//},
+		TokenList: dto.TokenDTO{
+			AccessToken:    accessToken,
+			RefreshToken:   refreshToken,
+			TokenType:      "bearer",
+			AccessTokenExp: accessExp,
+		},
 	}
 
 	// 转换组织列表
