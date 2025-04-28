@@ -9,24 +9,24 @@ package ioc
 // Injectors from wire.go:
 
 func InitApp() (*App, error) {
-	v := ProvideMiddlewares()
 	config := ProvideViperConfig()
+	metricsCollector := ProvideMetricsCollector(config)
+	v := ProvideMiddlewares(config, metricsCollector)
 	grpcClientManager, err := ProvideGrpcClientManager(config)
 	if err != nil {
 		return nil, err
 	}
 	captchaService := ProvideCaptchaService(grpcClientManager)
-	metricsCollector := ProvideMetricsCollector(config)
-	captchaHandler := ProvideCaptchaHandler(captchaService, metricsCollector)
+	captchaHandler := ProvideCaptchaHandler(captchaService)
 	authService := ProvideAuthService(grpcClientManager)
-	loginHandler := ProvideLoginHandler(authService, metricsCollector)
-	registerHandler := ProvideRegisterHandler(authService, metricsCollector)
+	loginHandler := ProvideLoginHandler(authService)
+	registerHandler := ProvideRegisterHandler(authService)
 	authRouter := ProvideAuthRouter(captchaHandler, loginHandler, registerHandler)
 	menuService := ProvideMenuService(grpcClientManager)
-	menuHandler := ProvideMenuHandler(menuService, metricsCollector)
+	menuHandler := ProvideMenuHandler(menuService)
 	menuRouter := ProvideMenuRouter(menuHandler)
 	v2 := ProvideRouters(authRouter, menuRouter)
-	engine := ProvideGinEngine(v, v2)
+	engine := ProvideGinEngine(config, v, v2, metricsCollector)
 	app := &App{
 		Server: engine,
 	}

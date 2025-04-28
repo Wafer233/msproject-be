@@ -28,7 +28,7 @@ func NewConfig() *Config {
 	cfg.loadZap()
 	cfg.loadUserService()
 	cfg.loadProjectService()
-	cfg.loadMetrics()
+	cfg.loadMetrics() // 添加指标加载
 
 	return cfg
 }
