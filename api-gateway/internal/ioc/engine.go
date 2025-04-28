@@ -16,6 +16,7 @@ func ProvideGinEngine(
 	middlewares []gin.HandlerFunc,
 	routers []router.Router,
 ) *gin.Engine {
+
 	engine := rest.InitWeb(middlewares, routers)
 
 	return engine
