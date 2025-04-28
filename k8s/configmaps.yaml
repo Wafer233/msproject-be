@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-gateway-config
+  namespace: msproject
+data:
+  config.yaml: |
+    userService:
+      grpcAddr: "user-service:8080"
+    projectService:
+      grpcAddr: "project-service:8081"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-service-config
+  namespace: msproject
+data:
+  config.yaml: |
+    grpc:
+      addr: "0.0.0.0:8080"
+      name: "user-service"
+      version: "1.0.0"
+    redis:
+      host: "host.docker.internal"
+      port: 6379
+      password: ""
+      db: 0
+    mysql:
+      host: "host.docker.internal"
+      port: 3307
+      user: "root"
+      password: "root"
+      dbname: "user-service"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: project-service-config
+  namespace: msproject
+data:
+  config.yaml: |
+    grpc:
+      addr: "0.0.0.0:8081"
+      name: "project-service"
+      version: "1.0.0"
+    mysql:
+      host: "host.docker.internal"
+      port: 3307
+      user: "root"
+      password: "root"
+      dbname: "project-service"
