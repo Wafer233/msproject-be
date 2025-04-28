@@ -1,3 +1,5 @@
+// api-gateway/internal/infrastructure/metrics/metrics.go
+
 package metrics
 
 import (
@@ -22,6 +24,16 @@ type MetricsCollector struct {
 	requestsInProgress *prometheus.GaugeVec
 	requestSize        *prometheus.HistogramVec
 	responseSize       *prometheus.HistogramVec
+
+	// Business-specific metrics
+	loginAttempts    *prometheus.CounterVec
+	registerAttempts *prometheus.CounterVec
+	captchaRequests  *prometheus.CounterVec
+	menuRequests     *prometheus.CounterVec
+	errorResponses   *prometheus.CounterVec
+	successResponses *prometheus.CounterVec
+	authResponseTime *prometheus.HistogramVec
+	menuResponseTime *prometheus.HistogramVec
 }
 
 // NewMetricsCollector 创建新的指标收集器
@@ -88,6 +100,82 @@ func NewMetricsCollector(cfg *config.MetricsConfig) *MetricsCollector {
 			},
 			[]string{"method", "path", "status"},
 		),
+
+		// Business specific metrics
+		loginAttempts: prometheus.NewCounterVec(
+			prometheus.CounterOpts{
+				Namespace: namespace,
+				Subsystem: subsystem,
+				Name:      "login_attempts_total",
+				Help:      "登录尝试总数",
+			},
+			[]string{"status"}, // success or failure
+		),
+		registerAttempts: prometheus.NewCounterVec(
+			prometheus.CounterOpts{
+				Namespace: namespace,
+				Subsystem: subsystem,
+				Name:      "register_attempts_total",
+				Help:      "注册尝试总数",
+			},
+			[]string{"status"}, // success or failure
+		),
+		captchaRequests: prometheus.NewCounterVec(
+			prometheus.CounterOpts{
+				Namespace: namespace,
+				Subsystem: subsystem,
+				Name:      "captcha_requests_total",
+				Help:      "验证码请求总数",
+			},
+			[]string{"status"}, // success or failure
+		),
+		menuRequests: prometheus.NewCounterVec(
+			prometheus.CounterOpts{
+				Namespace: namespace,
+				Subsystem: subsystem,
+				Name:      "menu_requests_total",
+				Help:      "菜单请求总数",
+			},
+			[]string{"status"}, // success or failure
+		),
+		errorResponses: prometheus.NewCounterVec(
+			prometheus.CounterOpts{
+				Namespace: namespace,
+				Subsystem: subsystem,
+				Name:      "error_responses_total",
+				Help:      "错误响应总数",
+			},
+			[]string{"path", "error_code"},
+		),
+		successResponses: prometheus.NewCounterVec(
+			prometheus.CounterOpts{
+				Namespace: namespace,
+				Subsystem: subsystem,
+				Name:      "success_responses_total",
+				Help:      "成功响应总数",
+			},
+			[]string{"path"},
+		),
+		authResponseTime: prometheus.NewHistogramVec(
+			prometheus.HistogramOpts{
+				Namespace: namespace,
+				Subsystem: subsystem,
+				Name:      "auth_response_time_seconds",
+				Help:      "认证响应时间（秒）",
+				Buckets:   defaultDurationBuckets,
+			},
+			[]string{"operation"}, // login, register, captcha
+		),
+		menuResponseTime: prometheus.NewHistogramVec(
+			prometheus.HistogramOpts{
+				Namespace: namespace,
+				Subsystem: subsystem,
+				Name:      "menu_response_time_seconds",
+				Help:      "菜单响应时间（秒）",
+				Buckets:   defaultDurationBuckets,
+			},
+			[]string{"operation"}, // index
+		),
 	}
 
 	// 注册所有指标
@@ -97,6 +185,14 @@ func NewMetricsCollector(cfg *config.MetricsConfig) *MetricsCollector {
 		mc.requestsInProgress,
 		mc.requestSize,
 		mc.responseSize,
+		mc.loginAttempts,
+		mc.registerAttempts,
+		mc.captchaRequests,
+		mc.menuRequests,
+		mc.errorResponses,
+		mc.successResponses,
+		mc.authResponseTime,
+		mc.menuResponseTime,
 	)
 
 	return mc
@@ -110,4 +206,60 @@ func (mc *MetricsCollector) Handler() gin.HandlerFunc {
 // GetRegistry 返回指标注册表
 func (mc *MetricsCollector) GetRegistry() *prometheus.Registry {
 	return mc.registry
+}
+
+// RecordLoginAttempt 记录登录尝试
+func (mc *MetricsCollector) RecordLoginAttempt(success bool) {
+	status := "success"
+	if !success {
+		status = "failure"
+	}
+	mc.loginAttempts.WithLabelValues(status).Inc()
+}
+
+// RecordRegisterAttempt 记录注册尝试
+func (mc *MetricsCollector) RecordRegisterAttempt(success bool) {
+	status := "success"
+	if !success {
+		status = "failure"
+	}
+	mc.registerAttempts.WithLabelValues(status).Inc()
+}
+
+// RecordCaptchaRequest 记录验证码请求
+func (mc *MetricsCollector) RecordCaptchaRequest(success bool) {
+	status := "success"
+	if !success {
+		status = "failure"
+	}
+	mc.captchaRequests.WithLabelValues(status).Inc()
+}
+
+// RecordMenuRequest 记录菜单请求
+func (mc *MetricsCollector) RecordMenuRequest(success bool) {
+	status := "success"
+	if !success {
+		status = "failure"
+	}
+	mc.menuRequests.WithLabelValues(status).Inc()
+}
+
+// RecordErrorResponse 记录错误响应
+func (mc *MetricsCollector) RecordErrorResponse(path string, errorCode int) {
+	mc.errorResponses.WithLabelValues(path, string(errorCode)).Inc()
+}
+
+// RecordSuccessResponse 记录成功响应
+func (mc *MetricsCollector) RecordSuccessResponse(path string) {
+	mc.successResponses.WithLabelValues(path).Inc()
+}
+
+// ObserveAuthResponseTime 观察认证响应时间
+func (mc *MetricsCollector) ObserveAuthResponseTime(operation string, duration float64) {
+	mc.authResponseTime.WithLabelValues(operation).Observe(duration)
+}
+
+// ObserveMenuResponseTime 观察菜单响应时间
+func (mc *MetricsCollector) ObserveMenuResponseTime(operation string, duration float64) {
+	mc.menuResponseTime.WithLabelValues(operation).Observe(duration)
 }
