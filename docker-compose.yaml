@@ -21,7 +21,15 @@ services:
     networks:
       - ms-network
 
-
+  prometheus:
+    image: 'prom/prometheus:latest'
+    container_name: ms-prometheus
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./deploy/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+    networks:
+      - ms-network
 
 
 networks:
