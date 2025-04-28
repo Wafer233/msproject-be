@@ -8,7 +8,6 @@ import (
 	"github.com/Wafer233/msproject-be/user-service/internal/domain/repository"
 	domainService "github.com/Wafer233/msproject-be/user-service/internal/domain/service"
 	"github.com/jinzhu/copier"
-	"strconv"
 	"time"
 )
 
@@ -114,7 +113,7 @@ func (das *DefaultAuthService) Login(ctx context.Context, req dto.LoginRequest) 
 	}
 
 	// 生成令牌
-	accessToken, refreshToken, accessExp := das.ts.GenerateTokens(strconv.FormatInt(member.Id, 10))
+	//accessToken, refreshToken, accessExp := das.ts.GenerateTokens(strconv.FormatInt(member.Id, 10))
 
 	// 构建响应
 	response := &dto.LoginResponse{
@@ -128,12 +127,12 @@ func (das *DefaultAuthService) Login(ctx context.Context, req dto.LoginRequest) 
 			Email:         member.Email,
 			Avatar:        member.Avatar,
 		},
-		TokenList: dto.TokenDTO{
-			AccessToken:    accessToken,
-			RefreshToken:   refreshToken,
-			TokenType:      "bearer",
-			AccessTokenExp: accessExp,
-		},
+		//TokenList: dto.TokenDTO{
+		//	AccessToken:    accessToken,
+		//	RefreshToken:   refreshToken,
+		//	TokenType:      "bearer",
+		//	AccessTokenExp: accessExp,
+		//},
 	}
 
 	// 转换组织列表

@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-// RegisterHandler 处理注册相关请求
+// RegisterHandler 处理注册相关请求s
 type RegisterHandler struct {
 	as *service.AuthService
 }
