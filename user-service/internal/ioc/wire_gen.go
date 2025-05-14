@@ -21,7 +21,8 @@ func InitApp() *App {
 	tokenService := ProvideJWTTokenService(config)
 	authService := ProvideDefaultAuthService(memberRepository, organizationRepository, passwordService, captchaRepository, tokenService)
 	captchaService := ProvideDefaultCaptchaService(captchaRepository)
-	grpcServer := ProvideGrpcServer(config, authService, captchaService, gormMetrics)
+	userService := ProvideDefaultUserService(organizationRepository)
+	grpcServer := ProvideGrpcServer(config, authService, captchaService, userService, gormMetrics)
 	app := &App{
 		GrpcServer: grpcServer,
 	}

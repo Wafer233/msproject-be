@@ -29,7 +29,10 @@ func InitApp() (*App, error) {
 	projectService := ProvideProjectService(grpcClientManager)
 	projectHandler := ProvideProjectHandler(projectService)
 	projectRouter := ProvideProjectRouter(projectHandler, handlerFunc)
-	v2 := ProvideRouters(authRouter, menuRouter, projectRouter)
+	userService := ProvideUserService(grpcClientManager)
+	userHandler := ProvideUserHandler(userService)
+	userRouter := ProvideUserRouter(userHandler, handlerFunc)
+	v2 := ProvideRouters(authRouter, menuRouter, projectRouter, userRouter)
 	engine := ProvideGinEngine(config, v, v2, metricsCollector)
 	app := &App{
 		Server: engine,

@@ -31,3 +31,7 @@ func ProvideJWTTokenService(cfg *config.Config) domainService.TokenService {
 	refreshDur, _ := time.ParseDuration(cfg.JWT.RefreshTokenDuration)
 	return domainService.NewJWTTokenService(cfg.JWT.SecretKey, accessDur, refreshDur)
 }
+
+func ProvideDefaultUserService(or repository.OrganizationRepository) service.UserService {
+	return service.NewDefaultUserService(or)
+}

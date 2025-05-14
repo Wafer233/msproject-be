@@ -29,6 +29,7 @@ func InitApp() *App {
 		ProvideDefaultAuthService,
 		ProvidePasswordService,
 		ProvideJWTTokenService,
+		ProvideDefaultUserService,
 
 		wire.Struct(new(App), "*"),
 	)

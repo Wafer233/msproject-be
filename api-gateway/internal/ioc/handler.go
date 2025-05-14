@@ -26,3 +26,7 @@ func ProvideMenuHandler(msvc *service.MenuService) *handler.MenuHandler {
 func ProvideProjectHandler(ps *service.ProjectService) *handler.ProjectHandler {
 	return handler.NewProjectHandler(ps)
 }
+
+func ProvideUserHandler(us *service.UserService) *handler.UserHandler {
+	return handler.NewUserHandler(us)
+}

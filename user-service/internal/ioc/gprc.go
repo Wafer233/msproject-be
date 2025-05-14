@@ -11,12 +11,14 @@ func ProvideGrpcServer(
 	cfg *config.Config,
 	authService service.AuthService,
 	captchaService service.CaptchaService,
+	userService service.UserService, // 新增
 	gormMetrics *metrics.GORMMetrics,
 ) *grpc.GrpcServer {
 	return grpc.NewGrpcServer(
 		cfg.GRPC.Addr,
 		authService,
 		captchaService,
+		userService, // 新增
 		cfg.Metrics,
 		gormMetrics,
 	)
