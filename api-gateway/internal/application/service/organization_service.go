@@ -35,8 +35,15 @@ func (s *DefaultOrganizationService) GetOrgList(ctx context.Context, memberId in
 		return nil, err
 	}
 
+	// 检查是否为空
+	if resp.OrganizationList == nil {
+		return []dto.OrganizationDTO{}, nil // 返回空数组而不是nil
+	}
+
+	// 确保初始化数组
+	orgDTOs := make([]dto.OrganizationDTO, 0, len(resp.OrganizationList))
+
 	// 转换为 DTO
-	var orgDTOs []dto.OrganizationDTO
 	for _, pbOrg := range resp.OrganizationList {
 		var orgDTO dto.OrganizationDTO
 		if err := copier.Copy(&orgDTO, pbOrg); err != nil {

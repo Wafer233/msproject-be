@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"github.com/Wafer233/msproject-be/api-gateway/internal/application/dto"
 	"github.com/Wafer233/msproject-be/api-gateway/internal/application/service"
 	"github.com/Wafer233/msproject-be/common"
 	"github.com/gin-gonic/gin"
@@ -42,6 +43,12 @@ func (h *OrganizationHandler) GetOrgList(c *gin.Context) {
 		return
 	}
 
-	// 返回结果
+	// 检查是否为空列表，如果是则返回空数组而不是nil
+	if orgs == nil {
+		c.JSON(http.StatusOK, result.Success([]dto.OrganizationDTO{}))
+		return
+	}
+
+	// 直接返回组织数组，不需要额外包装
 	c.JSON(http.StatusOK, result.Success(orgs))
 }
