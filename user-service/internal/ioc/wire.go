@@ -16,6 +16,8 @@ func InitApp() *App {
 		ProvideDB,
 		//grpc
 		ProvideGrpcServer,
+		//metrics
+		ProvideGORMMetrics,
 		//redis
 		ProvideRedisClient,
 		//repositories

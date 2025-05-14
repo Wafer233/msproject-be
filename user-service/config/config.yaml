@@ -30,3 +30,7 @@ grpc:
   version: "1.0.0"
   weight: 2
 
+metrics:
+  enabled: true
+  endpoint: "/metrics"
+  namespace: "user_service"

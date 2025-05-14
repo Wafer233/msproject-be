@@ -29,6 +29,7 @@ func NewConfig() *Config {
 	cfg.loadRedis()
 	cfg.loadZap()
 	cfg.loadJWT()
+	cfg.loadMetrics()
 
 	return cfg
 }
@@ -80,5 +81,13 @@ func (cfg *Config) loadJWT() {
 		SecretKey:            cfg.viper.GetString("jwt.secretKey"),
 		AccessTokenDuration:  cfg.viper.GetString("jwt.accessTokenDuration"),
 		RefreshTokenDuration: cfg.viper.GetString("jwt.refreshTokenDuration"),
+	}
+}
+
+func (cfg *Config) loadMetrics() {
+	cfg.Metrics = MetricsConfig{
+		Enabled:   cfg.viper.GetBool("metrics.enabled"),
+		Endpoint:  cfg.viper.GetString("metrics.endpoint"),
+		Namespace: cfg.viper.GetString("metrics.namespace"),
 	}
 }

@@ -10,7 +10,8 @@ package ioc
 
 func InitApp() *App {
 	config := ProvideViperConfig()
-	db := ProvideDB(config)
+	gormMetrics := ProvideGORMMetrics(config)
+	db := ProvideDB(config, gormMetrics)
 	memberRepository := ProvideGORMMemberRepository(db)
 	organizationRepository := ProvideGORMOrganizationRepository(db)
 	passwordService := ProvidePasswordService()
@@ -20,7 +21,7 @@ func InitApp() *App {
 	tokenService := ProvideJWTTokenService(config)
 	authService := ProvideDefaultAuthService(memberRepository, organizationRepository, passwordService, captchaRepository, tokenService)
 	captchaService := ProvideDefaultCaptchaService(captchaRepository)
-	grpcServer := ProvideGrpcServer(config, authService, captchaService)
+	grpcServer := ProvideGrpcServer(config, authService, captchaService, gormMetrics)
 	app := &App{
 		GrpcServer: grpcServer,
 	}

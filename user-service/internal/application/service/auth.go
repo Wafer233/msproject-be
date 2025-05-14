@@ -60,9 +60,9 @@ func (das *DefaultAuthService) Register(ctx context.Context, req dto.RegisterReq
 
 	// 创建新用户
 	member := &model.Member{
-		Account: req.Name,
-		//Password:      das.ps.EncryptPassword(req.Password),
-		Password:      req.Password,
+		Account:  req.Name,
+		Password: das.ps.EncryptPassword(req.Password),
+		//Password:      req.Password,
 		Name:          req.Name,
 		Mobile:        req.Mobile,
 		Email:         req.Email,
@@ -95,8 +95,8 @@ func (das *DefaultAuthService) Register(ctx context.Context, req dto.RegisterReq
 
 func (das *DefaultAuthService) Login(ctx context.Context, req dto.LoginRequest) (*dto.LoginResponse, error) {
 	// 加密密码
-	//pwd := das.ps.EncryptPassword(req.Password)
-	pwd := req.Password
+	pwd := das.ps.EncryptPassword(req.Password)
+	//pwd := req.Password
 	// 查找用户
 	member, err := das.mr.FindMember(ctx, req.Account, pwd)
 	if err != nil {

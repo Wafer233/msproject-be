@@ -6,13 +6,14 @@ import (
 )
 
 type Config struct {
-	Server ServerConfig
-	GRPC   GRPCConfig
-	MySQL  MySQLConfig
-	Redis  RedisConfig
-	Zap    logs.LogConfig
-	viper  *viper.Viper
-	JWT    JWTConfig
+	Server  ServerConfig
+	GRPC    GRPCConfig
+	MySQL   MySQLConfig
+	Redis   RedisConfig
+	Zap     logs.LogConfig
+	viper   *viper.Viper
+	JWT     JWTConfig
+	Metrics MetricsConfig
 }
 
 type ServerConfig struct {
@@ -46,4 +47,10 @@ type JWTConfig struct {
 	SecretKey            string
 	AccessTokenDuration  string
 	RefreshTokenDuration string
+}
+
+type MetricsConfig struct {
+	Enabled   bool   // Whether metrics are enabled
+	Endpoint  string // HTTP endpoint for metrics
+	Namespace string // Metrics namespace
 }
