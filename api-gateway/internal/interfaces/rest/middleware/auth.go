@@ -8,6 +8,7 @@ import (
 	"github.com/Wafer233/msproject-be/common"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strings"
 )
 
 func TokenVerifyMiddleware(clientMgr *grpc.GrpcClientManager) gin.HandlerFunc {
@@ -15,11 +16,17 @@ func TokenVerifyMiddleware(clientMgr *grpc.GrpcClientManager) gin.HandlerFunc {
 		result := &common.Result{}
 
 		// Get token from header
-		token := c.GetHeader("Authorization")
-		if token == "" {
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
 			c.JSON(http.StatusUnauthorized, result.Fail(model.Unauthorized, "Unauthorized"))
 			c.Abort()
 			return
+		}
+
+		// 去除可能的 "bearer " 前缀（不区分大小写）
+		token := authHeader
+		if len(authHeader) > 7 && strings.ToLower(authHeader[0:7]) == "bearer " {
+			token = authHeader[7:]
 		}
 
 		// Call token verify service

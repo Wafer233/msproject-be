@@ -9,6 +9,7 @@ import (
 	domainService "github.com/Wafer233/msproject-be/user-service/internal/domain/service"
 	"github.com/jinzhu/copier"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -23,6 +24,11 @@ type DefaultAuthService struct {
 func (das *DefaultAuthService) TokenVerify(ctx context.Context, token string) (*dto.MemberDTO, error) {
 	if token == "" {
 		return nil, errors.New("token is empty")
+	}
+
+	// 去除可能的 "bearer " 前缀（不区分大小写）
+	if len(token) > 7 && strings.ToLower(token[0:7]) == "bearer " {
+		token = token[7:]
 	}
 
 	// Validate the token
