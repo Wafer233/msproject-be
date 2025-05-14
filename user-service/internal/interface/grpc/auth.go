@@ -91,3 +91,27 @@ func (s *AuthServiceServer) Login(ctx context.Context, req *pb.LoginRequest) (*p
 
 	return resp, nil
 }
+
+func (s *AuthServiceServer) TokenVerify(ctx context.Context, req *pb.TokenVerifyRequest) (*pb.TokenVerifyResponse, error) {
+	// Call application service
+	memberDTO, err := s.authService.TokenVerify(ctx, req.Token)
+	if err != nil {
+		return nil, err
+	}
+
+	// Convert DTO to proto response
+	resp := &pb.TokenVerifyResponse{
+		Member: &pb.MemberDTO{
+			Id:            memberDTO.Id,
+			Account:       memberDTO.Account,
+			Name:          memberDTO.Name,
+			Mobile:        memberDTO.Mobile,
+			Status:        int32(memberDTO.Status),
+			LastLoginTime: memberDTO.LastLoginTime,
+			Email:         memberDTO.Email,
+			Avatar:        memberDTO.Avatar,
+		},
+	}
+
+	return resp, nil
+}

@@ -59,7 +59,16 @@ message LoginResponse {
   repeated OrganizationDTO organization_list = 3;
 }
 
+message TokenVerifyRequest {
+  string token = 1;
+}
+
+message TokenVerifyResponse {
+  MemberDTO member = 1;
+}
+
 service AuthService {
   rpc Register(RegisterRequest) returns (RegisterResponse) {}
   rpc Login(LoginRequest) returns (LoginResponse) {}
+  rpc TokenVerify(TokenVerifyRequest) returns (TokenVerifyResponse) {}
 }

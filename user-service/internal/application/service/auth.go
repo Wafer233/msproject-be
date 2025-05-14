@@ -20,6 +20,49 @@ type DefaultAuthService struct {
 	ts domainService.TokenService
 }
 
+func (das *DefaultAuthService) TokenVerify(ctx context.Context, token string) (*dto.MemberDTO, error) {
+	if token == "" {
+		return nil, errors.New("token is empty")
+	}
+
+	// Validate the token
+	userId, err := das.ts.ValidateToken(token)
+	if err != nil {
+		return nil, errors.New("invalid token")
+	}
+
+	// Convert to int64
+	memberId, err := strconv.ParseInt(userId, 10, 64)
+	if err != nil {
+		return nil, errors.New("invalid token format")
+	}
+
+	// Get member from repository
+	member, err := das.mr.FindMemberById(ctx, memberId)
+	if err != nil {
+		return nil, errors.New("user not found")
+	}
+
+	if !member.IsValid() {
+		return nil, errors.New("user is disabled")
+	}
+
+	// Convert to DTO
+	memberDTO := &dto.MemberDTO{
+		Id:            member.Id,
+		Account:       member.Account,
+		Name:          member.Name,
+		Mobile:        member.Mobile,
+		Status:        member.Status,
+		LastLoginTime: member.LastLoginTime,
+		Email:         member.Email,
+		Avatar:        member.Avatar,
+	}
+
+	return memberDTO, nil
+
+}
+
 // NewAuthService 创建认证服务
 func NewDefaultAuthService(
 	mr repository.MemberRepository,

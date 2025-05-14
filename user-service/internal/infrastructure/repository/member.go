@@ -13,6 +13,23 @@ type GORMMemberRepository struct {
 	db *gorm.DB
 }
 
+func (gmr GORMMemberRepository) FindMemberById(ctx context.Context, id int64) (*model.Member, error) {
+	var entity entity.MemberEntity
+
+	err := gmr.db.WithContext(ctx).
+		Where("id = ?", id).
+		First(&entity).Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("user not found")
+		}
+		return nil, err
+	}
+
+	return entity.ToModel(), nil
+}
+
 func NewGORMMemberRepository(db *gorm.DB) repository.MemberRepository {
 	return &GORMMemberRepository{db: db}
 }

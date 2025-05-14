@@ -25,6 +25,7 @@ func NewAuthRouter(
 
 func (ar *AuthRouter) Register(engine *gin.Engine) {
 	group := engine.Group("/project")
+	// Public routes don't need middleware
 	group.POST("/login/getCaptcha", ar.ch.GetCaptcha)
 	group.POST("/login/register", ar.rh.Register)
 	group.POST("/login", ar.lh.Login)
