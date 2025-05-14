@@ -19,22 +19,23 @@ func (r *GORMProjectRepository) FindProjectsByMemberId(ctx context.Context, memb
 	var total int64
 	offset := (page - 1) * pageSize
 
-	// Count total projects
+	// 计算总项目数
 	if err := r.db.WithContext(ctx).
-		Raw("SELECT COUNT(*) FROM ms_project a JOIN ms_project_member b ON a.id = b.project_code WHERE b.member_code = ?", memberId).
+		Table("ms_project_member").
+		Where("member_code = ?", memberId).
 		Count(&total).Error; err != nil {
 		return nil, 0, err
 	}
 
-	// Query projects with member relation
+	// 查询项目
 	var results []*model.ProjectWithMember
 	err := r.db.WithContext(ctx).
-		Raw(`SELECT a.*, b.member_code, b.join_time, b.is_owner, b.authorize, 
-			'子龙' as owner_name, 0 as collected 
-			FROM ms_project a JOIN ms_project_member b 
-			ON a.id = b.project_code 
-			WHERE b.member_code = ? LIMIT ? OFFSET ?`,
-			memberId, pageSize, offset).
+		Table("ms_project a").
+		Joins("JOIN ms_project_member b ON a.id = b.project_code").
+		Select("a.*, b.member_code, b.join_time, b.is_owner, b.authorize, '' as owner_name, 0 as collected").
+		Where("b.member_code = ?", memberId).
+		Limit(int(pageSize)).
+		Offset(int(offset)).
 		Scan(&results).Error
 
 	if err != nil {
