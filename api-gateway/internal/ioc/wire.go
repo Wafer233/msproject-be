@@ -21,6 +21,8 @@ func InitApp() (*App, error) {
 		ProvideMenuHandler,
 		//metrics
 		ProvideMetricsCollector,
+		//hanlder middlerware
+		ProvideAuthMiddleware,
 		//router
 		ProvideAuthRouter,
 		ProvideMenuRouter,

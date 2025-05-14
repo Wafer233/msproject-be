@@ -29,5 +29,4 @@ func (ar *AuthRouter) Register(engine *gin.Engine) {
 	group.POST("/login/getCaptcha", ar.ch.GetCaptcha)
 	group.POST("/login/register", ar.rh.Register)
 	group.POST("/login", ar.lh.Login)
-
 }

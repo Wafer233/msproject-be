@@ -7,19 +7,25 @@ import (
 
 // ProjectRouter 项目路由
 type MenuRouter struct {
-	ph *handler.MenuHandler
+	ph             *handler.MenuHandler
+	authMiddleware gin.HandlerFunc
 }
 
-func NewMenuRouter(ph *handler.MenuHandler) *MenuRouter {
+func NewMenuRouter(ph *handler.MenuHandler, authMiddleware gin.HandlerFunc) *MenuRouter {
 	return &MenuRouter{
-		ph: ph,
+		ph:             ph,
+		authMiddleware: authMiddleware,
 	}
 }
 
-// Register 注册路由
+// Register routes
 func (r *MenuRouter) Register(engine *gin.Engine) {
 	group := engine.Group("/project")
 
-	// 添加首页路由
-	group.POST("/index", r.ph.Index)
+	// Protected routes with auth middleware
+	protected := group.Group("")
+	protected.Use(r.authMiddleware)
+
+	// Add protected routes
+	protected.POST("/index", r.ph.Index)
 }

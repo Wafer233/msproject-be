@@ -3,6 +3,7 @@ package ioc
 import (
 	"github.com/Wafer233/msproject-be/api-gateway/internal/interfaces/rest/handler"
 	"github.com/Wafer233/msproject-be/api-gateway/internal/interfaces/rest/router"
+	"github.com/gin-gonic/gin"
 )
 
 func ProvideAuthRouter(
@@ -15,8 +16,9 @@ func ProvideAuthRouter(
 
 func ProvideMenuRouter(
 	mh *handler.MenuHandler,
+	authMiddleware gin.HandlerFunc,
 ) *router.MenuRouter {
-	return router.NewMenuRouter(mh)
+	return router.NewMenuRouter(mh, authMiddleware)
 }
 
 func ProvideRouters(

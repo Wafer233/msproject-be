@@ -24,7 +24,8 @@ func InitApp() (*App, error) {
 	authRouter := ProvideAuthRouter(captchaHandler, loginHandler, registerHandler)
 	menuService := ProvideMenuService(grpcClientManager)
 	menuHandler := ProvideMenuHandler(menuService)
-	menuRouter := ProvideMenuRouter(menuHandler)
+	handlerFunc := ProvideAuthMiddleware(grpcClientManager)
+	menuRouter := ProvideMenuRouter(menuHandler, handlerFunc)
 	v2 := ProvideRouters(authRouter, menuRouter)
 	engine := ProvideGinEngine(config, v, v2, metricsCollector)
 	app := &App{
