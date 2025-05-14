@@ -14,6 +14,7 @@ func ProvideAuthRouter(
 	return router.NewAuthRouter(ch, lr, rh)
 }
 
+// ------------------- adding router -------------------
 func ProvideMenuRouter(
 	mh *handler.MenuHandler,
 	authMiddleware gin.HandlerFunc,
@@ -21,13 +22,22 @@ func ProvideMenuRouter(
 	return router.NewMenuRouter(mh, authMiddleware)
 }
 
+func ProvideProjectRouter(
+	ph *handler.ProjectHandler,
+	authMiddleware gin.HandlerFunc,
+) *router.ProjectRouter {
+	return router.NewProjectRouter(ph, authMiddleware)
+}
+
 func ProvideRouters(
 	authRouter *router.AuthRouter,
 	menuRouter *router.MenuRouter,
+	projectRouter *router.ProjectRouter,
 	// add here
 ) []router.Router {
 	return []router.Router{
 		authRouter,
 		menuRouter,
+		projectRouter,
 	}
 }

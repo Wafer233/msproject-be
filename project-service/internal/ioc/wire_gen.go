@@ -13,7 +13,9 @@ func InitApp() *App {
 	db := ProvideDB(config)
 	menuRepository := ProvideGORMMenuRepository(db)
 	menuService := ProvideDefaultMenuService(menuRepository)
-	grpcServer := ProvideGrpcServer(config, menuService)
+	projectRepository := ProvideGORMProjectRepository(db)
+	projectService := ProvideDefaultProjectService(projectRepository)
+	grpcServer := ProvideGrpcServer(config, menuService, projectService)
 	app := &App{
 		GrpcServer: grpcServer,
 	}

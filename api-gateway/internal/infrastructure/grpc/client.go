@@ -5,6 +5,7 @@ import (
 	authpb "github.com/Wafer233/msproject-be/api-gateway/proto/auth"
 	captchapb "github.com/Wafer233/msproject-be/api-gateway/proto/captcha"
 	menupb "github.com/Wafer233/msproject-be/api-gateway/proto/menu"
+	projpb "github.com/Wafer233/msproject-be/api-gateway/proto/project"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -18,6 +19,7 @@ type GrpcClientManager struct {
 	AuthClient    authpb.AuthServiceClient
 	CaptchaClient captchapb.CaptchaServiceClient
 	MenuClient    menupb.MenuServiceClient
+	ProjectClient projpb.ProjectServiceClient
 }
 
 func NewGrpcClientManager(cfg *config.Config) (*GrpcClientManager, error) {
@@ -46,6 +48,7 @@ func NewGrpcClientManager(cfg *config.Config) (*GrpcClientManager, error) {
 	authClient := authpb.NewAuthServiceClient(userConn)
 	captchaClient := captchapb.NewCaptchaServiceClient(userConn)
 	menuClient := menupb.NewMenuServiceClient(projectConn)
+	projectClient := projpb.NewProjectServiceClient(projectConn)
 
 	return &GrpcClientManager{
 		UserConn:      userConn,
@@ -53,6 +56,7 @@ func NewGrpcClientManager(cfg *config.Config) (*GrpcClientManager, error) {
 		AuthClient:    authClient,
 		CaptchaClient: captchaClient,
 		MenuClient:    menuClient,
+		ProjectClient: projectClient,
 	}, nil
 }
 

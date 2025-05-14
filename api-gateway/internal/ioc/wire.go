@@ -19,6 +19,7 @@ func InitApp() (*App, error) {
 		ProvideRegisterHandler,
 		ProvideLoginHandler,
 		ProvideMenuHandler,
+		ProvideProjectHandler,
 		//metrics
 		ProvideMetricsCollector,
 		//hanlder middlerware
@@ -26,11 +27,14 @@ func InitApp() (*App, error) {
 		//router
 		ProvideAuthRouter,
 		ProvideMenuRouter,
+		ProvideProjectRouter,
 		ProvideRouters,
+
 		//service
 		ProvideAuthService,
 		ProvideCaptchaService,
 		ProvideMenuService,
+		ProvideProjectService,
 
 		wire.Struct(new(App), "*"),
 	)

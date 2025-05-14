@@ -16,8 +16,10 @@ func InitApp() *App {
 		ProvideGrpcServer,
 		//repositories
 		ProvideGORMMenuRepository,
+		ProvideGORMProjectRepository,
 		//services
 		ProvideDefaultMenuService,
+		ProvideDefaultProjectService,
 
 		wire.Struct(new(App), "*"),
 	)

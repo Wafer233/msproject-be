@@ -18,3 +18,7 @@ func ProvideCaptchaService(clientMgr *grpc.GrpcClientManager) *service.CaptchaSe
 func ProvideMenuService(clientMgr *grpc.GrpcClientManager) *service.MenuService {
 	return service.NewMenuService(clientMgr.MenuClient)
 }
+
+func ProvideProjectService(clientMgr *grpc.GrpcClientManager) *service.ProjectService {
+	return service.NewProjectService(clientMgr.ProjectClient)
+}

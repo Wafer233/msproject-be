@@ -5,21 +5,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// ProjectRouter 项目路由
-type MenuRouter struct {
-	mh             *handler.MenuHandler
+type ProjectRouter struct {
+	ph             *handler.ProjectHandler
 	authMiddleware gin.HandlerFunc
 }
 
-func NewMenuRouter(ph *handler.MenuHandler, authMiddleware gin.HandlerFunc) *MenuRouter {
-	return &MenuRouter{
-		mh:             ph,
+func NewProjectRouter(ph *handler.ProjectHandler, authMiddleware gin.HandlerFunc) *ProjectRouter {
+	return &ProjectRouter{
+		ph:             ph,
 		authMiddleware: authMiddleware,
 	}
 }
 
-// Register routes
-func (r *MenuRouter) Register(engine *gin.Engine) {
+func (r *ProjectRouter) Register(engine *gin.Engine) {
 	group := engine.Group("/project")
 
 	// Protected routes with auth middleware
@@ -27,5 +25,5 @@ func (r *MenuRouter) Register(engine *gin.Engine) {
 	protected.Use(r.authMiddleware)
 
 	// Add protected routes
-	protected.POST("/index", r.mh.Index)
+	protected.POST("/project/selfList", r.ph.GetMyProjects)
 }

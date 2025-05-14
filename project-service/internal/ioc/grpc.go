@@ -9,9 +9,11 @@ import (
 func ProvideGrpcServer(
 	cfg *config.Config,
 	menuService service.MenuService,
+	projectService service.ProjectService,
 ) *grpc.GrpcServer {
 	return grpc.NewGrpcServer(
 		cfg.GRPC.Addr,
 		menuService,
+		projectService,
 	)
 }

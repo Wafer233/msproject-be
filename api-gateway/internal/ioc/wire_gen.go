@@ -26,7 +26,10 @@ func InitApp() (*App, error) {
 	menuHandler := ProvideMenuHandler(menuService)
 	handlerFunc := ProvideAuthMiddleware(grpcClientManager)
 	menuRouter := ProvideMenuRouter(menuHandler, handlerFunc)
-	v2 := ProvideRouters(authRouter, menuRouter)
+	projectService := ProvideProjectService(grpcClientManager)
+	projectHandler := ProvideProjectHandler(projectService)
+	projectRouter := ProvideProjectRouter(projectHandler, handlerFunc)
+	v2 := ProvideRouters(authRouter, menuRouter, projectRouter)
 	engine := ProvideGinEngine(config, v, v2, metricsCollector)
 	app := &App{
 		Server: engine,

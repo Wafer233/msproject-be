@@ -9,3 +9,7 @@ import (
 func ProvideGORMMenuRepository(db *gorm.DB) repository.MenuRepository {
 	return impl.NewGORMMenuRepository(db)
 }
+
+func ProvideGORMProjectRepository(db *gorm.DB) repository.ProjectRepository {
+	return impl.NewGORMProjectRepository(db)
+}

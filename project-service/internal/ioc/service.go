@@ -8,3 +8,7 @@ import (
 func ProvideDefaultMenuService(mr repository.MenuRepository) service.MenuService {
 	return service.NewDefaultMenuService(mr)
 }
+
+func ProvideDefaultProjectService(pr repository.ProjectRepository) service.ProjectService {
+	return service.NewDefaultProjectService(pr)
+}

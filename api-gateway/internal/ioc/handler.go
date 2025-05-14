@@ -22,3 +22,7 @@ func ProvideLoginHandler(as *service.AuthService) *handler.LoginHandler {
 func ProvideMenuHandler(msvc *service.MenuService) *handler.MenuHandler {
 	return handler.NewMenuHandler(msvc)
 }
+
+func ProvideProjectHandler(ps *service.ProjectService) *handler.ProjectHandler {
+	return handler.NewProjectHandler(ps)
+}
