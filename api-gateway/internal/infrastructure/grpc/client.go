@@ -6,7 +6,7 @@ import (
 	captchapb "github.com/Wafer233/msproject-be/api-gateway/proto/captcha"
 	menupb "github.com/Wafer233/msproject-be/api-gateway/proto/menu"
 	projpb "github.com/Wafer233/msproject-be/api-gateway/proto/project"
-	userpb "github.com/Wafer233/msproject-be/user-service/proto/user"
+	orgpb "github.com/Wafer233/msproject-be/user-service/proto/user"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -17,11 +17,11 @@ type GrpcClientManager struct {
 	UserConn    *grpc.ClientConn
 	ProjectConn *grpc.ClientConn
 	// ----------------  添加服务需要在这里新增客户端 ----------------
-	AuthClient    authpb.AuthServiceClient
-	CaptchaClient captchapb.CaptchaServiceClient
-	MenuClient    menupb.MenuServiceClient
-	ProjectClient projpb.ProjectServiceClient
-	UserClient    userpb.UserServiceClient // 新增
+	AuthClient         authpb.AuthServiceClient
+	CaptchaClient      captchapb.CaptchaServiceClient
+	MenuClient         menupb.MenuServiceClient
+	ProjectClient      projpb.ProjectServiceClient
+	OrganizationClient orgpb.OrganizationServiceClient //add for _getOrgList
 }
 
 func NewGrpcClientManager(cfg *config.Config) (*GrpcClientManager, error) {
@@ -51,16 +51,16 @@ func NewGrpcClientManager(cfg *config.Config) (*GrpcClientManager, error) {
 	captchaClient := captchapb.NewCaptchaServiceClient(userConn)
 	menuClient := menupb.NewMenuServiceClient(projectConn)
 	projectClient := projpb.NewProjectServiceClient(projectConn)
-	userClient := userpb.NewUserServiceClient(userConn) // 新增
+	organizationClient := orgpb.NewOrganizationServiceClient(userConn) // add for _getOrgList
 
 	return &GrpcClientManager{
-		UserConn:      userConn,
-		ProjectConn:   projectConn,
-		AuthClient:    authClient,
-		CaptchaClient: captchaClient,
-		MenuClient:    menuClient,
-		ProjectClient: projectClient,
-		UserClient:    userClient, // 新增
+		UserConn:           userConn,
+		ProjectConn:        projectConn,
+		AuthClient:         authClient,
+		CaptchaClient:      captchaClient,
+		MenuClient:         menuClient,
+		ProjectClient:      projectClient,
+		OrganizationClient: organizationClient, // add for _getOrgList
 	}, nil
 }
 

@@ -27,6 +27,6 @@ func ProvideProjectHandler(ps *service.ProjectService) *handler.ProjectHandler {
 	return handler.NewProjectHandler(ps)
 }
 
-func ProvideUserHandler(us *service.UserService) *handler.UserHandler {
-	return handler.NewUserHandler(us)
+func ProvideOrganizationHandler(os service.OrganizationService) *handler.OrganizationHandler {
+	return handler.NewOrganizationHandler(os)
 }

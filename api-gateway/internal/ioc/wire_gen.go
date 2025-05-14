@@ -29,10 +29,10 @@ func InitApp() (*App, error) {
 	projectService := ProvideProjectService(grpcClientManager)
 	projectHandler := ProvideProjectHandler(projectService)
 	projectRouter := ProvideProjectRouter(projectHandler, handlerFunc)
-	userService := ProvideUserService(grpcClientManager)
-	userHandler := ProvideUserHandler(userService)
-	userRouter := ProvideUserRouter(userHandler, handlerFunc)
-	v2 := ProvideRouters(authRouter, menuRouter, projectRouter, userRouter)
+	organizationService := ProvideOrganizationService(grpcClientManager)
+	organizationHandler := ProvideOrganizationHandler(organizationService)
+	organizationRouter := ProvideOrganizationRouter(organizationHandler, handlerFunc)
+	v2 := ProvideRouters(authRouter, menuRouter, projectRouter, organizationRouter)
 	engine := ProvideGinEngine(config, v, v2, metricsCollector)
 	app := &App{
 		Server: engine,

@@ -5,22 +5,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type UserRouter struct {
-	oh             *handler.UserHandler
+type OrganizationRouter struct {
+	oh             *handler.OrganizationHandler
 	authMiddleware gin.HandlerFunc
 }
 
-func NewUserRouter(oh *handler.UserHandler, authMiddleware gin.HandlerFunc) *UserRouter {
-	return &UserRouter{
+func NewOrganizationRouter(oh *handler.OrganizationHandler, authMiddleware gin.HandlerFunc) *OrganizationRouter {
+	return &OrganizationRouter{
 		oh:             oh,
 		authMiddleware: authMiddleware,
 	}
 }
 
-func (r *UserRouter) Register(engine *gin.Engine) {
+func (r *OrganizationRouter) Register(engine *gin.Engine) {
 	group := engine.Group("/project")
 
-	// 受保护的路由与auth中间件
+	// 受保护的路由（需要认证中间件）
 	protected := group.Group("")
 	protected.Use(r.authMiddleware)
 

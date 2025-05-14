@@ -20,7 +20,7 @@ func InitApp() (*App, error) {
 		ProvideLoginHandler,
 		ProvideMenuHandler,
 		ProvideProjectHandler,
-		ProvideUserHandler,
+		ProvideOrganizationHandler, //add for _getOrgList
 		//metrics
 		ProvideMetricsCollector,
 		//hanlder middlerware
@@ -29,7 +29,7 @@ func InitApp() (*App, error) {
 		ProvideAuthRouter,
 		ProvideMenuRouter,
 		ProvideProjectRouter,
-		ProvideUserRouter,
+		ProvideOrganizationRouter, // add for _getOrgList
 		ProvideRouters,
 
 		//service
@@ -37,7 +37,7 @@ func InitApp() (*App, error) {
 		ProvideCaptchaService,
 		ProvideMenuService,
 		ProvideProjectService,
-		ProvideUserService,
+		ProvideOrganizationService, // add for _getOrgList
 
 		wire.Struct(new(App), "*"),
 	)

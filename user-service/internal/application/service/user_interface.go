@@ -2,10 +2,10 @@ package service
 
 import (
 	"context"
-	"github.com/Wafer233/msproject-be/user-service/internal/domain/model"
+	"github.com/Wafer233/msproject-be/user-service/internal/application/dto"
 )
 
 type UserService interface {
-	// 根据会员ID获取组织列表
-	GetOrganizationsByMemberId(ctx context.Context, memberId int64) ([]model.Organization, error)
+	// GetOrgList 获取用户所有的组织
+	GetOrgList(ctx context.Context, memberId int64) ([]dto.OrganizationDTO, error)
 }

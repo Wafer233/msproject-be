@@ -4,7 +4,7 @@
 // - protoc             v3.21.12
 // source: user-service/proto/user/user_service.proto
 
-package user
+package organization
 
 import (
 	context "context"
@@ -18,88 +18,88 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// UserServiceClient is the client API for UserService service.
+// OrganizationServiceClient is the client API for OrganizationService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type UserServiceClient interface {
-	// 获取会员的组织列表
-	GetOrganizationsByMemberId(ctx context.Context, in *GetOrgListRequest, opts ...grpc.CallOption) (*GetOrgListResponse, error)
+type OrganizationServiceClient interface {
+	// 获取组织列表
+	GetOrgList(ctx context.Context, in *OrgListRequest, opts ...grpc.CallOption) (*OrgListResponse, error)
 }
 
-type userServiceClient struct {
+type organizationServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
-	return &userServiceClient{cc}
+func NewOrganizationServiceClient(cc grpc.ClientConnInterface) OrganizationServiceClient {
+	return &organizationServiceClient{cc}
 }
 
-func (c *userServiceClient) GetOrganizationsByMemberId(ctx context.Context, in *GetOrgListRequest, opts ...grpc.CallOption) (*GetOrgListResponse, error) {
-	out := new(GetOrgListResponse)
-	err := c.cc.Invoke(ctx, "/user.service.v1.UserService/GetOrganizationsByMemberId", in, out, opts...)
+func (c *organizationServiceClient) GetOrgList(ctx context.Context, in *OrgListRequest, opts ...grpc.CallOption) (*OrgListResponse, error) {
+	out := new(OrgListResponse)
+	err := c.cc.Invoke(ctx, "/organization.service.v1.OrganizationService/GetOrgList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// UserServiceServer is the server API for UserService service.
-// All implementations must embed UnimplementedUserServiceServer
+// OrganizationServiceServer is the server API for OrganizationService service.
+// All implementations must embed UnimplementedOrganizationServiceServer
 // for forward compatibility
-type UserServiceServer interface {
-	// 获取会员的组织列表
-	GetOrganizationsByMemberId(context.Context, *GetOrgListRequest) (*GetOrgListResponse, error)
-	mustEmbedUnimplementedUserServiceServer()
+type OrganizationServiceServer interface {
+	// 获取组织列表
+	GetOrgList(context.Context, *OrgListRequest) (*OrgListResponse, error)
+	mustEmbedUnimplementedOrganizationServiceServer()
 }
 
-// UnimplementedUserServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedUserServiceServer struct {
+// UnimplementedOrganizationServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedOrganizationServiceServer struct {
 }
 
-func (UnimplementedUserServiceServer) GetOrganizationsByMemberId(context.Context, *GetOrgListRequest) (*GetOrgListResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetOrganizationsByMemberId not implemented")
+func (UnimplementedOrganizationServiceServer) GetOrgList(context.Context, *OrgListRequest) (*OrgListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetOrgList not implemented")
 }
-func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
+func (UnimplementedOrganizationServiceServer) mustEmbedUnimplementedOrganizationServiceServer() {}
 
-// UnsafeUserServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to UserServiceServer will
+// UnsafeOrganizationServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to OrganizationServiceServer will
 // result in compilation errors.
-type UnsafeUserServiceServer interface {
-	mustEmbedUnimplementedUserServiceServer()
+type UnsafeOrganizationServiceServer interface {
+	mustEmbedUnimplementedOrganizationServiceServer()
 }
 
-func RegisterUserServiceServer(s grpc.ServiceRegistrar, srv UserServiceServer) {
-	s.RegisterService(&UserService_ServiceDesc, srv)
+func RegisterOrganizationServiceServer(s grpc.ServiceRegistrar, srv OrganizationServiceServer) {
+	s.RegisterService(&OrganizationService_ServiceDesc, srv)
 }
 
-func _UserService_GetOrganizationsByMemberId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetOrgListRequest)
+func _OrganizationService_GetOrgList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OrgListRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServiceServer).GetOrganizationsByMemberId(ctx, in)
+		return srv.(OrganizationServiceServer).GetOrgList(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/user.service.v1.UserService/GetOrganizationsByMemberId",
+		FullMethod: "/organization.service.v1.OrganizationService/GetOrgList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).GetOrganizationsByMemberId(ctx, req.(*GetOrgListRequest))
+		return srv.(OrganizationServiceServer).GetOrgList(ctx, req.(*OrgListRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
+// OrganizationService_ServiceDesc is the grpc.ServiceDesc for OrganizationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var UserService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "user.service.v1.UserService",
-	HandlerType: (*UserServiceServer)(nil),
+var OrganizationService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "organization.service.v1.OrganizationService",
+	HandlerType: (*OrganizationServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetOrganizationsByMemberId",
-			Handler:    _UserService_GetOrganizationsByMemberId_Handler,
+			MethodName: "GetOrgList",
+			Handler:    _OrganizationService_GetOrgList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

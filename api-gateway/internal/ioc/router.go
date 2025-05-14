@@ -14,7 +14,6 @@ func ProvideAuthRouter(
 	return router.NewAuthRouter(ch, lr, rh)
 }
 
-// ------------------- adding router -------------------
 func ProvideMenuRouter(
 	mh *handler.MenuHandler,
 	authMiddleware gin.HandlerFunc,
@@ -29,24 +28,27 @@ func ProvideProjectRouter(
 	return router.NewProjectRouter(ph, authMiddleware)
 }
 
-func ProvideUserRouter(
-	uh *handler.UserHandler,
+// add for _organization
+func ProvideOrganizationRouter(
+	oh *handler.OrganizationHandler,
 	authMiddleware gin.HandlerFunc,
-) *router.UserRouter {
-	return router.NewUserRouter(uh, authMiddleware)
+) *router.OrganizationRouter {
+	return router.NewOrganizationRouter(oh, authMiddleware)
 }
 
+// ProvideRouters 提供所有路由
 func ProvideRouters(
 	authRouter *router.AuthRouter,
 	menuRouter *router.MenuRouter,
 	projectRouter *router.ProjectRouter,
-	userRouter *router.UserRouter,
-	// add here
+	organizationRouter *router.OrganizationRouter, // 新增
+	// 添加其他路由...
 ) []router.Router {
 	return []router.Router{
 		authRouter,
 		menuRouter,
 		projectRouter,
-		userRouter,
+		organizationRouter, // 新增
+		// 添加其他路由...
 	}
 }

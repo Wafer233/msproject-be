@@ -7,7 +7,7 @@ import (
 	"github.com/Wafer233/msproject-be/user-service/internal/infrastructure/metrics"
 	authpb "github.com/Wafer233/msproject-be/user-service/proto/auth"
 	captchapb "github.com/Wafer233/msproject-be/user-service/proto/captcha"
-	userpb "github.com/Wafer233/msproject-be/user-service/proto/user"
+	orgpb "github.com/Wafer233/msproject-be/user-service/proto/user"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -21,7 +21,7 @@ type GrpcServer struct {
 	//--------------add services here----------------
 	authSvc    service.AuthService
 	captchaSvc service.CaptchaService
-	userSvc    service.UserService
+	userSvc    service.UserService // add for _getOrgList
 
 	/////-------------metrics related----------------
 	metricsConf config.MetricsConfig
@@ -34,7 +34,7 @@ func NewGrpcServer(
 	//--------------add services here----------------
 	authSvc service.AuthService,
 	captchaSvc service.CaptchaService,
-	userSvc service.UserService,
+	userSvc service.UserService, // add for _getOrgList
 
 	metricsConf config.MetricsConfig,
 	metrics *metrics.GORMMetrics,
@@ -45,7 +45,7 @@ func NewGrpcServer(
 		//--------------add services here----------------
 		authSvc:    authSvc,
 		captchaSvc: captchaSvc,
-		userSvc:    userSvc,
+		userSvc:    userSvc, // add for _getOrgList
 
 		metricsConf: metricsConf,
 		metrics:     metrics,
@@ -65,7 +65,7 @@ func (gs *GrpcServer) Start() error {
 	// ---------------- Register services here -------------------
 	authpb.RegisterAuthServiceServer(gs.server, NewAuthServiceServer(gs.authSvc))
 	captchapb.RegisterCaptchaServiceServer(gs.server, NewCaptchaServiceServer(gs.captchaSvc))
-	userpb.RegisterUserServiceServer(gs.server, NewUserServiceServer(gs.userSvc))
+	orgpb.RegisterOrganizationServiceServer(gs.server, NewUserServiceServer(gs.userSvc)) // add for _getOrgList
 
 	// Start gRPC server in a goroutine
 	go func() {

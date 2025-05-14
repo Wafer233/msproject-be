@@ -4,7 +4,7 @@
 // 	protoc        v3.21.12
 // source: api-gateway/proto/user/user_service.proto
 
-package user
+package organization
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -21,21 +21,20 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// 组织信息DTO
 type OrganizationDTO struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	Avatar        string                 `protobuf:"bytes,3,opt,name=avatar,proto3" json:"avatar,omitempty"`
 	Description   string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
-	OwnerCode     int64                  `protobuf:"varint,5,opt,name=owner_code,json=ownerCode,proto3" json:"owner_code,omitempty"`
-	CreateTime    string                 `protobuf:"bytes,6,opt,name=create_time,json=createTime,proto3" json:"create_time,omitempty"`
+	MemberId      int64                  `protobuf:"varint,5,opt,name=member_id,json=memberId,proto3" json:"member_id,omitempty"`
+	CreateTime    int64                  `protobuf:"varint,6,opt,name=create_time,json=createTime,proto3" json:"create_time,omitempty"`
 	Personal      int32                  `protobuf:"varint,7,opt,name=personal,proto3" json:"personal,omitempty"`
-	Code          string                 `protobuf:"bytes,8,opt,name=code,proto3" json:"code,omitempty"`
-	Address       string                 `protobuf:"bytes,9,opt,name=address,proto3" json:"address,omitempty"`
-	Province      int32                  `protobuf:"varint,10,opt,name=province,proto3" json:"province,omitempty"`
-	City          int32                  `protobuf:"varint,11,opt,name=city,proto3" json:"city,omitempty"`
-	Area          int32                  `protobuf:"varint,12,opt,name=area,proto3" json:"area,omitempty"`
+	Address       string                 `protobuf:"bytes,8,opt,name=address,proto3" json:"address,omitempty"`
+	Province      int32                  `protobuf:"varint,9,opt,name=province,proto3" json:"province,omitempty"`
+	City          int32                  `protobuf:"varint,10,opt,name=city,proto3" json:"city,omitempty"`
+	Area          int32                  `protobuf:"varint,11,opt,name=area,proto3" json:"area,omitempty"`
+	Code          string                 `protobuf:"bytes,12,opt,name=code,proto3" json:"code,omitempty"` // 加密后的ID
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -98,18 +97,18 @@ func (x *OrganizationDTO) GetDescription() string {
 	return ""
 }
 
-func (x *OrganizationDTO) GetOwnerCode() int64 {
+func (x *OrganizationDTO) GetMemberId() int64 {
 	if x != nil {
-		return x.OwnerCode
+		return x.MemberId
 	}
 	return 0
 }
 
-func (x *OrganizationDTO) GetCreateTime() string {
+func (x *OrganizationDTO) GetCreateTime() int64 {
 	if x != nil {
 		return x.CreateTime
 	}
-	return ""
+	return 0
 }
 
 func (x *OrganizationDTO) GetPersonal() int32 {
@@ -117,13 +116,6 @@ func (x *OrganizationDTO) GetPersonal() int32 {
 		return x.Personal
 	}
 	return 0
-}
-
-func (x *OrganizationDTO) GetCode() string {
-	if x != nil {
-		return x.Code
-	}
-	return ""
 }
 
 func (x *OrganizationDTO) GetAddress() string {
@@ -154,28 +146,34 @@ func (x *OrganizationDTO) GetArea() int32 {
 	return 0
 }
 
-// 获取组织列表请求
-type GetOrgListRequest struct {
+func (x *OrganizationDTO) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+type OrgListRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	MemberId      int64                  `protobuf:"varint,1,opt,name=member_id,json=memberId,proto3" json:"member_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetOrgListRequest) Reset() {
-	*x = GetOrgListRequest{}
+func (x *OrgListRequest) Reset() {
+	*x = OrgListRequest{}
 	mi := &file_api_gateway_proto_user_user_service_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetOrgListRequest) String() string {
+func (x *OrgListRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetOrgListRequest) ProtoMessage() {}
+func (*OrgListRequest) ProtoMessage() {}
 
-func (x *GetOrgListRequest) ProtoReflect() protoreflect.Message {
+func (x *OrgListRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_api_gateway_proto_user_user_service_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -187,40 +185,39 @@ func (x *GetOrgListRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetOrgListRequest.ProtoReflect.Descriptor instead.
-func (*GetOrgListRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use OrgListRequest.ProtoReflect.Descriptor instead.
+func (*OrgListRequest) Descriptor() ([]byte, []int) {
 	return file_api_gateway_proto_user_user_service_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GetOrgListRequest) GetMemberId() int64 {
+func (x *OrgListRequest) GetMemberId() int64 {
 	if x != nil {
 		return x.MemberId
 	}
 	return 0
 }
 
-// 获取组织列表响应
-type GetOrgListResponse struct {
+type OrgListResponse struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	OrganizationList []*OrganizationDTO     `protobuf:"bytes,1,rep,name=organization_list,json=organizationList,proto3" json:"organization_list,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
 
-func (x *GetOrgListResponse) Reset() {
-	*x = GetOrgListResponse{}
+func (x *OrgListResponse) Reset() {
+	*x = OrgListResponse{}
 	mi := &file_api_gateway_proto_user_user_service_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetOrgListResponse) String() string {
+func (x *OrgListResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetOrgListResponse) ProtoMessage() {}
+func (*OrgListResponse) ProtoMessage() {}
 
-func (x *GetOrgListResponse) ProtoReflect() protoreflect.Message {
+func (x *OrgListResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_api_gateway_proto_user_user_service_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -232,12 +229,12 @@ func (x *GetOrgListResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetOrgListResponse.ProtoReflect.Descriptor instead.
-func (*GetOrgListResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use OrgListResponse.ProtoReflect.Descriptor instead.
+func (*OrgListResponse) Descriptor() ([]byte, []int) {
 	return file_api_gateway_proto_user_user_service_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *GetOrgListResponse) GetOrganizationList() []*OrganizationDTO {
+func (x *OrgListResponse) GetOrganizationList() []*OrganizationDTO {
 	if x != nil {
 		return x.OrganizationList
 	}
@@ -248,29 +245,29 @@ var File_api_gateway_proto_user_user_service_proto protoreflect.FileDescriptor
 
 const file_api_gateway_proto_user_user_service_proto_rawDesc = "" +
 	"\n" +
-	")api-gateway/proto/user/user_service.proto\x12\x0fuser.service.v1\"\xbd\x02\n" +
+	")api-gateway/proto/user/user_service.proto\x12\x17organization.service.v1\"\xbb\x02\n" +
 	"\x0fOrganizationDTO\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x16\n" +
 	"\x06avatar\x18\x03 \x01(\tR\x06avatar\x12 \n" +
-	"\vdescription\x18\x04 \x01(\tR\vdescription\x12\x1d\n" +
-	"\n" +
-	"owner_code\x18\x05 \x01(\x03R\townerCode\x12\x1f\n" +
-	"\vcreate_time\x18\x06 \x01(\tR\n" +
+	"\vdescription\x18\x04 \x01(\tR\vdescription\x12\x1b\n" +
+	"\tmember_id\x18\x05 \x01(\x03R\bmemberId\x12\x1f\n" +
+	"\vcreate_time\x18\x06 \x01(\x03R\n" +
 	"createTime\x12\x1a\n" +
-	"\bpersonal\x18\a \x01(\x05R\bpersonal\x12\x12\n" +
-	"\x04code\x18\b \x01(\tR\x04code\x12\x18\n" +
-	"\aaddress\x18\t \x01(\tR\aaddress\x12\x1a\n" +
-	"\bprovince\x18\n" +
-	" \x01(\x05R\bprovince\x12\x12\n" +
-	"\x04city\x18\v \x01(\x05R\x04city\x12\x12\n" +
-	"\x04area\x18\f \x01(\x05R\x04area\"0\n" +
-	"\x11GetOrgListRequest\x12\x1b\n" +
-	"\tmember_id\x18\x01 \x01(\x03R\bmemberId\"c\n" +
-	"\x12GetOrgListResponse\x12M\n" +
-	"\x11organization_list\x18\x01 \x03(\v2 .user.service.v1.OrganizationDTOR\x10organizationList2v\n" +
-	"\vUserService\x12g\n" +
-	"\x1aGetOrganizationsByMemberId\x12\".user.service.v1.GetOrgListRequest\x1a#.user.service.v1.GetOrgListResponse\"\x00B:Z8github.com/Wafer233/msproject-be/user-service/proto/userb\x06proto3"
+	"\bpersonal\x18\a \x01(\x05R\bpersonal\x12\x18\n" +
+	"\aaddress\x18\b \x01(\tR\aaddress\x12\x1a\n" +
+	"\bprovince\x18\t \x01(\x05R\bprovince\x12\x12\n" +
+	"\x04city\x18\n" +
+	" \x01(\x05R\x04city\x12\x12\n" +
+	"\x04area\x18\v \x01(\x05R\x04area\x12\x12\n" +
+	"\x04code\x18\f \x01(\tR\x04code\"-\n" +
+	"\x0eOrgListRequest\x12\x1b\n" +
+	"\tmember_id\x18\x01 \x01(\x03R\bmemberId\"h\n" +
+	"\x0fOrgListResponse\x12U\n" +
+	"\x11organization_list\x18\x01 \x03(\v2(.organization.service.v1.OrganizationDTOR\x10organizationList2x\n" +
+	"\x13OrganizationService\x12a\n" +
+	"\n" +
+	"GetOrgList\x12'.organization.service.v1.OrgListRequest\x1a(.organization.service.v1.OrgListResponse\"\x00BBZ@github.com/Wafer233/msproject-be/user-service/proto/organizationb\x06proto3"
 
 var (
 	file_api_gateway_proto_user_user_service_proto_rawDescOnce sync.Once
@@ -286,14 +283,14 @@ func file_api_gateway_proto_user_user_service_proto_rawDescGZIP() []byte {
 
 var file_api_gateway_proto_user_user_service_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_api_gateway_proto_user_user_service_proto_goTypes = []any{
-	(*OrganizationDTO)(nil),    // 0: user.service.v1.OrganizationDTO
-	(*GetOrgListRequest)(nil),  // 1: user.service.v1.GetOrgListRequest
-	(*GetOrgListResponse)(nil), // 2: user.service.v1.GetOrgListResponse
+	(*OrganizationDTO)(nil), // 0: organization.service.v1.OrganizationDTO
+	(*OrgListRequest)(nil),  // 1: organization.service.v1.OrgListRequest
+	(*OrgListResponse)(nil), // 2: organization.service.v1.OrgListResponse
 }
 var file_api_gateway_proto_user_user_service_proto_depIdxs = []int32{
-	0, // 0: user.service.v1.GetOrgListResponse.organization_list:type_name -> user.service.v1.OrganizationDTO
-	1, // 1: user.service.v1.UserService.GetOrganizationsByMemberId:input_type -> user.service.v1.GetOrgListRequest
-	2, // 2: user.service.v1.UserService.GetOrganizationsByMemberId:output_type -> user.service.v1.GetOrgListResponse
+	0, // 0: organization.service.v1.OrgListResponse.organization_list:type_name -> organization.service.v1.OrganizationDTO
+	1, // 1: organization.service.v1.OrganizationService.GetOrgList:input_type -> organization.service.v1.OrgListRequest
+	2, // 2: organization.service.v1.OrganizationService.GetOrgList:output_type -> organization.service.v1.OrgListResponse
 	2, // [2:3] is the sub-list for method output_type
 	1, // [1:2] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name

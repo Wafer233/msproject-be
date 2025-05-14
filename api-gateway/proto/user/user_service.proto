@@ -1,35 +1,31 @@
 syntax = "proto3";
-package user.service.v1;
-option go_package = "github.com/Wafer233/msproject-be/user-service/proto/user";
+package organization.service.v1;
+option go_package = "github.com/Wafer233/msproject-be/user-service/proto/organization";
 
-// 组织信息DTO
 message OrganizationDTO {
   int64 id = 1;
   string name = 2;
   string avatar = 3;
   string description = 4;
-  int64 owner_code = 5;
-  string create_time = 6;
+  int64 member_id = 5;
+  int64 create_time = 6;
   int32 personal = 7;
-  string code = 8;
-  string address = 9;
-  int32 province = 10;
-  int32 city = 11;
-  int32 area = 12;
+  string address = 8;
+  int32 province = 9;
+  int32 city = 10;
+  int32 area = 11;
+  string code = 12; // 加密后的ID
 }
 
-// 获取组织列表请求
-message GetOrgListRequest {
+message OrgListRequest {
   int64 member_id = 1;
 }
 
-// 获取组织列表响应
-message GetOrgListResponse {
+message OrgListResponse {
   repeated OrganizationDTO organization_list = 1;
 }
 
-// 用户服务定义
-service UserService {
-  // 获取会员的组织列表
-  rpc GetOrganizationsByMemberId(GetOrgListRequest) returns (GetOrgListResponse) {}
+service OrganizationService {
+  // 获取组织列表
+  rpc GetOrgList(OrgListRequest) returns (OrgListResponse) {}
 }

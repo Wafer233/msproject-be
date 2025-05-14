@@ -4,56 +4,44 @@ import (
 	"context"
 	"github.com/Wafer233/msproject-be/user-service/internal/application/service"
 	pb "github.com/Wafer233/msproject-be/user-service/proto/user"
+	"github.com/jinzhu/copier"
 	"go.uber.org/zap"
-	"strconv"
 )
 
 type UserServiceServer struct {
-	pb.UnimplementedUserServiceServer
+	pb.UnimplementedOrganizationServiceServer
 	userService service.UserService
 }
 
+// NewUserServiceServer 创建用户服务gRPC处理器
 func NewUserServiceServer(userService service.UserService) *UserServiceServer {
 	return &UserServiceServer{
 		userService: userService,
 	}
 }
 
-func (s *UserServiceServer) GetOrganizationsByMemberId(ctx context.Context, req *pb.GetOrgListRequest) (*pb.GetOrgListResponse, error) {
-	// 获取成员的组织
-	organizations, err := s.userService.GetOrganizationsByMemberId(ctx, req.MemberId)
+// GetOrgList 获取用户组织列表
+func (s *UserServiceServer) GetOrgList(ctx context.Context, req *pb.OrgListRequest) (*pb.OrgListResponse, error) {
+	// 调用应用服务
+	orgs, err := s.userService.GetOrgList(ctx, req.MemberId)
 	if err != nil {
-		zap.L().Error("获取组织失败", zap.Error(err))
+		zap.L().Error("获取组织列表失败", zap.Error(err))
 		return nil, err
 	}
 
-	// 转换为proto响应
-	resp := &pb.GetOrgListResponse{}
-	resp.OrganizationList = make([]*pb.OrganizationDTO, 0, len(organizations))
-
-	for _, org := range organizations {
-		orgDTO := &pb.OrganizationDTO{
-			Id:          org.Id,
-			Name:        org.Name,
-			Avatar:      org.Avatar,
-			Description: org.Description,
-			OwnerCode:   org.MemberId,
-			CreateTime:  "",
-			Personal:    org.Personal,
-			Code:        "", // 需要处理
-			Address:     org.Address,
-			Province:    org.Province,
-			City:        org.City,
-			Area:        org.Area,
-		}
-
-		// 处理创建时间，如果它是整数类型的时间戳
-		if org.CreateTime > 0 {
-			orgDTO.CreateTime = strconv.FormatInt(org.CreateTime, 10)
-		}
-
-		resp.OrganizationList = append(resp.OrganizationList, orgDTO)
+	// 转换为gRPC响应
+	response := &pb.OrgListResponse{
+		OrganizationList: make([]*pb.OrganizationDTO, 0, len(orgs)),
 	}
 
-	return resp, nil
+	for _, org := range orgs {
+		pbOrg := &pb.OrganizationDTO{}
+		if err := copier.Copy(pbOrg, &org); err != nil {
+			zap.L().Error("组织DTO转换失败", zap.Error(err))
+			continue
+		}
+		response.OrganizationList = append(response.OrganizationList, pbOrg)
+	}
+
+	return response, nil
 }

@@ -14,3 +14,7 @@ type OrganizationDTO struct {
 	City        int    `json:"city"`
 	Area        int    `json:"area"`
 }
+
+type OrganizationListResponse struct {
+	List []OrganizationDTO `json:"list"`
+}
