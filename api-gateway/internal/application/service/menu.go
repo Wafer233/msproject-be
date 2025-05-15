@@ -8,18 +8,19 @@ import (
 	"go.uber.org/zap"
 )
 
-// ProjectService 处理项目相关的服务
+// MenuService 处理菜单相关的应用服务
 type MenuService struct {
 	client menupb.MenuServiceClient
 }
 
-// NewProjectService 创建一个新的项目服务
+// NewMenuService 创建菜单服务
 func NewMenuService(client menupb.MenuServiceClient) *MenuService {
 	return &MenuService{
 		client: client,
 	}
 }
 
+// GetMenus 获取菜单数据
 func (s *MenuService) GetMenus(ctx context.Context, token string) (*dto.MenuResponse, error) {
 	// 调用gRPC服务
 	resp, err := s.client.Index(ctx, &menupb.IndexMessage{
@@ -27,7 +28,7 @@ func (s *MenuService) GetMenus(ctx context.Context, token string) (*dto.MenuResp
 	})
 
 	if err != nil {
-		zap.L().Error("调用gRPC服务,获取菜单导航失败", zap.Error(err))
+		zap.L().Error("调用gRPC服务获取菜单失败", zap.Error(err))
 		return nil, err
 	}
 
@@ -38,18 +39,15 @@ func (s *MenuService) GetMenus(ctx context.Context, token string) (*dto.MenuResp
 	// 递归转换菜单树
 	for _, menu := range resp.Menus {
 		menuDTO := &dto.MenuDTO{}
-		er := copier.Copy(menuDTO, menu)
-		if er != nil {
-			zap.L().Error("递归转换菜单树失败", zap.Error(er))
-			return nil, er
+		if err := copier.Copy(menuDTO, menu); err != nil {
+			zap.L().Error("复制菜单数据失败", zap.Error(err))
+			return nil, err
 		}
 
 		// 递归处理子菜单
 		if len(menu.Children) > 0 {
 			var children []*dto.MenuDTO
-			err = s.ConvertMenuTree(menu.Children, &children)
-			if err != nil {
-				zap.L().Error("递归处理子菜单失败", zap.Error(err))
+			if err := s.ConvertMenuTree(menu.Children, &children); err != nil {
 				return nil, err
 			}
 			menuDTO.Children = children
@@ -66,16 +64,14 @@ func (s *MenuService) GetMenus(ctx context.Context, token string) (*dto.MenuResp
 func (s *MenuService) ConvertMenuTree(pbMenus []*menupb.MenuMessage, menuDTOs *[]*dto.MenuDTO) error {
 	for _, pbMenu := range pbMenus {
 		menuDTO := &dto.MenuDTO{}
-		err := copier.Copy(menuDTO, pbMenu)
-		if err != nil {
+		if err := copier.Copy(menuDTO, pbMenu); err != nil {
 			return err
 		}
 
 		// 递归处理子菜单
 		if len(pbMenu.Children) > 0 {
 			var children []*dto.MenuDTO
-			err = s.ConvertMenuTree(pbMenu.Children, &children)
-			if err != nil {
+			if err := s.ConvertMenuTree(pbMenu.Children, &children); err != nil {
 				return err
 			}
 			menuDTO.Children = children

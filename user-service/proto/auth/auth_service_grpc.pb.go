@@ -22,8 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthServiceClient interface {
-	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
-	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	Register(ctx context.Context, in *RegisterMessage, opts ...grpc.CallOption) (*RegisterResponse, error)
+	Login(ctx context.Context, in *LoginMessage, opts ...grpc.CallOption) (*LoginResponse, error)
 	TokenVerify(ctx context.Context, in *TokenVerifyRequest, opts ...grpc.CallOption) (*TokenVerifyResponse, error)
 }
 
@@ -35,7 +35,7 @@ func NewAuthServiceClient(cc grpc.ClientConnInterface) AuthServiceClient {
 	return &authServiceClient{cc}
 }
 
-func (c *authServiceClient) Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error) {
+func (c *authServiceClient) Register(ctx context.Context, in *RegisterMessage, opts ...grpc.CallOption) (*RegisterResponse, error) {
 	out := new(RegisterResponse)
 	err := c.cc.Invoke(ctx, "/auth.service.v1.AuthService/Register", in, out, opts...)
 	if err != nil {
@@ -44,7 +44,7 @@ func (c *authServiceClient) Register(ctx context.Context, in *RegisterRequest, o
 	return out, nil
 }
 
-func (c *authServiceClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
+func (c *authServiceClient) Login(ctx context.Context, in *LoginMessage, opts ...grpc.CallOption) (*LoginResponse, error) {
 	out := new(LoginResponse)
 	err := c.cc.Invoke(ctx, "/auth.service.v1.AuthService/Login", in, out, opts...)
 	if err != nil {
@@ -66,8 +66,8 @@ func (c *authServiceClient) TokenVerify(ctx context.Context, in *TokenVerifyRequ
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility
 type AuthServiceServer interface {
-	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
-	Login(context.Context, *LoginRequest) (*LoginResponse, error)
+	Register(context.Context, *RegisterMessage) (*RegisterResponse, error)
+	Login(context.Context, *LoginMessage) (*LoginResponse, error)
 	TokenVerify(context.Context, *TokenVerifyRequest) (*TokenVerifyResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
@@ -76,10 +76,10 @@ type AuthServiceServer interface {
 type UnimplementedAuthServiceServer struct {
 }
 
-func (UnimplementedAuthServiceServer) Register(context.Context, *RegisterRequest) (*RegisterResponse, error) {
+func (UnimplementedAuthServiceServer) Register(context.Context, *RegisterMessage) (*RegisterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
-func (UnimplementedAuthServiceServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
+func (UnimplementedAuthServiceServer) Login(context.Context, *LoginMessage) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
 func (UnimplementedAuthServiceServer) TokenVerify(context.Context, *TokenVerifyRequest) (*TokenVerifyResponse, error) {
@@ -99,7 +99,7 @@ func RegisterAuthServiceServer(s grpc.ServiceRegistrar, srv AuthServiceServer) {
 }
 
 func _AuthService_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RegisterRequest)
+	in := new(RegisterMessage)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -111,13 +111,13 @@ func _AuthService_Register_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: "/auth.service.v1.AuthService/Register",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).Register(ctx, req.(*RegisterRequest))
+		return srv.(AuthServiceServer).Register(ctx, req.(*RegisterMessage))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _AuthService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LoginRequest)
+	in := new(LoginMessage)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -129,7 +129,7 @@ func _AuthService_Login_Handler(srv interface{}, ctx context.Context, dec func(i
 		FullMethod: "/auth.service.v1.AuthService/Login",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).Login(ctx, req.(*LoginRequest))
+		return srv.(AuthServiceServer).Login(ctx, req.(*LoginMessage))
 	}
 	return interceptor(ctx, in, info, handler)
 }

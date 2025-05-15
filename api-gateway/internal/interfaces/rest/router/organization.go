@@ -24,6 +24,6 @@ func (r *OrganizationRouter) Register(engine *gin.Engine) {
 	protected := group.Group("")
 	protected.Use(r.authMiddleware)
 
-	// 添加受保护的路由
+	// 添加受保护的路由 - 确保路径正确
 	protected.POST("/organization/_getOrgList", r.oh.GetOrgList)
 }

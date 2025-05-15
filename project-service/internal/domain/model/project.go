@@ -4,7 +4,6 @@ type Project struct {
 	Id                 int64
 	Cover              string
 	Name               string
-	Code               string
 	Description        string
 	AccessControlType  string
 	WhiteList          string
@@ -26,4 +25,9 @@ type Project struct {
 	BeginTime          int64
 	EndTime            int64
 	AutoUpdateSchedule int
+}
+
+// TableName 返回数据库表名
+func (*Project) TableName() string {
+	return "ms_project"
 }

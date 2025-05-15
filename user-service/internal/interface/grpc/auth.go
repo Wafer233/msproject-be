@@ -5,7 +5,6 @@ import (
 	"github.com/Wafer233/msproject-be/user-service/internal/application/dto"
 	"github.com/Wafer233/msproject-be/user-service/internal/application/service"
 	pb "github.com/Wafer233/msproject-be/user-service/proto/auth"
-	"github.com/jinzhu/copier"
 )
 
 type AuthServiceServer struct {
@@ -19,41 +18,37 @@ func NewAuthServiceServer(authService service.AuthService) *AuthServiceServer {
 	}
 }
 
-func (s *AuthServiceServer) Register(ctx context.Context, req *pb.RegisterRequest) (*pb.RegisterResponse, error) {
+func (s *AuthServiceServer) Register(ctx context.Context, req *pb.RegisterMessage) (*pb.RegisterResponse, error) {
 	// Convert proto request to DTO
 	dtoReq := dto.RegisterRequest{
-		Email:     req.Email,
-		Name:      req.Name,
-		Password:  req.Password,
-		Password2: req.Password2,
-		Mobile:    req.Mobile,
-		Captcha:   req.Captcha,
+		Email:    req.Email,
+		Name:     req.Name,
+		Password: req.Password,
+		Mobile:   req.Mobile,
+		Captcha:  req.Captcha,
 	}
 
 	// Call application service
 	err := s.authService.Register(ctx, dtoReq)
 
-	// Create response
-	resp := &pb.RegisterResponse{
-		Success: err == nil,
-	}
-
 	if err != nil {
-		resp.Message = err.Error()
+		return nil, err
 	}
+	// Create response
+	resp := &pb.RegisterResponse{}
 
 	return resp, nil
 }
 
-func (s *AuthServiceServer) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
+func (s *AuthServiceServer) Login(ctx context.Context, req *pb.LoginMessage) (*pb.LoginResponse, error) {
 	// Convert proto request to DTO
-	dtoReq := dto.LoginRequest{
+	dtoReq := &dto.LoginReq{
 		Account:  req.Account,
 		Password: req.Password,
 	}
 
 	// Call application service
-	result, err := s.authService.Login(ctx, dtoReq)
+	dtoRsp, err := s.authService.Login(ctx, *dtoReq)
 	if err != nil {
 		return nil, err
 	}
@@ -62,30 +57,45 @@ func (s *AuthServiceServer) Login(ctx context.Context, req *pb.LoginRequest) (*p
 	resp := &pb.LoginResponse{}
 
 	// Convert member
-	resp.Member = &pb.MemberDTO{
-		Id:            result.Member.Id,
-		Account:       result.Member.Account,
-		Name:          result.Member.Name,
-		Mobile:        result.Member.Mobile,
-		Status:        int32(result.Member.Status),
-		LastLoginTime: result.Member.LastLoginTime,
-		Email:         result.Member.Email,
-		Avatar:        result.Member.Avatar,
+	resp.Member = &pb.MemberMessage{
+		Id:     dtoRsp.Member.Id,
+		Name:   dtoRsp.Member.Name,
+		Mobile: dtoRsp.Member.Mobile,
+		Status: int32(dtoRsp.Member.Status),
+		// 以下是可选字段，dto 中没有就不填
+		// Realname: "",
+		// Account:  "",
+		// LastLoginTime: 0,
+		// Address: "",
+		// Province: 0,
+		// City: 0,
+		// Area: 0,
+		// Email: "",
 	}
 
-	// Convert token
-	resp.TokenList = &pb.TokenDTO{
-		AccessToken:    result.TokenList.AccessToken,
-		RefreshToken:   result.TokenList.RefreshToken,
-		TokenType:      result.TokenList.TokenType,
-		AccessTokenExp: result.TokenList.AccessTokenExp,
+	resp.TokenList = &pb.TokenMessage{
+		AccessToken:    dtoRsp.TokenList.AccessToken,
+		RefreshToken:   dtoRsp.TokenList.RefreshToken,
+		TokenType:      dtoRsp.TokenList.TokenType,
+		AccessTokenExp: dtoRsp.TokenList.AccessTokenExp,
 	}
 
 	// Convert organizations
-	resp.OrganizationList = make([]*pb.OrganizationDTO, 0, len(result.OrganizationList))
-	for _, org := range result.OrganizationList {
-		orgDTO := &pb.OrganizationDTO{}
-		_ = copier.Copy(orgDTO, org)
+	resp.OrganizationList = make([]*pb.OrganizationMessage, 0, len(dtoRsp.OrganizationList))
+	for _, org := range dtoRsp.OrganizationList {
+		orgDTO := &pb.OrganizationMessage{
+			Id:          org.Id,
+			Name:        org.Name,
+			Avatar:      org.Avatar,
+			Description: org.Description,
+			MemberId:    org.MemberId,
+			CreateTime:  org.CreateTime,
+			Personal:    org.Personal,
+			Address:     org.Address,
+			Province:    org.Province,
+			City:        org.City,
+			Area:        org.Area,
+		}
 		resp.OrganizationList = append(resp.OrganizationList, orgDTO)
 	}
 
@@ -94,22 +104,18 @@ func (s *AuthServiceServer) Login(ctx context.Context, req *pb.LoginRequest) (*p
 
 func (s *AuthServiceServer) TokenVerify(ctx context.Context, req *pb.TokenVerifyRequest) (*pb.TokenVerifyResponse, error) {
 	// Call application service
-	memberDTO, err := s.authService.TokenVerify(ctx, req.Token)
+	tokenRsp, err := s.authService.TokenVerify(ctx, req.Token)
 	if err != nil {
 		return nil, err
 	}
 
 	// Convert DTO to proto response
 	resp := &pb.TokenVerifyResponse{
-		Member: &pb.MemberDTO{
-			Id:            memberDTO.Id,
-			Account:       memberDTO.Account,
-			Name:          memberDTO.Name,
-			Mobile:        memberDTO.Mobile,
-			Status:        int32(memberDTO.Status),
-			LastLoginTime: memberDTO.LastLoginTime,
-			Email:         memberDTO.Email,
-			Avatar:        memberDTO.Avatar,
+		Member: &pb.MemberMessage{
+			Id:     tokenRsp.Id,
+			Name:   tokenRsp.Name,
+			Mobile: tokenRsp.Mobile,
+			Status: int32(tokenRsp.Status),
 		},
 	}
 

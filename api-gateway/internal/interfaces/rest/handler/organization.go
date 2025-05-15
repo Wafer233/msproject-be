@@ -12,20 +12,20 @@ import (
 )
 
 type OrganizationHandler struct {
-	organizationService service.OrganizationService
+	os *service.OrganizationService
 }
 
-func NewOrganizationHandler(organizationService service.OrganizationService) *OrganizationHandler {
+func NewOrganizationHandler(os *service.OrganizationService) *OrganizationHandler {
 	return &OrganizationHandler{
-		organizationService: organizationService,
+		os: os,
 	}
 }
 
 func (h *OrganizationHandler) GetOrgList(c *gin.Context) {
 	result := &common.Result{}
 
-	// 从上下文获取用户ID（由认证中间件设置）
-	userId, exists := c.Get("userId")
+	// 从上下文获取用户ID（由认证中间件设置）- 注意键名一致性
+	userId, exists := c.Get("userId") // 确保与中间件中设置的键名一致
 	if !exists {
 		c.JSON(http.StatusOK, result.Fail(http.StatusUnauthorized, "未授权"))
 		return
@@ -36,7 +36,7 @@ func (h *OrganizationHandler) GetOrgList(c *gin.Context) {
 	defer cancel()
 
 	// 调用服务
-	orgs, err := h.organizationService.GetOrgList(ctx, userId.(int64))
+	orgs, err := h.os.GetOrgList(ctx, userId.(int64))
 	if err != nil {
 		zap.L().Error("获取组织列表失败", zap.Error(err))
 		c.JSON(http.StatusOK, result.Fail(http.StatusInternalServerError, "服务器错误"))
@@ -45,10 +45,9 @@ func (h *OrganizationHandler) GetOrgList(c *gin.Context) {
 
 	// 检查是否为空列表，如果是则返回空数组而不是nil
 	if orgs == nil {
-		c.JSON(http.StatusOK, result.Success([]dto.OrganizationDTO{}))
-		return
+		orgs = []dto.OrganizationList{}
 	}
 
-	// 直接返回组织数组，不需要额外包装
+	// 直接返回数组，与文档格式一致
 	c.JSON(http.StatusOK, result.Success(orgs))
 }

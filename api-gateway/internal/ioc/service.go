@@ -23,6 +23,6 @@ func ProvideProjectService(clientMgr *grpc.GrpcClientManager) *service.ProjectSe
 	return service.NewProjectService(clientMgr.ProjectClient)
 }
 
-func ProvideOrganizationService(clientMgr *grpc.GrpcClientManager) service.OrganizationService {
+func ProvideOrganizationService(clientMgr *grpc.GrpcClientManager) *service.OrganizationService {
 	return service.NewOrganizationService(clientMgr.OrganizationClient)
 }

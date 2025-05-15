@@ -3,7 +3,6 @@ package service
 
 import (
 	"context"
-	"errors"
 	"github.com/Wafer233/msproject-be/api-gateway/internal/application/dto"
 	authpb "github.com/Wafer233/msproject-be/api-gateway/proto/auth"
 	"github.com/jinzhu/copier"
@@ -21,32 +20,31 @@ func NewAuthService(client authpb.AuthServiceClient) *AuthService {
 
 func (s *AuthService) Register(ctx context.Context, req dto.RegisterRequest) error {
 	// 转换到gRPC请求
-	grpcReq := &authpb.RegisterRequest{
-		Email:     req.Email,
-		Name:      req.Name,
-		Password:  req.Password,
-		Password2: req.Password2,
-		Mobile:    req.Mobile,
-		Captcha:   req.Captcha,
+	grpcReq := &authpb.RegisterMessage{
+		Email:    req.Email,
+		Name:     req.Name,
+		Password: req.Password,
+		Mobile:   req.Mobile,
+		Captcha:  req.Captcha,
 	}
 
 	// 调用gRPC服务
-	resp, err := s.client.Register(ctx, grpcReq)
+	_, err := s.client.Register(ctx, grpcReq)
 	if err != nil {
 		return err
 	}
 
 	// 检查响应
-	if !resp.Success {
-		return errors.New(resp.Message)
-	}
+	//if !resp.Success {
+	//	return errors.New(resp.Message)
+	//}
 
 	return nil
 }
 
-func (s *AuthService) Login(ctx context.Context, req dto.LoginRequest) (*dto.LoginResponse, error) {
+func (s *AuthService) Login(ctx context.Context, req *dto.LoginReq) (*dto.LoginRsp, error) {
 	// 转换到gRPC请求
-	grpcReq := &authpb.LoginRequest{
+	grpcReq := &authpb.LoginMessage{
 		Account:  req.Account,
 		Password: req.Password,
 	}
@@ -58,22 +56,18 @@ func (s *AuthService) Login(ctx context.Context, req dto.LoginRequest) (*dto.Log
 	}
 
 	// 转换到DTO
-	resp := &dto.LoginResponse{}
+	resp := &dto.LoginRsp{}
 
 	// 转换用户信息
-	resp.Member = dto.MemberDTO{
-		Id:            grpcResp.Member.Id,
-		Account:       grpcResp.Member.Account,
-		Name:          grpcResp.Member.Name,
-		Mobile:        grpcResp.Member.Mobile,
-		Status:        int(grpcResp.Member.Status),
-		LastLoginTime: grpcResp.Member.LastLoginTime,
-		Email:         grpcResp.Member.Email,
-		Avatar:        grpcResp.Member.Avatar,
+	resp.Member = dto.Member{
+		Id:     grpcResp.Member.Id,
+		Name:   grpcResp.Member.Name,
+		Mobile: grpcResp.Member.Mobile,
+		Status: int(grpcResp.Member.Status),
 	}
 
 	// 转换令牌
-	resp.TokenList = dto.TokenDTO{
+	resp.TokenList = dto.TokenList{
 		AccessToken:    grpcResp.TokenList.AccessToken,
 		RefreshToken:   grpcResp.TokenList.RefreshToken,
 		TokenType:      grpcResp.TokenList.TokenType,
@@ -81,9 +75,9 @@ func (s *AuthService) Login(ctx context.Context, req dto.LoginRequest) (*dto.Log
 	}
 
 	// 转换组织列表
-	resp.OrganizationList = make([]dto.OrganizationDTO, 0, len(grpcResp.OrganizationList))
+	resp.OrganizationList = make([]dto.OrganizationList, 0, len(grpcResp.OrganizationList))
 	for _, org := range grpcResp.OrganizationList {
-		var orgDTO dto.OrganizationDTO
+		var orgDTO dto.OrganizationList
 		_ = copier.Copy(&orgDTO, org)
 		resp.OrganizationList = append(resp.OrganizationList, orgDTO)
 	}

@@ -6,6 +6,7 @@ import (
 	"github.com/Wafer233/msproject-be/project-service/internal/domain/repository"
 	"github.com/jinzhu/copier"
 	"go.uber.org/zap"
+	"strconv"
 )
 
 type DefaultProjectService struct {
@@ -17,22 +18,26 @@ func NewDefaultProjectService(projectRepo repository.ProjectRepository) ProjectS
 }
 
 func (s *DefaultProjectService) GetProjectsByMemberId(ctx context.Context, memberId int64, page, pageSize int64) (*dto.ProjectListResponse, error) {
-	// Call repository
+	// 调用仓库获取项目数据
 	projects, total, err := s.projectRepo.FindProjectsByMemberId(ctx, memberId, page, pageSize)
 	if err != nil {
-		zap.L().Error("Failed to find projects by member ID", zap.Error(err))
+		zap.L().Error("获取用户项目失败", zap.Error(err))
 		return nil, err
 	}
 
-	// Convert domain models to DTOs
+	// 转换领域模型到DTO
 	var projectDTOs []*dto.ProjectDTO
 	for _, p := range projects {
-		dto := &dto.ProjectDTO{}
-		if err := copier.Copy(dto, p); err != nil {
-			zap.L().Error("Failed to copy project to DTO", zap.Error(err))
+		projectDTO := &dto.ProjectDTO{}
+		if err := copier.Copy(projectDTO, p); err != nil {
+			zap.L().Error("复制项目数据失败", zap.Error(err))
 			return nil, err
 		}
-		projectDTOs = append(projectDTOs, dto)
+
+		// 重要: 简化处理，直接将ID转为字符串赋值给Code
+		projectDTO.Code = strconv.FormatInt(p.Id, 10)
+
+		projectDTOs = append(projectDTOs, projectDTO)
 	}
 
 	return &dto.ProjectListResponse{

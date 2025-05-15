@@ -39,8 +39,9 @@ func TokenVerifyMiddleware(clientMgr *grpc.GrpcClientManager) gin.HandlerFunc {
 			return
 		}
 
-		// Set user info to context
+		// 设置用户信息到上下文 - 为了一致性，既设置userId又设置memberId
 		c.Set("userId", resp.Member.Id)
+		c.Set("memberId", resp.Member.Id) // 添加这一行，确保两个键名都可用
 		c.Set("userName", resp.Member.Name)
 
 		c.Next()

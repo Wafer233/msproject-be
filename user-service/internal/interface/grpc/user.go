@@ -6,6 +6,7 @@ import (
 	pb "github.com/Wafer233/msproject-be/user-service/proto/user"
 	"github.com/jinzhu/copier"
 	"go.uber.org/zap"
+	"strconv"
 )
 
 type UserServiceServer struct {
@@ -37,9 +38,13 @@ func (s *UserServiceServer) GetOrgList(ctx context.Context, req *pb.OrgListReque
 	for _, org := range orgs {
 		pbOrg := &pb.OrganizationDTO{}
 		if err := copier.Copy(pbOrg, &org); err != nil {
-			zap.L().Error("组织DTO转换失败", zap.Error(err))
+			zap.L().Error("复制组织数据失败", zap.Error(err))
 			continue
 		}
+
+		// 重要: 简化处理，直接将ID转为字符串赋值给Code
+		pbOrg.Code = strconv.FormatInt(pbOrg.Id, 10)
+
 		response.OrganizationList = append(response.OrganizationList, pbOrg)
 	}
 

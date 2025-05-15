@@ -7,5 +7,5 @@ import (
 
 type UserService interface {
 	// GetOrgList 获取用户所有的组织
-	GetOrgList(ctx context.Context, memberId int64) ([]dto.OrganizationDTO, error)
+	GetOrgList(ctx context.Context, memberId int64) ([]dto.OrganizationList, error)
 }

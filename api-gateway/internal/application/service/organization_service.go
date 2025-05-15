@@ -6,29 +6,26 @@ import (
 	orgpb "github.com/Wafer233/msproject-be/user-service/proto/user"
 	"github.com/jinzhu/copier"
 	"go.uber.org/zap"
+	"strconv"
 )
 
-type OrganizationService interface {
-	GetOrgList(ctx context.Context, memberId int64) ([]dto.OrganizationDTO, error)
-}
-
-type DefaultOrganizationService struct {
+type OrganizationService struct {
 	client orgpb.OrganizationServiceClient
 }
 
-func NewOrganizationService(client orgpb.OrganizationServiceClient) OrganizationService {
-	return &DefaultOrganizationService{
+func NewOrganizationService(client orgpb.OrganizationServiceClient) *OrganizationService {
+	return &OrganizationService{
 		client: client,
 	}
 }
 
-func (s *DefaultOrganizationService) GetOrgList(ctx context.Context, memberId int64) ([]dto.OrganizationDTO, error) {
+func (s *OrganizationService) GetOrgList(ctx context.Context, memberId int64) ([]dto.OrganizationList, error) {
 	// 创建请求
 	req := &orgpb.OrgListRequest{
 		MemberId: memberId,
 	}
 
-	// 调用 gRPC 服务
+	// 调用gRPC服务
 	resp, err := s.client.GetOrgList(ctx, req)
 	if err != nil {
 		zap.L().Error("调用组织服务失败", zap.Error(err))
@@ -37,19 +34,23 @@ func (s *DefaultOrganizationService) GetOrgList(ctx context.Context, memberId in
 
 	// 检查是否为空
 	if resp.OrganizationList == nil {
-		return []dto.OrganizationDTO{}, nil // 返回空数组而不是nil
+		return []dto.OrganizationList{}, nil // 返回空数组而不是nil
 	}
 
 	// 确保初始化数组
-	orgDTOs := make([]dto.OrganizationDTO, 0, len(resp.OrganizationList))
+	orgDTOs := make([]dto.OrganizationList, 0, len(resp.OrganizationList))
 
-	// 转换为 DTO
+	// 转换为DTO
 	for _, pbOrg := range resp.OrganizationList {
-		var orgDTO dto.OrganizationDTO
+		var orgDTO dto.OrganizationList
 		if err := copier.Copy(&orgDTO, pbOrg); err != nil {
-			zap.L().Error("组织数据转换失败", zap.Error(err))
+			zap.L().Error("复制组织数据失败", zap.Error(err))
 			continue
 		}
+
+		// 重要: 简化处理，直接将ID转为字符串赋值给Code
+		orgDTO.Code = strconv.FormatInt(pbOrg.Id, 10)
+
 		orgDTOs = append(orgDTOs, orgDTO)
 	}
 

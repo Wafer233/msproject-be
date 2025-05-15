@@ -1,6 +1,7 @@
 package model
 
-type Captcha struct {
-	Mobile string
-	Code   string
-}
+//
+//type Captcha struct {
+//	Mobile string
+//	Code   string
+//}

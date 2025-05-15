@@ -21,7 +21,7 @@ type DefaultAuthService struct {
 	ts domainService.TokenService
 }
 
-func (das *DefaultAuthService) TokenVerify(ctx context.Context, token string) (*dto.MemberDTO, error) {
+func (das *DefaultAuthService) TokenVerify(ctx context.Context, token string) (*dto.Member, error) {
 	if token == "" {
 		return nil, errors.New("token is empty")
 	}
@@ -54,15 +54,11 @@ func (das *DefaultAuthService) TokenVerify(ctx context.Context, token string) (*
 	}
 
 	// Convert to DTO
-	memberDTO := &dto.MemberDTO{
-		Id:            member.Id,
-		Account:       member.Account,
-		Name:          member.Name,
-		Mobile:        member.Mobile,
-		Status:        member.Status,
-		LastLoginTime: member.LastLoginTime,
-		Email:         member.Email,
-		Avatar:        member.Avatar,
+	memberDTO := &dto.Member{
+		Id:     member.Id,
+		Name:   member.Name,
+		Mobile: member.Mobile,
+		Status: member.Status,
 	}
 
 	return memberDTO, nil
@@ -142,7 +138,7 @@ func (das *DefaultAuthService) Register(ctx context.Context, req dto.RegisterReq
 	return nil
 }
 
-func (das *DefaultAuthService) Login(ctx context.Context, req dto.LoginRequest) (*dto.LoginResponse, error) {
+func (das *DefaultAuthService) Login(ctx context.Context, req dto.LoginReq) (*dto.LoginRsp, error) {
 	// 加密密码
 	pwd := das.ps.EncryptPassword(req.Password)
 	//pwd := req.Password
@@ -167,18 +163,14 @@ func (das *DefaultAuthService) Login(ctx context.Context, req dto.LoginRequest) 
 	accessToken, refreshToken, accessExp := das.ts.GenerateTokens(strconv.FormatInt(member.Id, 10))
 
 	// 构建响应
-	response := &dto.LoginResponse{
-		Member: dto.MemberDTO{
-			Id:            member.Id,
-			Account:       member.Account,
-			Name:          member.Name,
-			Mobile:        member.Mobile,
-			Status:        member.Status,
-			LastLoginTime: member.LastLoginTime,
-			Email:         member.Email,
-			Avatar:        member.Avatar,
+	response := &dto.LoginRsp{
+		Member: dto.Member{
+			Id:     member.Id,
+			Name:   member.Name,
+			Mobile: member.Mobile,
+			Status: member.Status,
 		},
-		TokenList: dto.TokenDTO{
+		TokenList: dto.TokenList{
 			AccessToken:    accessToken,
 			RefreshToken:   refreshToken,
 			TokenType:      "bearer",
@@ -187,9 +179,9 @@ func (das *DefaultAuthService) Login(ctx context.Context, req dto.LoginRequest) 
 	}
 
 	// 转换组织列表
-	var orgDTOs []dto.OrganizationDTO
+	var orgDTOs []dto.OrganizationList
 	for _, org := range organizations {
-		var orgDTO dto.OrganizationDTO
+		var orgDTO dto.OrganizationList
 		_ = copier.Copy(&orgDTO, org)
 		orgDTOs = append(orgDTOs, orgDTO)
 	}

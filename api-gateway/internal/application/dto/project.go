@@ -1,6 +1,5 @@
 package dto
 
-// ProjectDTO represents a project in the response
 type ProjectDTO struct {
 	Id                 int64   `json:"id"`
 	Cover              string  `json:"cover"`
@@ -36,13 +35,13 @@ type ProjectDTO struct {
 	Collected          int     `json:"collected"`
 }
 
-// ProjectListResponse represents a response containing a list of projects
+// ProjectListResponse 表示项目列表响应
 type ProjectListResponse struct {
 	List  []*ProjectDTO `json:"list"`
 	Total int64         `json:"total"`
 }
 
-// ProjectRequest represents a project list request parameters
+// ProjectRequest 表示项目列表请求参数
 type ProjectRequest struct {
 	Page     int64 `form:"page"`
 	PageSize int64 `form:"pageSize"`

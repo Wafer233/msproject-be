@@ -1,40 +1,30 @@
 package dto
 
-// LoginRequest 登录请求DTO
-type LoginRequest struct {
-	Account  string `json:"account" `
-	Password string `json:"password" `
+type LoginReq struct {
+	Account  string `json:"account" form:"account"`
+	Password string `json:"password" form:"password"`
 }
 
-// LoginResponse 登录响应DTO
-type LoginResponse struct {
-	Member           MemberDTO         `json:"member"`
-	TokenList        TokenDTO          `json:"tokenList"`
-	OrganizationList []OrganizationDTO `json:"organizationList"`
+type LoginRsp struct {
+	Member           Member             `json:"member"`
+	TokenList        TokenList          `json:"tokenList"`
+	OrganizationList []OrganizationList `json:"organizationList"`
+}
+type Member struct {
+	Id     int64  `json:"id"`
+	Name   string `json:"name"`
+	Mobile string `json:"mobile"`
+	Status int    `json:"status"`
 }
 
-// MemberDTO 用户DTO
-type MemberDTO struct {
-	Id            int64  `json:"id"`
-	Account       string `json:"account"`
-	Name          string `json:"name"`
-	Mobile        string `json:"mobile"`
-	Status        int    `json:"status"`
-	LastLoginTime int64  `json:"last_login_time"`
-	Email         string `json:"email"`
-	Avatar        string `json:"avatar"`
-}
-
-// TokenDTO 令牌DTO
-type TokenDTO struct {
+type TokenList struct {
 	AccessToken    string `json:"accessToken"`
 	RefreshToken   string `json:"refreshToken"`
 	TokenType      string `json:"tokenType"`
 	AccessTokenExp int64  `json:"accessTokenExp"`
 }
 
-// OrganizationDTO 组织DTO
-type OrganizationDTO struct {
+type OrganizationList struct {
 	Id          int64  `json:"id"`
 	Name        string `json:"name"`
 	Avatar      string `json:"avatar"`
@@ -46,4 +36,5 @@ type OrganizationDTO struct {
 	Province    int32  `json:"province"`
 	City        int32  `json:"city"`
 	Area        int32  `json:"area"`
+	Code        string `json:"codes"`
 }

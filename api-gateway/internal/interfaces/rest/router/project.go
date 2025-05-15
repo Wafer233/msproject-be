@@ -17,6 +17,7 @@ func NewProjectRouter(ph *handler.ProjectHandler, authMiddleware gin.HandlerFunc
 	}
 }
 
+// api-gateway/internal/interfaces/rest/router/project.go
 func (r *ProjectRouter) Register(engine *gin.Engine) {
 	group := engine.Group("/project")
 
@@ -24,6 +25,6 @@ func (r *ProjectRouter) Register(engine *gin.Engine) {
 	protected := group.Group("")
 	protected.Use(r.authMiddleware)
 
-	// Add protected routes
-	protected.POST("/project/selfList", r.ph.GetMyProjects)
+	// 修改为明确的路径
+	protected.POST("/project/selfList", r.ph.GetMyProjects) // 确保路径匹配
 }

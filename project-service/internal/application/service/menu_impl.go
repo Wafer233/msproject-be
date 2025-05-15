@@ -24,7 +24,7 @@ func (s *DefaultMenuService) GetMenus(ctx context.Context) (*dto.MenuResponse, e
 	// 调用仓库获取领域模型
 	menus, err := s.menuRepo.FindAll(ctx)
 	if err != nil {
-		zap.L().Error("project-service调用仓库获取领域模型", zap.Error(err))
+		zap.L().Error("获取菜单失败", zap.Error(err))
 		return nil, err
 	}
 

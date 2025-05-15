@@ -1,6 +1,6 @@
 package model
 
-// ProjectWithMember combines Project and ProjectMember data
+// ProjectWithMember 组合项目和成员数据
 type ProjectWithMember struct {
 	Project
 	MemberCode string

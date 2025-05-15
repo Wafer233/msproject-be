@@ -6,6 +6,7 @@ import (
 	"github.com/Wafer233/msproject-be/user-service/internal/domain/repository"
 	"github.com/jinzhu/copier"
 	"go.uber.org/zap"
+	"strconv"
 )
 
 type DefaultUserService struct {
@@ -18,7 +19,7 @@ func NewDefaultUserService(or repository.OrganizationRepository) UserService {
 	}
 }
 
-func (s *DefaultUserService) GetOrgList(ctx context.Context, memberId int64) ([]dto.OrganizationDTO, error) {
+func (s *DefaultUserService) GetOrgList(ctx context.Context, memberId int64) ([]dto.OrganizationList, error) {
 	// 调用仓库获取组织列表
 	organizations, err := s.or.FindOrganizationsByMemberId(ctx, memberId)
 	if err != nil {
@@ -27,16 +28,16 @@ func (s *DefaultUserService) GetOrgList(ctx context.Context, memberId int64) ([]
 	}
 
 	// 转换为DTO
-	orgDTOs := make([]dto.OrganizationDTO, 0, len(organizations))
+	orgDTOs := make([]dto.OrganizationList, 0, len(organizations))
 	for _, org := range organizations {
-		var dto dto.OrganizationDTO
+		var dto dto.OrganizationList
 		if err := copier.Copy(&dto, &org); err != nil {
-			zap.L().Error("转换组织DTO失败", zap.Error(err))
+			zap.L().Error("复制组织数据失败", zap.Error(err))
 			continue
 		}
 
-		// 转换ID为Code (假设有加密函数)
-		//dto.Code = strconv.FormatInt(org.Id, 10) // 实际项目中应使用加密函数
+		// 重要: 简化处理，直接将ID转为字符串赋值给Code
+		dto.Code = strconv.FormatInt(org.Id, 10)
 
 		orgDTOs = append(orgDTOs, dto)
 	}

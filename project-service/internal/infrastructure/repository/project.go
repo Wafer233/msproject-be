@@ -27,13 +27,13 @@ func (r *GORMProjectRepository) FindProjectsByMemberId(ctx context.Context, memb
 		return nil, 0, err
 	}
 
-	// 查询项目
+	// 查询项目与成员关联数据
 	var results []*model.ProjectWithMember
 	err := r.db.WithContext(ctx).
-		Table("ms_project a").
-		Joins("JOIN ms_project_member b ON a.id = b.project_code").
-		Select("a.*, b.member_code, b.join_time, b.is_owner, b.authorize, '' as owner_name, 0 as collected").
-		Where("b.member_code = ?", memberId).
+		Table("ms_project p").
+		Joins("JOIN ms_project_member pm ON p.id = pm.project_code").
+		Select("p.*, pm.member_code, pm.join_time, pm.is_owner, pm.authorize, '' as owner_name, 0 as collected").
+		Where("pm.member_code = ?", memberId).
 		Limit(int(pageSize)).
 		Offset(int(offset)).
 		Scan(&results).Error

@@ -6,7 +6,6 @@ type ProjectEntity struct {
 	Id                 int64   `gorm:"column:id;primaryKey"`
 	Cover              string  `gorm:"column:cover"`
 	Name               string  `gorm:"column:name"`
-	Code               string  `gorm:"column:code"`
 	Description        string  `gorm:"column:description"`
 	AccessControlType  string  `gorm:"column:access_control_type"`
 	WhiteList          string  `gorm:"column:white_list"`
@@ -30,18 +29,17 @@ type ProjectEntity struct {
 	AutoUpdateSchedule int     `gorm:"column:auto_update_schedule"`
 }
 
-// TableName returns the table name for GORM
+// TableName 设置GORM的表名
 func (ProjectEntity) TableName() string {
 	return "ms_project"
 }
 
-// ToModel converts entity to domain model
+// ToModel 将实体转换为领域模型
 func (e *ProjectEntity) ToModel() *model.Project {
 	return &model.Project{
 		Id:                 e.Id,
 		Cover:              e.Cover,
 		Name:               e.Name,
-		Code:               e.Code,
 		Description:        e.Description,
 		AccessControlType:  e.AccessControlType,
 		WhiteList:          e.WhiteList,

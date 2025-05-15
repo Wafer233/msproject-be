@@ -23,7 +23,7 @@ func (lh *LoginHandler) Login(c *gin.Context) {
 	result := &common.Result{}
 
 	// 解析请求
-	var req dto.LoginRequest
+	var req *dto.LoginReq
 	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusOK, result.Fail(http.StatusBadRequest, "参数传递有误"))
 		return

@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// ProjectRouter 项目路由
+// MenuRouter 菜单路由
 type MenuRouter struct {
 	mh             *handler.MenuHandler
 	authMiddleware gin.HandlerFunc
@@ -18,14 +18,14 @@ func NewMenuRouter(ph *handler.MenuHandler, authMiddleware gin.HandlerFunc) *Men
 	}
 }
 
-// Register routes
+// Register 注册路由
 func (r *MenuRouter) Register(engine *gin.Engine) {
 	group := engine.Group("/project")
 
-	// Protected routes with auth middleware
+	// 使用认证中间件保护路由
 	protected := group.Group("")
 	protected.Use(r.authMiddleware)
 
-	// Add protected routes
+	// 添加导航菜单获取路由
 	protected.POST("/index", r.mh.Index)
 }

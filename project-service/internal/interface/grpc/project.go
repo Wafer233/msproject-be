@@ -6,6 +6,7 @@ import (
 	pb "github.com/Wafer233/msproject-be/project-service/proto/project"
 	"github.com/jinzhu/copier"
 	"go.uber.org/zap"
+	"strconv"
 )
 
 type ProjectServiceServer struct {
@@ -20,21 +21,25 @@ func NewProjectServiceServer(projectService service.ProjectService) *ProjectServ
 }
 
 func (s *ProjectServiceServer) GetProjectsByMemberId(ctx context.Context, req *pb.ProjectListRequest) (*pb.ProjectListResponse, error) {
-	// Call application service
+	// 调用应用服务
 	response, err := s.projectService.GetProjectsByMemberId(ctx, req.MemberId, req.Page, req.PageSize)
 	if err != nil {
-		zap.L().Error("Failed to get projects by member ID", zap.Error(err))
+		zap.L().Error("获取用户项目失败", zap.Error(err))
 		return nil, err
 	}
 
-	// Convert DTO to proto message
+	// 转换DTO到Proto
 	var pbProjects []*pb.ProjectMessage
 	for _, dto := range response.List {
 		pbProject := &pb.ProjectMessage{}
 		if err := copier.Copy(pbProject, dto); err != nil {
-			zap.L().Error("Failed to copy DTO to proto message", zap.Error(err))
+			zap.L().Error("复制项目数据失败", zap.Error(err))
 			return nil, err
 		}
+
+		// 重要: 简化处理，直接将ID转为字符串赋值给Code
+		pbProject.Code = strconv.FormatInt(pbProject.Id, 10)
+
 		pbProjects = append(pbProjects, pbProject)
 	}
 
