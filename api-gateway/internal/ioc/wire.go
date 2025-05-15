@@ -23,13 +23,14 @@ func InitApp() (*App, error) {
 		ProvideProjectHandler,
 		//metrics
 		ProvideMetricsCollector,
+		//middleware
+		ProvideTokenVerifyMiddleware,
 		//router
 		ProvideIndexRouter,
 		ProvideLoginRouter,
 		ProvideOrganizationRouter,
 		ProvideProjectRouter,
 		ProvideRouters,
-
 		//service
 		ProvideGatewayGetCaptchaService,
 		ProvideGatewayGetOrgListService,

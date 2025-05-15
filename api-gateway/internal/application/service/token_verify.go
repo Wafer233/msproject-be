@@ -1,4 +1,4 @@
-package middleware
+package service
 
 import (
 	"context"
@@ -7,6 +7,12 @@ import (
 
 type TokenVerifyService struct {
 	client pb.LoginServiceClient
+}
+
+func NewTokenVerifyService(client pb.LoginServiceClient) *TokenVerifyService {
+	return &TokenVerifyService{
+		client: client,
+	}
 }
 
 func (service *TokenVerifyService) VerifyToken(ctx context.Context, token string) (*pb.TokenVerifyResponse, error) {

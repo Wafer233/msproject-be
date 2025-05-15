@@ -2,20 +2,22 @@ package router
 
 import (
 	"github.com/Wafer233/msproject-be/api-gateway/internal/interfaces/rest/handler"
-	"github.com/Wafer233/msproject-be/api-gateway/internal/interfaces/rest/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 // IndexRouter 菜单路由
 type IndexRouter struct {
-	indexHandler *handler.IndexHandler
+	indexHandler          *handler.IndexHandler
+	tokenVerifyMiddleware gin.HandlerFunc
 }
 
 func NewIndexRouter(
 	indexHandler *handler.IndexHandler,
+	tokenVerifyMiddleware gin.HandlerFunc,
 ) *IndexRouter {
 	return &IndexRouter{
-		indexHandler: indexHandler,
+		indexHandler:          indexHandler,
+		tokenVerifyMiddleware: tokenVerifyMiddleware,
 	}
 }
 
@@ -25,7 +27,7 @@ func (router *IndexRouter) Register(engine *gin.Engine) {
 
 	// 使用认证中间件保护路由
 	protected := group.Group("")
-	protected.Use(middleware.TokenVerifyMiddleware())
+	protected.Use(router.tokenVerifyMiddleware)
 
 	// 添加导航菜单获取路由
 	protected.POST("/index", router.indexHandler.Index)

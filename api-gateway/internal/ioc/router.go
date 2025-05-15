@@ -3,10 +3,14 @@ package ioc
 import (
 	"github.com/Wafer233/msproject-be/api-gateway/internal/interfaces/rest/handler"
 	"github.com/Wafer233/msproject-be/api-gateway/internal/interfaces/rest/router"
+	"github.com/gin-gonic/gin"
 )
 
-func ProvideIndexRouter(handler *handler.IndexHandler) *router.IndexRouter {
-	return router.NewIndexRouter(handler)
+func ProvideIndexRouter(
+	handler *handler.IndexHandler,
+	middleware gin.HandlerFunc,
+) *router.IndexRouter {
+	return router.NewIndexRouter(handler, middleware)
 }
 
 func ProvideLoginRouter(
@@ -17,12 +21,18 @@ func ProvideLoginRouter(
 	return router.NewLoginRouter(getCaptchaHandler, loginHandler, registerHandler)
 }
 
-func ProvideOrganizationRouter(handler *handler.GetOrgListHandler) *router.OrganizationRouter {
-	return router.NewOrganizationRouter(handler)
+func ProvideOrganizationRouter(
+	handler *handler.GetOrgListHandler,
+	middlerware gin.HandlerFunc,
+) *router.OrganizationRouter {
+	return router.NewOrganizationRouter(handler, middlerware)
 }
 
-func ProvideProjectRouter(handler *handler.ProjectHandler) *router.ProjectRouter {
-	return router.NewProjectRouter(handler)
+func ProvideProjectRouter(
+	handler *handler.ProjectHandler,
+	middleware gin.HandlerFunc,
+) *router.ProjectRouter {
+	return router.NewProjectRouter(handler, middleware)
 }
 
 // ProvideRouters 提供所有路由

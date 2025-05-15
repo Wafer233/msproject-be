@@ -18,7 +18,8 @@ func InitApp() (*App, error) {
 	}
 	gatewayIndexService := ProvideGatewayIndexService(grpcClientManager)
 	indexHandler := ProvideIndexHandler(gatewayIndexService)
-	indexRouter := ProvideIndexRouter(indexHandler)
+	handlerFunc := ProvideTokenVerifyMiddleware(grpcClientManager)
+	indexRouter := ProvideIndexRouter(indexHandler, handlerFunc)
 	gatewayGetCaptchaService := ProvideGatewayGetCaptchaService(grpcClientManager)
 	getCaptchaHandler := ProvideGetCaptchaHandler(gatewayGetCaptchaService)
 	gatewayLoginService := ProvideGatewayLoginService(grpcClientManager)
@@ -28,10 +29,10 @@ func InitApp() (*App, error) {
 	loginRouter := ProvideLoginRouter(getCaptchaHandler, loginHandler, registerHandler)
 	gatewayGetOrgListService := ProvideGatewayGetOrgListService(grpcClientManager)
 	getOrgListHandler := ProvideGetOrgListHandler(gatewayGetOrgListService)
-	organizationRouter := ProvideOrganizationRouter(getOrgListHandler)
+	organizationRouter := ProvideOrganizationRouter(getOrgListHandler, handlerFunc)
 	gatewayProjectService := ProvideGatewayProjectService(grpcClientManager)
 	projectHandler := ProvideProjectHandler(gatewayProjectService)
-	projectRouter := ProvideProjectRouter(projectHandler)
+	projectRouter := ProvideProjectRouter(projectHandler, handlerFunc)
 	v2 := ProvideRouters(indexRouter, loginRouter, organizationRouter, projectRouter)
 	engine := ProvideGinEngine(config, v, v2, metricsCollector)
 	app := &App{

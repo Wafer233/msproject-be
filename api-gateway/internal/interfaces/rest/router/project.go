@@ -2,17 +2,21 @@ package router
 
 import (
 	"github.com/Wafer233/msproject-be/api-gateway/internal/interfaces/rest/handler"
-	"github.com/Wafer233/msproject-be/api-gateway/internal/interfaces/rest/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 type ProjectRouter struct {
-	projectHandler *handler.ProjectHandler
+	projectHandler        *handler.ProjectHandler
+	tokenVerifyMiddleware gin.HandlerFunc
 }
 
-func NewProjectRouter(projectHandler *handler.ProjectHandler) *ProjectRouter {
+func NewProjectRouter(
+	projectHandler *handler.ProjectHandler,
+	tokenVerifyMiddleware gin.HandlerFunc,
+) *ProjectRouter {
 	return &ProjectRouter{
-		projectHandler: projectHandler,
+		projectHandler:        projectHandler,
+		tokenVerifyMiddleware: tokenVerifyMiddleware,
 	}
 }
 
@@ -22,7 +26,7 @@ func (router *ProjectRouter) Register(engine *gin.Engine) {
 
 	// Protected routes with auth middleware
 	protected := group.Group("")
-	protected.Use(middleware.TokenVerifyMiddleware())
+	protected.Use(router.tokenVerifyMiddleware)
 
 	group.POST("/project/selfList", router.projectHandler.SelfList)
 	group.POST("/project", router.projectHandler.SelfList)
