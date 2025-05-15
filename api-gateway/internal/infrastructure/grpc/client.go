@@ -2,11 +2,11 @@ package grpc
 
 import (
 	"github.com/Wafer233/msproject-be/api-gateway/config"
-	authpb "github.com/Wafer233/msproject-be/api-gateway/proto/auth"
-	captchapb "github.com/Wafer233/msproject-be/api-gateway/proto/captcha"
-	menupb "github.com/Wafer233/msproject-be/api-gateway/proto/menu"
+	indexPb "github.com/Wafer233/msproject-be/api-gateway/proto/index"
+	loginPb "github.com/Wafer233/msproject-be/api-gateway/proto/login"
+	orgPb "github.com/Wafer233/msproject-be/api-gateway/proto/organization"
 	projpb "github.com/Wafer233/msproject-be/api-gateway/proto/project"
-	orgpb "github.com/Wafer233/msproject-be/user-service/proto/user"
+
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -17,11 +17,10 @@ type GrpcClientManager struct {
 	UserConn    *grpc.ClientConn
 	ProjectConn *grpc.ClientConn
 	// ----------------  添加服务需要在这里新增客户端 ----------------
-	AuthClient         authpb.AuthServiceClient
-	CaptchaClient      captchapb.CaptchaServiceClient
-	MenuClient         menupb.MenuServiceClient
+	IndexClient        indexPb.IndexServiceClient
+	LoginClient        loginPb.LoginServiceClient
+	OrganizationClient orgPb.OrganizationServiceClient
 	ProjectClient      projpb.ProjectServiceClient
-	OrganizationClient orgpb.OrganizationServiceClient //add for _getOrgList
 }
 
 func NewGrpcClientManager(cfg *config.Config) (*GrpcClientManager, error) {
@@ -47,20 +46,20 @@ func NewGrpcClientManager(cfg *config.Config) (*GrpcClientManager, error) {
 	}
 
 	// ----------------  添加服务需要在这里新增客服端的实现 ----------------
-	authClient := authpb.NewAuthServiceClient(userConn)
-	captchaClient := captchapb.NewCaptchaServiceClient(userConn)
-	menuClient := menupb.NewMenuServiceClient(projectConn)
+	loginClient := loginPb.NewLoginServiceClient(userConn)
+	organizationClient := orgPb.NewOrganizationServiceClient(userConn)
+	// ----------------  添加服务需要在这里新增客服端的实现 ----------------
+	indexClient := indexPb.NewIndexServiceClient(projectConn)
 	projectClient := projpb.NewProjectServiceClient(projectConn)
-	organizationClient := orgpb.NewOrganizationServiceClient(userConn) // add for _getOrgList
 
 	return &GrpcClientManager{
-		UserConn:           userConn,
-		ProjectConn:        projectConn,
-		AuthClient:         authClient,
-		CaptchaClient:      captchaClient,
-		MenuClient:         menuClient,
+		UserConn:    userConn,
+		ProjectConn: projectConn,
+
+		LoginClient:        loginClient,
+		OrganizationClient: organizationClient,
+		IndexClient:        indexClient,
 		ProjectClient:      projectClient,
-		OrganizationClient: organizationClient, // add for _getOrgList
 	}, nil
 }
 

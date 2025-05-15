@@ -2,29 +2,28 @@ package router
 
 import (
 	"github.com/Wafer233/msproject-be/api-gateway/internal/interfaces/rest/handler"
+	"github.com/Wafer233/msproject-be/api-gateway/internal/interfaces/rest/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 type ProjectRouter struct {
-	ph             *handler.ProjectHandler
-	authMiddleware gin.HandlerFunc
+	projectHandler *handler.ProjectHandler
 }
 
-func NewProjectRouter(ph *handler.ProjectHandler, authMiddleware gin.HandlerFunc) *ProjectRouter {
+func NewProjectRouter(projectHandler *handler.ProjectHandler) *ProjectRouter {
 	return &ProjectRouter{
-		ph:             ph,
-		authMiddleware: authMiddleware,
+		projectHandler: projectHandler,
 	}
 }
 
 // api-gateway/internal/interfaces/rest/router/project.go
-func (r *ProjectRouter) Register(engine *gin.Engine) {
+func (router *ProjectRouter) Register(engine *gin.Engine) {
 	group := engine.Group("/project")
 
 	// Protected routes with auth middleware
 	protected := group.Group("")
-	protected.Use(r.authMiddleware)
+	protected.Use(middleware.TokenVerifyMiddleware())
 
-	// 修改为明确的路径
-	protected.POST("/project/selfList", r.ph.GetMyProjects) // 确保路径匹配
+	group.POST("/project/selfList", router.projectHandler.SelfList)
+	group.POST("/project", router.projectHandler.SelfList)
 }

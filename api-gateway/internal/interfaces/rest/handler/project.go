@@ -6,61 +6,41 @@ import (
 	"github.com/Wafer233/msproject-be/api-gateway/internal/application/service"
 	"github.com/Wafer233/msproject-be/common"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"net/http"
 	"time"
 )
 
 type ProjectHandler struct {
-	projectService *service.ProjectService
+	service *service.GatewayProjectService
 }
 
-func NewProjectHandler(projectService *service.ProjectService) *ProjectHandler {
+func NewProjectHandler(projectService *service.GatewayProjectService) *ProjectHandler {
 	return &ProjectHandler{
-		projectService: projectService,
+		service: projectService,
 	}
 }
 
-func (h *ProjectHandler) GetMyProjects(c *gin.Context) {
+func (handler *ProjectHandler) SelfList(ctx *gin.Context) {
 	result := &common.Result{}
-
-	// 从上下文获取用户ID - 注意键名要与中间件设置一致
-	userId, exists := c.Get("userId") // 确保与中间件中设置的键名一致
-	if !exists {
-		c.JSON(http.StatusOK, result.Fail(http.StatusUnauthorized, "Unauthorized"))
-		return
-	}
-
-	// 解析分页参数
-	var req dto.ProjectRequest
-	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusOK, result.Fail(http.StatusBadRequest, "Invalid parameters"))
-		return
-	}
-
-	// 设置默认值
-	if req.Page <= 0 {
-		req.Page = 1
-	}
-	if req.PageSize <= 0 {
-		req.PageSize = 10
-	}
-
-	// 创建超时上下文
-	ctx, cancel := context.WithTimeout(c.Request.Context(), 2*time.Second)
+	//1. 获取参数
+	c, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 
-	// 调用服务
-	response, err := h.projectService.GetMyProjects(ctx, userId.(int64), req.Page, req.PageSize)
+	memberId := ctx.GetInt64("memberId")
+	memberName := ctx.GetString("memberName")
+
+	page := &dto.DTOPage{}
+	page.Bind(ctx)
+	selectBy := ctx.PostForm("selectBy")
+
+	list, total, err := handler.service.GetMyProjects(c, page, selectBy, memberId, memberName)
 	if err != nil {
-		zap.L().Error("Failed to get my projects", zap.Error(err))
-		c.JSON(http.StatusOK, result.Fail(http.StatusInternalServerError, "Server error"))
+		ctx.JSON(http.StatusOK, result.Fail(common.ProjectSelfListFail, "调用selfList服务失败"))
 		return
 	}
 
-	// 返回结果 - 格式为 { "list": [...], "total": ... }
-	c.JSON(http.StatusOK, result.Success(gin.H{
-		"list":  response.List,
-		"total": response.Total,
+	ctx.JSON(http.StatusOK, result.Success(gin.H{
+		"list":  list, //null nil -> []
+		"total": total,
 	}))
 }

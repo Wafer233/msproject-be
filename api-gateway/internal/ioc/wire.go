@@ -15,29 +15,28 @@ func InitApp() (*App, error) {
 		//grpc
 		ProvideGrpcClientManager,
 		//handler
-		ProvideCaptchaHandler,
-		ProvideRegisterHandler,
+		ProvideGetCaptchaHandler,
+		ProvideGetOrgListHandler,
+		ProvideIndexHandler,
 		ProvideLoginHandler,
-		ProvideMenuHandler,
+		ProvideRegisterHandler,
 		ProvideProjectHandler,
-		ProvideOrganizationHandler, //add for _getOrgList
 		//metrics
 		ProvideMetricsCollector,
-		//hanlder middlerware
-		ProvideAuthMiddleware,
 		//router
-		ProvideAuthRouter,
-		ProvideMenuRouter,
+		ProvideIndexRouter,
+		ProvideLoginRouter,
+		ProvideOrganizationRouter,
 		ProvideProjectRouter,
-		ProvideOrganizationRouter, // add for _getOrgList
 		ProvideRouters,
 
 		//service
-		ProvideAuthService,
-		ProvideCaptchaService,
-		ProvideMenuService,
-		ProvideProjectService,
-		ProvideOrganizationService, // add for _getOrgList
+		ProvideGatewayGetCaptchaService,
+		ProvideGatewayGetOrgListService,
+		ProvideGatewayIndexService,
+		ProvideGatewayLoginService,
+		ProvideGatewayProjectService,
+		ProvideGatewayRegisterService,
 
 		wire.Struct(new(App), "*"),
 	)

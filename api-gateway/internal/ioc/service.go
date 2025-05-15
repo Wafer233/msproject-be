@@ -7,22 +7,26 @@ import (
 
 // add all the services (domain/application) here
 
-func ProvideAuthService(clientMgr *grpc.GrpcClientManager) *service.AuthService {
-	return service.NewAuthService(clientMgr.AuthClient)
+func ProvideGatewayGetCaptchaService(clientMgr *grpc.GrpcClientManager) *service.GatewayGetCaptchaService {
+	return service.NewGatewayGetCaptchaService(clientMgr.LoginClient)
 }
 
-func ProvideCaptchaService(clientMgr *grpc.GrpcClientManager) *service.CaptchaService {
-	return service.NewCaptchaService(clientMgr.CaptchaClient)
+func ProvideGatewayGetOrgListService(clientMgr *grpc.GrpcClientManager) *service.GatewayGetOrgListService {
+	return service.NewGatewayGetOrgListService(clientMgr.OrganizationClient)
 }
 
-func ProvideMenuService(clientMgr *grpc.GrpcClientManager) *service.MenuService {
-	return service.NewMenuService(clientMgr.MenuClient)
+func ProvideGatewayIndexService(clientMgr *grpc.GrpcClientManager) *service.GatewayIndexService {
+	return service.NewGatewayIndexService(clientMgr.IndexClient)
 }
 
-func ProvideProjectService(clientMgr *grpc.GrpcClientManager) *service.ProjectService {
-	return service.NewProjectService(clientMgr.ProjectClient)
+func ProvideGatewayLoginService(clientMgr *grpc.GrpcClientManager) *service.GatewayLoginService {
+	return service.NewGatewayLoginService(clientMgr.LoginClient)
 }
 
-func ProvideOrganizationService(clientMgr *grpc.GrpcClientManager) *service.OrganizationService {
-	return service.NewOrganizationService(clientMgr.OrganizationClient)
+func ProvideGatewayProjectService(clientMgr *grpc.GrpcClientManager) *service.GatewayProjectService {
+	return service.NewGatewayProjectService(clientMgr.ProjectClient)
+}
+
+func ProvideGatewayRegisterService(clientMgr *grpc.GrpcClientManager) *service.GatewayRegisterService {
+	return service.NewGatewayRegisterService(clientMgr.LoginClient)
 }

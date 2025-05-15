@@ -1,48 +1,52 @@
 package handler
 
 import (
+	"context"
 	"github.com/Wafer233/msproject-be/api-gateway/internal/application/dto"
 	"github.com/Wafer233/msproject-be/api-gateway/internal/application/service"
 	"github.com/Wafer233/msproject-be/common"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 )
 
 // RegisterHandler 处理注册相关请求s
 type RegisterHandler struct {
-	as *service.AuthService
+	service *service.GatewayRegisterService
 }
 
 // NewRegisterHandler 创建注册处理器
-func NewRegisterHandler(as *service.AuthService) *RegisterHandler {
+func NewRegisterHandler(service *service.GatewayRegisterService) *RegisterHandler {
 	return &RegisterHandler{
-		as: as,
+		service: service,
 	}
 }
 
-func (h *RegisterHandler) Register(c *gin.Context) {
+func (handler *RegisterHandler) Register(ctx *gin.Context) {
 	result := &common.Result{}
 
-	// 解析请求
-	var req dto.RegisterRequest
-	if err := c.ShouldBind(&req); err != nil {
-		c.JSON(http.StatusOK, result.Fail(http.StatusBadRequest, "参数传递有误"))
+	c, cancel := context.WithTimeout(ctx.Request.Context(), 2*time.Second)
+	defer cancel()
+
+	var dtoReq dto.RegisterRequest
+	if err := ctx.ShouldBind(&dtoReq); err != nil {
+		ctx.JSON(http.StatusOK, result.Fail(common.LoginRegisterBindFail, "注册请求Bind失败"))
 		return
 	}
 
 	// 验证参数
-	if err := req.Verify(); err != nil {
-		c.JSON(http.StatusOK, result.Fail(http.StatusBadRequest, err.Error()))
+	if err := dtoReq.Verify(); err != nil {
+		ctx.JSON(http.StatusOK, result.Fail(common.LoginRegisterReqFormatError, "注册请求参数格式错误"))
 		return
 	}
 
 	// 调用服务层
-	err := h.as.Register(c, req)
+	err := handler.service.Register(c, dtoReq)
 	if err != nil {
-		c.JSON(http.StatusOK, result.Fail(http.StatusInternalServerError, err.Error()))
+		ctx.JSON(http.StatusOK, result.Fail(common.LoginRegisterServiceError, "注册服务调用失败"))
 		return
 	}
 
 	// 返回结果
-	c.JSON(http.StatusOK, result.Success(nil))
+	ctx.JSON(http.StatusOK, result.Success(""))
 }

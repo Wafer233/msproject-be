@@ -5,28 +5,26 @@ import (
 	"github.com/Wafer233/msproject-be/api-gateway/internal/interfaces/rest/handler"
 )
 
-// add all the handlers here to support the router
-
-func ProvideCaptchaHandler(svc *service.CaptchaService) *handler.CaptchaHandler {
-	return handler.NewCaptchaHandler(svc)
+func ProvideGetCaptchaHandler(service *service.GatewayGetCaptchaService) *handler.GetCaptchaHandler {
+	return handler.NewGetCaptchaHandler(service)
 }
 
-func ProvideRegisterHandler(as *service.AuthService) *handler.RegisterHandler {
-	return handler.NewRegisterHandler(as)
+func ProvideGetOrgListHandler(service *service.GatewayGetOrgListService) *handler.GetOrgListHandler {
+	return handler.NewGetOrgListHandler(service)
 }
 
-func ProvideLoginHandler(as *service.AuthService) *handler.LoginHandler {
-	return handler.NewLoginHandler(as)
+func ProvideIndexHandler(service *service.GatewayIndexService) *handler.IndexHandler {
+	return handler.NewIndexHandler(service)
 }
 
-func ProvideMenuHandler(msvc *service.MenuService) *handler.MenuHandler {
-	return handler.NewMenuHandler(msvc)
+func ProvideLoginHandler(service *service.GatewayLoginService) *handler.LoginHandler {
+	return handler.NewLoginHandler(service)
 }
 
-func ProvideProjectHandler(ps *service.ProjectService) *handler.ProjectHandler {
-	return handler.NewProjectHandler(ps)
+func ProvideRegisterHandler(service *service.GatewayRegisterService) *handler.RegisterHandler {
+	return handler.NewRegisterHandler(service)
 }
 
-func ProvideOrganizationHandler(os *service.OrganizationService) *handler.OrganizationHandler {
-	return handler.NewOrganizationHandler(os)
+func ProvideProjectHandler(service *service.GatewayProjectService) *handler.ProjectHandler {
+	return handler.NewProjectHandler(service)
 }

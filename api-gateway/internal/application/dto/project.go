@@ -1,10 +1,27 @@
 package dto
 
-type ProjectDTO struct {
+import "github.com/gin-gonic/gin"
+
+type DTOPage struct {
+	Page     int64 `json:"page" form:"page"`
+	PageSize int64 `json:"pageSize" form:"pageSize"`
+}
+
+type DTOProject struct {
+	Project
+	ProjectCode int64  `json:"project_code"`
+	MemberCode  int64  `json:"member_code"`
+	JoinTime    int64  `json:"join_time"`
+	IsOwner     int64  `json:"is_owner"`
+	Authorize   string `json:"authorize"`
+	OwnerName   string `json:"owner_name"`
+	Collected   int    `json:"collected"`
+}
+
+type Project struct {
 	Id                 int64   `json:"id"`
 	Cover              string  `json:"cover"`
 	Name               string  `json:"name"`
-	Code               string  `json:"code"`
 	Description        string  `json:"description"`
 	AccessControlType  string  `json:"access_control_type"`
 	WhiteList          string  `json:"white_list"`
@@ -26,23 +43,15 @@ type ProjectDTO struct {
 	BeginTime          int64   `json:"begin_time"`
 	EndTime            int64   `json:"end_time"`
 	AutoUpdateSchedule int     `json:"auto_update_schedule"`
-	ProjectCode        string  `json:"project_code"`
-	MemberCode         string  `json:"member_code"`
-	JoinTime           string  `json:"join_time"`
-	IsOwner            int     `json:"is_owner"`
-	Authorize          string  `json:"authorize"`
-	OwnerName          string  `json:"owner_name"`
-	Collected          int     `json:"collected"`
+	Code               string  `json:"code"`
 }
 
-// ProjectListResponse 表示项目列表响应
-type ProjectListResponse struct {
-	List  []*ProjectDTO `json:"list"`
-	Total int64         `json:"total"`
-}
-
-// ProjectRequest 表示项目列表请求参数
-type ProjectRequest struct {
-	Page     int64 `form:"page"`
-	PageSize int64 `form:"pageSize"`
+func (p *DTOPage) Bind(c *gin.Context) {
+	_ = c.ShouldBind(&p)
+	if p.Page == 0 {
+		p.Page = 1
+	}
+	if p.PageSize == 0 {
+		p.PageSize = 10
+	}
 }
