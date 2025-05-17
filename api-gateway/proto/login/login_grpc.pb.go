@@ -22,10 +22,11 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type LoginServiceClient interface {
-	GetCaptcha(ctx context.Context, in *GetCaptchaMessage, opts ...grpc.CallOption) (*GetCaptchaResponse, error)
-	Register(ctx context.Context, in *RegisterMessage, opts ...grpc.CallOption) (*RegisterResponse, error)
-	Login(ctx context.Context, in *LoginMessage, opts ...grpc.CallOption) (*LoginResponse, error)
-	TokenVerify(ctx context.Context, in *TokenVerifyMessage, opts ...grpc.CallOption) (*TokenVerifyResponse, error)
+	GetCaptcha(ctx context.Context, in *GetCaptchaRequest, opts ...grpc.CallOption) (*GetCaptchaResponse, error)
+	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
+	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	TokenVerify(ctx context.Context, in *TokenVerifyRequest, opts ...grpc.CallOption) (*TokenVerifyResponse, error)
+	GetOrgList(ctx context.Context, in *GetOrgListRequest, opts ...grpc.CallOption) (*GetOrgListResponse, error)
 }
 
 type loginServiceClient struct {
@@ -36,36 +37,45 @@ func NewLoginServiceClient(cc grpc.ClientConnInterface) LoginServiceClient {
 	return &loginServiceClient{cc}
 }
 
-func (c *loginServiceClient) GetCaptcha(ctx context.Context, in *GetCaptchaMessage, opts ...grpc.CallOption) (*GetCaptchaResponse, error) {
+func (c *loginServiceClient) GetCaptcha(ctx context.Context, in *GetCaptchaRequest, opts ...grpc.CallOption) (*GetCaptchaResponse, error) {
 	out := new(GetCaptchaResponse)
-	err := c.cc.Invoke(ctx, "/login.service.v1.LoginService/GetCaptcha", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/login.v1.LoginService/GetCaptcha", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *loginServiceClient) Register(ctx context.Context, in *RegisterMessage, opts ...grpc.CallOption) (*RegisterResponse, error) {
+func (c *loginServiceClient) Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error) {
 	out := new(RegisterResponse)
-	err := c.cc.Invoke(ctx, "/login.service.v1.LoginService/Register", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/login.v1.LoginService/Register", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *loginServiceClient) Login(ctx context.Context, in *LoginMessage, opts ...grpc.CallOption) (*LoginResponse, error) {
+func (c *loginServiceClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
 	out := new(LoginResponse)
-	err := c.cc.Invoke(ctx, "/login.service.v1.LoginService/Login", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/login.v1.LoginService/Login", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *loginServiceClient) TokenVerify(ctx context.Context, in *TokenVerifyMessage, opts ...grpc.CallOption) (*TokenVerifyResponse, error) {
+func (c *loginServiceClient) TokenVerify(ctx context.Context, in *TokenVerifyRequest, opts ...grpc.CallOption) (*TokenVerifyResponse, error) {
 	out := new(TokenVerifyResponse)
-	err := c.cc.Invoke(ctx, "/login.service.v1.LoginService/TokenVerify", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/login.v1.LoginService/TokenVerify", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *loginServiceClient) GetOrgList(ctx context.Context, in *GetOrgListRequest, opts ...grpc.CallOption) (*GetOrgListResponse, error) {
+	out := new(GetOrgListResponse)
+	err := c.cc.Invoke(ctx, "/login.v1.LoginService/GetOrgList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -76,10 +86,11 @@ func (c *loginServiceClient) TokenVerify(ctx context.Context, in *TokenVerifyMes
 // All implementations must embed UnimplementedLoginServiceServer
 // for forward compatibility
 type LoginServiceServer interface {
-	GetCaptcha(context.Context, *GetCaptchaMessage) (*GetCaptchaResponse, error)
-	Register(context.Context, *RegisterMessage) (*RegisterResponse, error)
-	Login(context.Context, *LoginMessage) (*LoginResponse, error)
-	TokenVerify(context.Context, *TokenVerifyMessage) (*TokenVerifyResponse, error)
+	GetCaptcha(context.Context, *GetCaptchaRequest) (*GetCaptchaResponse, error)
+	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
+	Login(context.Context, *LoginRequest) (*LoginResponse, error)
+	TokenVerify(context.Context, *TokenVerifyRequest) (*TokenVerifyResponse, error)
+	GetOrgList(context.Context, *GetOrgListRequest) (*GetOrgListResponse, error)
 	mustEmbedUnimplementedLoginServiceServer()
 }
 
@@ -87,17 +98,20 @@ type LoginServiceServer interface {
 type UnimplementedLoginServiceServer struct {
 }
 
-func (UnimplementedLoginServiceServer) GetCaptcha(context.Context, *GetCaptchaMessage) (*GetCaptchaResponse, error) {
+func (UnimplementedLoginServiceServer) GetCaptcha(context.Context, *GetCaptchaRequest) (*GetCaptchaResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCaptcha not implemented")
 }
-func (UnimplementedLoginServiceServer) Register(context.Context, *RegisterMessage) (*RegisterResponse, error) {
+func (UnimplementedLoginServiceServer) Register(context.Context, *RegisterRequest) (*RegisterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
-func (UnimplementedLoginServiceServer) Login(context.Context, *LoginMessage) (*LoginResponse, error) {
+func (UnimplementedLoginServiceServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
-func (UnimplementedLoginServiceServer) TokenVerify(context.Context, *TokenVerifyMessage) (*TokenVerifyResponse, error) {
+func (UnimplementedLoginServiceServer) TokenVerify(context.Context, *TokenVerifyRequest) (*TokenVerifyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TokenVerify not implemented")
+}
+func (UnimplementedLoginServiceServer) GetOrgList(context.Context, *GetOrgListRequest) (*GetOrgListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetOrgList not implemented")
 }
 func (UnimplementedLoginServiceServer) mustEmbedUnimplementedLoginServiceServer() {}
 
@@ -113,7 +127,7 @@ func RegisterLoginServiceServer(s grpc.ServiceRegistrar, srv LoginServiceServer)
 }
 
 func _LoginService_GetCaptcha_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetCaptchaMessage)
+	in := new(GetCaptchaRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -122,16 +136,16 @@ func _LoginService_GetCaptcha_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/login.service.v1.LoginService/GetCaptcha",
+		FullMethod: "/login.v1.LoginService/GetCaptcha",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LoginServiceServer).GetCaptcha(ctx, req.(*GetCaptchaMessage))
+		return srv.(LoginServiceServer).GetCaptcha(ctx, req.(*GetCaptchaRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _LoginService_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RegisterMessage)
+	in := new(RegisterRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -140,16 +154,16 @@ func _LoginService_Register_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/login.service.v1.LoginService/Register",
+		FullMethod: "/login.v1.LoginService/Register",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LoginServiceServer).Register(ctx, req.(*RegisterMessage))
+		return srv.(LoginServiceServer).Register(ctx, req.(*RegisterRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _LoginService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LoginMessage)
+	in := new(LoginRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -158,16 +172,16 @@ func _LoginService_Login_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/login.service.v1.LoginService/Login",
+		FullMethod: "/login.v1.LoginService/Login",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LoginServiceServer).Login(ctx, req.(*LoginMessage))
+		return srv.(LoginServiceServer).Login(ctx, req.(*LoginRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _LoginService_TokenVerify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TokenVerifyMessage)
+	in := new(TokenVerifyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -176,10 +190,28 @@ func _LoginService_TokenVerify_Handler(srv interface{}, ctx context.Context, dec
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/login.service.v1.LoginService/TokenVerify",
+		FullMethod: "/login.v1.LoginService/TokenVerify",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(LoginServiceServer).TokenVerify(ctx, req.(*TokenVerifyMessage))
+		return srv.(LoginServiceServer).TokenVerify(ctx, req.(*TokenVerifyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _LoginService_GetOrgList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetOrgListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LoginServiceServer).GetOrgList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/login.v1.LoginService/GetOrgList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LoginServiceServer).GetOrgList(ctx, req.(*GetOrgListRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -188,7 +220,7 @@ func _LoginService_TokenVerify_Handler(srv interface{}, ctx context.Context, dec
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var LoginService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "login.service.v1.LoginService",
+	ServiceName: "login.v1.LoginService",
 	HandlerType: (*LoginServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -206,6 +238,10 @@ var LoginService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "TokenVerify",
 			Handler:    _LoginService_TokenVerify_Handler,
+		},
+		{
+			MethodName: "GetOrgList",
+			Handler:    _LoginService_GetOrgList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

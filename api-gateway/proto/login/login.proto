@@ -1,18 +1,26 @@
 syntax = "proto3";
-package login.service.v1;
+package login.v1;
 option go_package = "github.com/Wafer233/msproject-be/api-gateway/proto/login";
 
-//------------------------------------captcha------------------------------------
-message GetCaptchaMessage {
+service LoginService {
+  rpc GetCaptcha(GetCaptchaRequest) returns (GetCaptchaResponse) {}
+  rpc Register(RegisterRequest) returns (RegisterResponse) {}
+  rpc Login(LoginRequest) returns (LoginResponse) {}
+  rpc TokenVerify(TokenVerifyRequest) returns (TokenVerifyResponse) {}
+  rpc GetOrgList(GetOrgListRequest) returns (GetOrgListResponse) {}
+  //  rpc FindMemInfoById(UserMessage) returns (MemberMessage) {}
+  //  rpc FindMemInfoByIds(UserMessage) returns (MemberMessageList) {}
+}
+
+// ---------------------------- GetCaptcha ----------------------------
+message GetCaptchaRequest {
   string mobile = 1;
 }
-
-message GetCaptchaResponse {
-  string captcha = 1;
+message GetCaptchaResponse{
+  string code = 1;
 }
-
-// ------------------------------------register------------------------------------
-message RegisterMessage {
+// ---------------------------- Register ----------------------------
+message RegisterRequest {
   string email = 1;
   string name = 2;
   string password = 3;
@@ -20,19 +28,38 @@ message RegisterMessage {
   string captcha = 5;
 }
 message RegisterResponse {}
-
-//------------------------------------login------------------------------------
-message LoginMessage {
+// ---------------------------- Login ----------------------------
+message LoginRequest {
   string account = 1;
   string password = 2;
   string token = 3;
+  string ip = 4;
 }
 message LoginResponse{
   Member member = 1;
   repeated Organization organizationList = 2;
   Token tokenList = 3;
 }
-
+// ---------------------------- TokenVerify ----------------------------
+message TokenVerifyRequest {
+  string account = 1;
+  string password = 2;
+  string token = 3;
+  string ip = 4;
+}
+message TokenVerifyResponse{
+  Member member = 1;
+  repeated Organization organizationList = 2;
+  Token tokenList = 3;
+}
+// ---------------------------- GetOrgList ----------------------------
+message GetOrgListRequest {
+  int64 memberId = 1;
+}
+message GetOrgListResponse{
+  repeated Organization organizationList = 1;
+}
+// ---------------------------- common ----------------------------
 message Member {
   int64 id = 1;
   string name = 2;
@@ -51,7 +78,6 @@ message Member {
   string organizationCode = 15;
   string avatar = 16;
 }
-
 message Organization {
   int64 id = 1;
   string name = 2;
@@ -67,33 +93,9 @@ message Organization {
   string code = 12;
   string ownerCode = 13;
 }
-
 message Token{
   string accessToken = 1;
   string refreshToken = 2;
   string tokenType = 3;
   int64 accessTokenExp = 4;
 }
-
-//------------------------------------token verify------------------------------------
-
-message TokenVerifyMessage {
-  string token = 1;
-}
-
-message TokenVerifyResponse{
-  int64 id = 1;
-  string name = 2;
-  string organizationCode = 3;
-}
-
-
-//------------------------------------service------------------------------------
-
-service LoginService {
-  rpc GetCaptcha(GetCaptchaMessage) returns (GetCaptchaResponse) {}
-  rpc Register(RegisterMessage) returns (RegisterResponse) {}
-  rpc Login(LoginMessage) returns (LoginResponse) {}
-  rpc TokenVerify(TokenVerifyMessage) returns (TokenVerifyResponse) {}
-}
-

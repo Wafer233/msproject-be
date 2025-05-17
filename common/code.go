@@ -1,23 +1,34 @@
 package common
 
 const (
+	LoginGetCaptchaFail        = 10000
+	LoginGetCaptchaMobileEmpty = 10001
+	LoginGetCaptchaServiceFail = 10002
 
-	// ===== LoginService（2xxx）=====
-	LoginMobileNotLegal                   BusinessCode = 2001 // 手机号不合法
-	LoginGetCaptchaFail                   BusinessCode = 2002 // 生成验证码失败
-	LoginRegisterBindFail                 BusinessCode = 2003 // 注册绑定失败
-	LoginRegisterReqFormatError           BusinessCode = 2004 // 注册请求参数格式错误
-	LoginRegisterServiceError             BusinessCode = 2005 // 注册服务调用失败
-	LoginLoginReqBindFail                 BusinessCode = 2006 // 登录请求参数绑定失败
-	LoginTokenVerifyMiddlewareServiceFail BusinessCode = 2007 // 登录请求参数绑定失败
+	LoginLoginFail            = 10010
+	LoginLoginRequestBindFail = 10011
+	LoginLoginCopyFail        = 10012
+	LoginLoginServiceFail     = 10013
 
-	// ===== OrganizationService（3xxx）=====
-	OganizationServiceFail BusinessCode = 3001 // 调用GetOrgList服务失败
+	LoginRegisterFail              = 10020
+	LoginRegisterRequestBindFail   = 10021
+	LoginRegisterRequestVerifyFail = 10022
+	LoginRegisterCopyFail          = 10023
+	LoginRegisterServiceFail       = 10024
 
-	// ===== IndexService（4xxx）=====
-	IndexIndexServiceFail BusinessCode = 4002 // 调用Index服务失败
+	LoginGetOrgListFail           = 10030
+	LoginGetOrgListMemberNotExist = 10031
+	LoginGetOrgListServiceFail    = 10032
+	LoginGetOrgListCopyFail       = 10033
 
-	// ===== ProjectService（5xxx）=====
-	ProjectSelfListFail BusinessCode = 5001 // 调用Project服务失败
+	ProjectIndexFail        = 20000
+	ProjectIndexServiceFail = 20001
+	ProjectIndexCopyFail    = 20002
 
+	ProjectSelfProjectFail        = 20010
+	ProjectSelfProjectServiceFail = 20011
+	ProjectSelfProjectCopyFail    = 20012
+
+	MiddlewareTokenVerifyFail        = 30000
+	MiddlewareTokenVerifyServiceFail = 30001
 )

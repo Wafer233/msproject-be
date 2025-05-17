@@ -22,7 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProjectServiceClient interface {
-	SelfList(ctx context.Context, in *SelfListMessage, opts ...grpc.CallOption) (*SelfListResponse, error)
+	Index(ctx context.Context, in *IndexRequest, opts ...grpc.CallOption) (*IndexResponse, error)
+	SelfProject(ctx context.Context, in *SelfProjectRequest, opts ...grpc.CallOption) (*SelfProjectResponse, error)
 }
 
 type projectServiceClient struct {
@@ -33,9 +34,18 @@ func NewProjectServiceClient(cc grpc.ClientConnInterface) ProjectServiceClient {
 	return &projectServiceClient{cc}
 }
 
-func (c *projectServiceClient) SelfList(ctx context.Context, in *SelfListMessage, opts ...grpc.CallOption) (*SelfListResponse, error) {
-	out := new(SelfListResponse)
-	err := c.cc.Invoke(ctx, "/project.service.v1.ProjectService/SelfList", in, out, opts...)
+func (c *projectServiceClient) Index(ctx context.Context, in *IndexRequest, opts ...grpc.CallOption) (*IndexResponse, error) {
+	out := new(IndexResponse)
+	err := c.cc.Invoke(ctx, "/project.v1.ProjectService/Index", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) SelfProject(ctx context.Context, in *SelfProjectRequest, opts ...grpc.CallOption) (*SelfProjectResponse, error) {
+	out := new(SelfProjectResponse)
+	err := c.cc.Invoke(ctx, "/project.v1.ProjectService/SelfProject", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +56,8 @@ func (c *projectServiceClient) SelfList(ctx context.Context, in *SelfListMessage
 // All implementations must embed UnimplementedProjectServiceServer
 // for forward compatibility
 type ProjectServiceServer interface {
-	SelfList(context.Context, *SelfListMessage) (*SelfListResponse, error)
+	Index(context.Context, *IndexRequest) (*IndexResponse, error)
+	SelfProject(context.Context, *SelfProjectRequest) (*SelfProjectResponse, error)
 	mustEmbedUnimplementedProjectServiceServer()
 }
 
@@ -54,8 +65,11 @@ type ProjectServiceServer interface {
 type UnimplementedProjectServiceServer struct {
 }
 
-func (UnimplementedProjectServiceServer) SelfList(context.Context, *SelfListMessage) (*SelfListResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SelfList not implemented")
+func (UnimplementedProjectServiceServer) Index(context.Context, *IndexRequest) (*IndexResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Index not implemented")
+}
+func (UnimplementedProjectServiceServer) SelfProject(context.Context, *SelfProjectRequest) (*SelfProjectResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SelfProject not implemented")
 }
 func (UnimplementedProjectServiceServer) mustEmbedUnimplementedProjectServiceServer() {}
 
@@ -70,20 +84,38 @@ func RegisterProjectServiceServer(s grpc.ServiceRegistrar, srv ProjectServiceSer
 	s.RegisterService(&ProjectService_ServiceDesc, srv)
 }
 
-func _ProjectService_SelfList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SelfListMessage)
+func _ProjectService_Index_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IndexRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ProjectServiceServer).SelfList(ctx, in)
+		return srv.(ProjectServiceServer).Index(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/project.service.v1.ProjectService/SelfList",
+		FullMethod: "/project.v1.ProjectService/Index",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProjectServiceServer).SelfList(ctx, req.(*SelfListMessage))
+		return srv.(ProjectServiceServer).Index(ctx, req.(*IndexRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProjectService_SelfProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SelfProjectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProjectServiceServer).SelfProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/project.v1.ProjectService/SelfProject",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProjectServiceServer).SelfProject(ctx, req.(*SelfProjectRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -92,12 +124,16 @@ func _ProjectService_SelfList_Handler(srv interface{}, ctx context.Context, dec 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ProjectService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "project.service.v1.ProjectService",
+	ServiceName: "project.v1.ProjectService",
 	HandlerType: (*ProjectServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SelfList",
-			Handler:    _ProjectService_SelfList_Handler,
+			MethodName: "Index",
+			Handler:    _ProjectService_Index_Handler,
+		},
+		{
+			MethodName: "SelfProject",
+			Handler:    _ProjectService_SelfProject_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

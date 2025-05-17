@@ -16,24 +16,12 @@ func InitApp() (*App, error) {
 	if err != nil {
 		return nil, err
 	}
-	gatewayIndexService := ProvideGatewayIndexService(grpcClientManager)
-	indexHandler := ProvideIndexHandler(gatewayIndexService)
-	handlerFunc := ProvideTokenVerifyMiddleware(grpcClientManager)
-	indexRouter := ProvideIndexRouter(indexHandler, handlerFunc)
-	gatewayGetCaptchaService := ProvideGatewayGetCaptchaService(grpcClientManager)
-	getCaptchaHandler := ProvideGetCaptchaHandler(gatewayGetCaptchaService)
-	gatewayLoginService := ProvideGatewayLoginService(grpcClientManager)
-	loginHandler := ProvideLoginHandler(gatewayLoginService)
-	gatewayRegisterService := ProvideGatewayRegisterService(grpcClientManager)
-	registerHandler := ProvideRegisterHandler(gatewayRegisterService)
-	loginRouter := ProvideLoginRouter(getCaptchaHandler, loginHandler, registerHandler)
-	gatewayGetOrgListService := ProvideGatewayGetOrgListService(grpcClientManager)
-	getOrgListHandler := ProvideGetOrgListHandler(gatewayGetOrgListService)
-	organizationRouter := ProvideOrganizationRouter(getOrgListHandler, handlerFunc)
-	gatewayProjectService := ProvideGatewayProjectService(grpcClientManager)
-	projectHandler := ProvideProjectHandler(gatewayProjectService)
-	projectRouter := ProvideProjectRouter(projectHandler, handlerFunc)
-	v2 := ProvideRouters(indexRouter, loginRouter, organizationRouter, projectRouter)
+	loginHttpHandler := ProvideLoginHttpHandler(grpcClientManager)
+	tokenVerifyMiddleware := ProvideTokenVerifyMiddleware(grpcClientManager)
+	userRouter := ProvideUserRouter(loginHttpHandler, tokenVerifyMiddleware)
+	projectHttpHandler := ProvideProjectHandler(grpcClientManager)
+	projectRouter := ProvideProjectRouter(projectHttpHandler, tokenVerifyMiddleware)
+	v2 := ProvideRouters(userRouter, projectRouter)
 	engine := ProvideGinEngine(config, v, v2, metricsCollector)
 	app := &App{
 		Server: engine,

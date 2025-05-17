@@ -3,7 +3,9 @@
 
 package ioc
 
-import "github.com/google/wire"
+import (
+	"github.com/google/wire"
+)
 
 func InitApp() (*App, error) {
 	wire.Build(
@@ -12,32 +14,19 @@ func InitApp() (*App, error) {
 		//engine
 		ProvideMiddlewares,
 		ProvideGinEngine,
-		//grpc
+		//client
 		ProvideGrpcClientManager,
 		//handler
-		ProvideGetCaptchaHandler,
-		ProvideGetOrgListHandler,
-		ProvideIndexHandler,
-		ProvideLoginHandler,
-		ProvideRegisterHandler,
+		ProvideLoginHttpHandler,
 		ProvideProjectHandler,
 		//metrics
 		ProvideMetricsCollector,
 		//middleware
 		ProvideTokenVerifyMiddleware,
 		//router
-		ProvideIndexRouter,
-		ProvideLoginRouter,
-		ProvideOrganizationRouter,
+		ProvideUserRouter,
 		ProvideProjectRouter,
 		ProvideRouters,
-		//service
-		ProvideGatewayGetCaptchaService,
-		ProvideGatewayGetOrgListService,
-		ProvideGatewayIndexService,
-		ProvideGatewayLoginService,
-		ProvideGatewayProjectService,
-		ProvideGatewayRegisterService,
 
 		wire.Struct(new(App), "*"),
 	)

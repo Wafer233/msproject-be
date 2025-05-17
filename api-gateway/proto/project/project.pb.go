@@ -21,7 +21,89 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type SelfListMessage struct {
+// ----------------- Index -----------------
+type IndexRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *IndexRequest) Reset() {
+	*x = IndexRequest{}
+	mi := &file_api_gateway_proto_project_project_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *IndexRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IndexRequest) ProtoMessage() {}
+
+func (x *IndexRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_gateway_proto_project_project_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IndexRequest.ProtoReflect.Descriptor instead.
+func (*IndexRequest) Descriptor() ([]byte, []int) {
+	return file_api_gateway_proto_project_project_proto_rawDescGZIP(), []int{0}
+}
+
+type IndexResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	MenuList      []*Menu                `protobuf:"bytes,1,rep,name=menuList,proto3" json:"menuList,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *IndexResponse) Reset() {
+	*x = IndexResponse{}
+	mi := &file_api_gateway_proto_project_project_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *IndexResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IndexResponse) ProtoMessage() {}
+
+func (x *IndexResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_gateway_proto_project_project_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IndexResponse.ProtoReflect.Descriptor instead.
+func (*IndexResponse) Descriptor() ([]byte, []int) {
+	return file_api_gateway_proto_project_project_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *IndexResponse) GetMenuList() []*Menu {
+	if x != nil {
+		return x.MenuList
+	}
+	return nil
+}
+
+// ----------------SelfProject -----------------
+type SelfProjectRequest struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	MemberId         int64                  `protobuf:"varint,1,opt,name=memberId,proto3" json:"memberId,omitempty"`
 	MemberName       string                 `protobuf:"bytes,2,opt,name=memberName,proto3" json:"memberName,omitempty"`
@@ -37,25 +119,26 @@ type SelfListMessage struct {
 	ProjectCode      string                 `protobuf:"bytes,12,opt,name=projectCode,proto3" json:"projectCode,omitempty"`
 	Deleted          bool                   `protobuf:"varint,13,opt,name=deleted,proto3" json:"deleted,omitempty"`
 	CollectType      string                 `protobuf:"bytes,14,opt,name=collectType,proto3" json:"collectType,omitempty"`
+	TaskCode         string                 `protobuf:"bytes,15,opt,name=taskCode,proto3" json:"taskCode,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
 
-func (x *SelfListMessage) Reset() {
-	*x = SelfListMessage{}
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[0]
+func (x *SelfProjectRequest) Reset() {
+	*x = SelfProjectRequest{}
+	mi := &file_api_gateway_proto_project_project_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SelfListMessage) String() string {
+func (x *SelfProjectRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SelfListMessage) ProtoMessage() {}
+func (*SelfProjectRequest) ProtoMessage() {}
 
-func (x *SelfListMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[0]
+func (x *SelfProjectRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_gateway_proto_project_project_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -66,132 +149,139 @@ func (x *SelfListMessage) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SelfListMessage.ProtoReflect.Descriptor instead.
-func (*SelfListMessage) Descriptor() ([]byte, []int) {
-	return file_api_gateway_proto_project_project_proto_rawDescGZIP(), []int{0}
+// Deprecated: Use SelfProjectRequest.ProtoReflect.Descriptor instead.
+func (*SelfProjectRequest) Descriptor() ([]byte, []int) {
+	return file_api_gateway_proto_project_project_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *SelfListMessage) GetMemberId() int64 {
+func (x *SelfProjectRequest) GetMemberId() int64 {
 	if x != nil {
 		return x.MemberId
 	}
 	return 0
 }
 
-func (x *SelfListMessage) GetMemberName() string {
+func (x *SelfProjectRequest) GetMemberName() string {
 	if x != nil {
 		return x.MemberName
 	}
 	return ""
 }
 
-func (x *SelfListMessage) GetPage() int64 {
+func (x *SelfProjectRequest) GetPage() int64 {
 	if x != nil {
 		return x.Page
 	}
 	return 0
 }
 
-func (x *SelfListMessage) GetPageSize() int64 {
+func (x *SelfProjectRequest) GetPageSize() int64 {
 	if x != nil {
 		return x.PageSize
 	}
 	return 0
 }
 
-func (x *SelfListMessage) GetSelectBy() string {
+func (x *SelfProjectRequest) GetSelectBy() string {
 	if x != nil {
 		return x.SelectBy
 	}
 	return ""
 }
 
-func (x *SelfListMessage) GetOrganizationCode() string {
+func (x *SelfProjectRequest) GetOrganizationCode() string {
 	if x != nil {
 		return x.OrganizationCode
 	}
 	return ""
 }
 
-func (x *SelfListMessage) GetViewType() int32 {
+func (x *SelfProjectRequest) GetViewType() int32 {
 	if x != nil {
 		return x.ViewType
 	}
 	return 0
 }
 
-func (x *SelfListMessage) GetName() string {
+func (x *SelfProjectRequest) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-func (x *SelfListMessage) GetTemplateCode() string {
+func (x *SelfProjectRequest) GetTemplateCode() string {
 	if x != nil {
 		return x.TemplateCode
 	}
 	return ""
 }
 
-func (x *SelfListMessage) GetDescription() string {
+func (x *SelfProjectRequest) GetDescription() string {
 	if x != nil {
 		return x.Description
 	}
 	return ""
 }
 
-func (x *SelfListMessage) GetId() int64 {
+func (x *SelfProjectRequest) GetId() int64 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-func (x *SelfListMessage) GetProjectCode() string {
+func (x *SelfProjectRequest) GetProjectCode() string {
 	if x != nil {
 		return x.ProjectCode
 	}
 	return ""
 }
 
-func (x *SelfListMessage) GetDeleted() bool {
+func (x *SelfProjectRequest) GetDeleted() bool {
 	if x != nil {
 		return x.Deleted
 	}
 	return false
 }
 
-func (x *SelfListMessage) GetCollectType() string {
+func (x *SelfProjectRequest) GetCollectType() string {
 	if x != nil {
 		return x.CollectType
 	}
 	return ""
 }
 
-type SelfListResponse struct {
+func (x *SelfProjectRequest) GetTaskCode() string {
+	if x != nil {
+		return x.TaskCode
+	}
+	return ""
+}
+
+type SelfProjectResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	List          []*Project             `protobuf:"bytes,1,rep,name=list,proto3" json:"list,omitempty"`
+	Projects      []*Project             `protobuf:"bytes,1,rep,name=projects,proto3" json:"projects,omitempty"`
 	Total         int64                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SelfListResponse) Reset() {
-	*x = SelfListResponse{}
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[1]
+func (x *SelfProjectResponse) Reset() {
+	*x = SelfProjectResponse{}
+	mi := &file_api_gateway_proto_project_project_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SelfListResponse) String() string {
+func (x *SelfProjectResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SelfListResponse) ProtoMessage() {}
+func (*SelfProjectResponse) ProtoMessage() {}
 
-func (x *SelfListResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[1]
+func (x *SelfProjectResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_gateway_proto_project_project_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -202,23 +292,204 @@ func (x *SelfListResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SelfListResponse.ProtoReflect.Descriptor instead.
-func (*SelfListResponse) Descriptor() ([]byte, []int) {
-	return file_api_gateway_proto_project_project_proto_rawDescGZIP(), []int{1}
+// Deprecated: Use SelfProjectResponse.ProtoReflect.Descriptor instead.
+func (*SelfProjectResponse) Descriptor() ([]byte, []int) {
+	return file_api_gateway_proto_project_project_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *SelfListResponse) GetList() []*Project {
+func (x *SelfProjectResponse) GetProjects() []*Project {
 	if x != nil {
-		return x.List
+		return x.Projects
 	}
 	return nil
 }
 
-func (x *SelfListResponse) GetTotal() int64 {
+func (x *SelfProjectResponse) GetTotal() int64 {
 	if x != nil {
 		return x.Total
 	}
 	return 0
+}
+
+// ------------------common -----------------
+type Menu struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Pid           int64                  `protobuf:"varint,2,opt,name=pid,proto3" json:"pid,omitempty"`
+	Title         string                 `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
+	Icon          string                 `protobuf:"bytes,4,opt,name=icon,proto3" json:"icon,omitempty"`
+	Url           string                 `protobuf:"bytes,5,opt,name=url,proto3" json:"url,omitempty"`
+	FilePath      string                 `protobuf:"bytes,6,opt,name=filePath,proto3" json:"filePath,omitempty"`
+	Params        string                 `protobuf:"bytes,7,opt,name=params,proto3" json:"params,omitempty"`
+	Node          string                 `protobuf:"bytes,8,opt,name=node,proto3" json:"node,omitempty"`
+	Sort          int32                  `protobuf:"varint,9,opt,name=sort,proto3" json:"sort,omitempty"`
+	Status        int32                  `protobuf:"varint,10,opt,name=status,proto3" json:"status,omitempty"`
+	CreateBy      int64                  `protobuf:"varint,11,opt,name=createBy,proto3" json:"createBy,omitempty"`
+	IsInner       int32                  `protobuf:"varint,12,opt,name=isInner,proto3" json:"isInner,omitempty"`
+	Values        string                 `protobuf:"bytes,13,opt,name=values,proto3" json:"values,omitempty"`
+	ShowSlider    int32                  `protobuf:"varint,14,opt,name=showSlider,proto3" json:"showSlider,omitempty"`
+	StatusText    string                 `protobuf:"bytes,15,opt,name=statusText,proto3" json:"statusText,omitempty"`
+	InnerText     string                 `protobuf:"bytes,16,opt,name=innerText,proto3" json:"innerText,omitempty"`
+	FullUrl       string                 `protobuf:"bytes,17,opt,name=fullUrl,proto3" json:"fullUrl,omitempty"`
+	MenuList      []*Menu                `protobuf:"bytes,18,rep,name=menuList,proto3" json:"menuList,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Menu) Reset() {
+	*x = Menu{}
+	mi := &file_api_gateway_proto_project_project_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Menu) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Menu) ProtoMessage() {}
+
+func (x *Menu) ProtoReflect() protoreflect.Message {
+	mi := &file_api_gateway_proto_project_project_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Menu.ProtoReflect.Descriptor instead.
+func (*Menu) Descriptor() ([]byte, []int) {
+	return file_api_gateway_proto_project_project_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *Menu) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Menu) GetPid() int64 {
+	if x != nil {
+		return x.Pid
+	}
+	return 0
+}
+
+func (x *Menu) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *Menu) GetIcon() string {
+	if x != nil {
+		return x.Icon
+	}
+	return ""
+}
+
+func (x *Menu) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+func (x *Menu) GetFilePath() string {
+	if x != nil {
+		return x.FilePath
+	}
+	return ""
+}
+
+func (x *Menu) GetParams() string {
+	if x != nil {
+		return x.Params
+	}
+	return ""
+}
+
+func (x *Menu) GetNode() string {
+	if x != nil {
+		return x.Node
+	}
+	return ""
+}
+
+func (x *Menu) GetSort() int32 {
+	if x != nil {
+		return x.Sort
+	}
+	return 0
+}
+
+func (x *Menu) GetStatus() int32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *Menu) GetCreateBy() int64 {
+	if x != nil {
+		return x.CreateBy
+	}
+	return 0
+}
+
+func (x *Menu) GetIsInner() int32 {
+	if x != nil {
+		return x.IsInner
+	}
+	return 0
+}
+
+func (x *Menu) GetValues() string {
+	if x != nil {
+		return x.Values
+	}
+	return ""
+}
+
+func (x *Menu) GetShowSlider() int32 {
+	if x != nil {
+		return x.ShowSlider
+	}
+	return 0
+}
+
+func (x *Menu) GetStatusText() string {
+	if x != nil {
+		return x.StatusText
+	}
+	return ""
+}
+
+func (x *Menu) GetInnerText() string {
+	if x != nil {
+		return x.InnerText
+	}
+	return ""
+}
+
+func (x *Menu) GetFullUrl() string {
+	if x != nil {
+		return x.FullUrl
+	}
+	return ""
+}
+
+func (x *Menu) GetMenuList() []*Menu {
+	if x != nil {
+		return x.MenuList
+	}
+	return nil
 }
 
 type Project struct {
@@ -261,7 +532,7 @@ type Project struct {
 
 func (x *Project) Reset() {
 	*x = Project{}
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[2]
+	mi := &file_api_gateway_proto_project_project_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -273,7 +544,7 @@ func (x *Project) String() string {
 func (*Project) ProtoMessage() {}
 
 func (x *Project) ProtoReflect() protoreflect.Message {
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[2]
+	mi := &file_api_gateway_proto_project_project_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -286,7 +557,7 @@ func (x *Project) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Project.ProtoReflect.Descriptor instead.
 func (*Project) Descriptor() ([]byte, []int) {
-	return file_api_gateway_proto_project_project_proto_rawDescGZIP(), []int{2}
+	return file_api_gateway_proto_project_project_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *Project) GetId() int64 {
@@ -517,8 +788,12 @@ var File_api_gateway_proto_project_project_proto protoreflect.FileDescriptor
 
 const file_api_gateway_proto_project_project_proto_rawDesc = "" +
 	"\n" +
-	"'api-gateway/proto/project/project.proto\x12\x12project.service.v1\"\xa9\x03\n" +
-	"\x0fSelfListMessage\x12\x1a\n" +
+	"'api-gateway/proto/project/project.proto\x12\n" +
+	"project.v1\"\x0e\n" +
+	"\fIndexRequest\"=\n" +
+	"\rIndexResponse\x12,\n" +
+	"\bmenuList\x18\x01 \x03(\v2\x10.project.v1.MenuR\bmenuList\"\xc8\x03\n" +
+	"\x12SelfProjectRequest\x12\x1a\n" +
 	"\bmemberId\x18\x01 \x01(\x03R\bmemberId\x12\x1e\n" +
 	"\n" +
 	"memberName\x18\x02 \x01(\tR\n" +
@@ -535,10 +810,35 @@ const file_api_gateway_proto_project_project_proto_rawDesc = "" +
 	"\x02id\x18\v \x01(\x03R\x02id\x12 \n" +
 	"\vprojectCode\x18\f \x01(\tR\vprojectCode\x12\x18\n" +
 	"\adeleted\x18\r \x01(\bR\adeleted\x12 \n" +
-	"\vcollectType\x18\x0e \x01(\tR\vcollectType\"Y\n" +
-	"\x10SelfListResponse\x12/\n" +
-	"\x04list\x18\x01 \x03(\v2\x1b.project.service.v1.ProjectR\x04list\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x03R\x05total\"\xe3\a\n" +
+	"\vcollectType\x18\x0e \x01(\tR\vcollectType\x12\x1a\n" +
+	"\btaskCode\x18\x0f \x01(\tR\btaskCode\"\\\n" +
+	"\x13SelfProjectResponse\x12/\n" +
+	"\bprojects\x18\x01 \x03(\v2\x13.project.v1.ProjectR\bprojects\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x03R\x05total\"\xcc\x03\n" +
+	"\x04Menu\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x10\n" +
+	"\x03pid\x18\x02 \x01(\x03R\x03pid\x12\x14\n" +
+	"\x05title\x18\x03 \x01(\tR\x05title\x12\x12\n" +
+	"\x04icon\x18\x04 \x01(\tR\x04icon\x12\x10\n" +
+	"\x03url\x18\x05 \x01(\tR\x03url\x12\x1a\n" +
+	"\bfilePath\x18\x06 \x01(\tR\bfilePath\x12\x16\n" +
+	"\x06params\x18\a \x01(\tR\x06params\x12\x12\n" +
+	"\x04node\x18\b \x01(\tR\x04node\x12\x12\n" +
+	"\x04sort\x18\t \x01(\x05R\x04sort\x12\x16\n" +
+	"\x06status\x18\n" +
+	" \x01(\x05R\x06status\x12\x1a\n" +
+	"\bcreateBy\x18\v \x01(\x03R\bcreateBy\x12\x18\n" +
+	"\aisInner\x18\f \x01(\x05R\aisInner\x12\x16\n" +
+	"\x06values\x18\r \x01(\tR\x06values\x12\x1e\n" +
+	"\n" +
+	"showSlider\x18\x0e \x01(\x05R\n" +
+	"showSlider\x12\x1e\n" +
+	"\n" +
+	"statusText\x18\x0f \x01(\tR\n" +
+	"statusText\x12\x1c\n" +
+	"\tinnerText\x18\x10 \x01(\tR\tinnerText\x12\x18\n" +
+	"\afullUrl\x18\x11 \x01(\tR\afullUrl\x12,\n" +
+	"\bmenuList\x18\x12 \x03(\v2\x10.project.v1.MenuR\bmenuList\"\xe3\a\n" +
 	"\aProject\x12\x0e\n" +
 	"\x02Id\x18\x01 \x01(\x03R\x02Id\x12\x14\n" +
 	"\x05Cover\x18\x02 \x01(\tR\x05Cover\x12\x12\n" +
@@ -578,9 +878,10 @@ const file_api_gateway_proto_project_project_proto_rawDesc = "" +
 	"\tAuthorize\x18\x1d \x01(\tR\tAuthorize\x12\x12\n" +
 	"\x04code\x18\x1e \x01(\tR\x04code\x12\x1c\n" +
 	"\townerName\x18\x1f \x01(\tR\townerName\x12\x1c\n" +
-	"\tcollected\x18  \x01(\x05R\tcollected2i\n" +
-	"\x0eProjectService\x12W\n" +
-	"\bSelfList\x12#.project.service.v1.SelfListMessage\x1a$.project.service.v1.SelfListResponse\"\x00B<Z:github.com/Wafer233/msproject-be/api-gateway/proto/projectb\x06proto3"
+	"\tcollected\x18  \x01(\x05R\tcollected2\xa2\x01\n" +
+	"\x0eProjectService\x12>\n" +
+	"\x05Index\x12\x18.project.v1.IndexRequest\x1a\x19.project.v1.IndexResponse\"\x00\x12P\n" +
+	"\vSelfProject\x12\x1e.project.v1.SelfProjectRequest\x1a\x1f.project.v1.SelfProjectResponse\"\x00B<Z:github.com/Wafer233/msproject-be/api-gateway/proto/projectb\x06proto3"
 
 var (
 	file_api_gateway_proto_project_project_proto_rawDescOnce sync.Once
@@ -594,21 +895,28 @@ func file_api_gateway_proto_project_project_proto_rawDescGZIP() []byte {
 	return file_api_gateway_proto_project_project_proto_rawDescData
 }
 
-var file_api_gateway_proto_project_project_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_api_gateway_proto_project_project_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_api_gateway_proto_project_project_proto_goTypes = []any{
-	(*SelfListMessage)(nil),  // 0: project.service.v1.SelfListMessage
-	(*SelfListResponse)(nil), // 1: project.service.v1.SelfListResponse
-	(*Project)(nil),          // 2: project.service.v1.Project
+	(*IndexRequest)(nil),        // 0: project.v1.IndexRequest
+	(*IndexResponse)(nil),       // 1: project.v1.IndexResponse
+	(*SelfProjectRequest)(nil),  // 2: project.v1.SelfProjectRequest
+	(*SelfProjectResponse)(nil), // 3: project.v1.SelfProjectResponse
+	(*Menu)(nil),                // 4: project.v1.Menu
+	(*Project)(nil),             // 5: project.v1.Project
 }
 var file_api_gateway_proto_project_project_proto_depIdxs = []int32{
-	2, // 0: project.service.v1.SelfListResponse.list:type_name -> project.service.v1.Project
-	0, // 1: project.service.v1.ProjectService.SelfList:input_type -> project.service.v1.SelfListMessage
-	1, // 2: project.service.v1.ProjectService.SelfList:output_type -> project.service.v1.SelfListResponse
-	2, // [2:3] is the sub-list for method output_type
-	1, // [1:2] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	4, // 0: project.v1.IndexResponse.menuList:type_name -> project.v1.Menu
+	5, // 1: project.v1.SelfProjectResponse.projects:type_name -> project.v1.Project
+	4, // 2: project.v1.Menu.menuList:type_name -> project.v1.Menu
+	0, // 3: project.v1.ProjectService.Index:input_type -> project.v1.IndexRequest
+	2, // 4: project.v1.ProjectService.SelfProject:input_type -> project.v1.SelfProjectRequest
+	1, // 5: project.v1.ProjectService.Index:output_type -> project.v1.IndexResponse
+	3, // 6: project.v1.ProjectService.SelfProject:output_type -> project.v1.SelfProjectResponse
+	5, // [5:7] is the sub-list for method output_type
+	3, // [3:5] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_api_gateway_proto_project_project_proto_init() }
@@ -622,7 +930,7 @@ func file_api_gateway_proto_project_project_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_gateway_proto_project_project_proto_rawDesc), len(file_api_gateway_proto_project_project_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

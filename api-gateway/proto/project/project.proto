@@ -1,8 +1,29 @@
 syntax = "proto3";
-package project.service.v1;
+package project.v1;
 option go_package = "github.com/Wafer233/msproject-be/api-gateway/proto/project";
 
-message SelfListMessage{
+service ProjectService {
+  rpc Index(IndexRequest) returns (IndexResponse) {}
+  rpc SelfProject(SelfProjectRequest) returns (SelfProjectResponse){}
+  //  rpc FindProjectTemplate(ProjectRpcMessage) returns (ProjectTemplateResponse){}
+  //  rpc SaveProject(ProjectRpcMessage) returns (SaveProjectMessage){}
+  //  rpc FindProjectDetail(ProjectRpcMessage) returns (ProjectDetailMessage){}
+  //  rpc UpdateDeletedProject(ProjectRpcMessage) returns (DeletedProjectResponse){}
+  //  rpc UpdateCollectProject(ProjectRpcMessage) returns (CollectProjectResponse){}
+  //  rpc UpdateProject(UpdateProjectMessage) returns (UpdateProjectResponse){}
+  //  rpc GetLogBySelfProject(ProjectRpcMessage) returns (ProjectLogResponse){}
+  //  rpc NodeList(ProjectRpcMessage) returns (ProjectNodeResponseMessage){}
+  //  rpc FindProjectByMemberId(ProjectRpcMessage) returns (FindProjectByMemberIdResponse){}
+}
+
+// ----------------- Index -----------------
+message IndexRequest{
+}
+message IndexResponse{
+  repeated Menu menuList = 1;
+}
+// ----------------SelfProject -----------------
+message SelfProjectRequest{
   int64 memberId = 1;
   string memberName = 2;
   int64 page = 3;
@@ -17,11 +38,32 @@ message SelfListMessage{
   string projectCode = 12;
   bool deleted = 13;
   string collectType = 14;
+  string taskCode = 15;
 }
-
-message SelfListResponse{
-  repeated Project list = 1;
+message SelfProjectResponse{
+  repeated Project projects = 1;
   int64 total = 2;
+}
+// ------------------common -----------------
+message Menu {
+  int64  id = 1;
+  int64 pid = 2;
+  string title = 3;
+  string icon = 4;
+  string url = 5;
+  string filePath = 6;
+  string params = 7;
+  string node = 8;
+  int32 sort = 9;
+  int32 status = 10;
+  int64 createBy = 11;
+  int32 isInner = 12;
+  string values = 13;
+  int32 showSlider = 14;
+  string statusText = 15;
+  string innerText = 16;
+  string fullUrl = 17;
+  repeated Menu menuList = 18;
 }
 
 message Project{
@@ -57,10 +99,4 @@ message Project{
   string code = 30;
   string ownerName = 31;
   int32 collected = 32;
-}
-
-
-// Project service definition
-service ProjectService {
-  rpc SelfList(SelfListMessage) returns (SelfListResponse){}
 }

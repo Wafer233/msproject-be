@@ -21,28 +21,28 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// ------------------------------------captcha------------------------------------
-type GetCaptchaMessage struct {
+// ---------------------------- GetCaptcha ----------------------------
+type GetCaptchaRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Mobile        string                 `protobuf:"bytes,1,opt,name=mobile,proto3" json:"mobile,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetCaptchaMessage) Reset() {
-	*x = GetCaptchaMessage{}
+func (x *GetCaptchaRequest) Reset() {
+	*x = GetCaptchaRequest{}
 	mi := &file_api_gateway_proto_login_login_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetCaptchaMessage) String() string {
+func (x *GetCaptchaRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetCaptchaMessage) ProtoMessage() {}
+func (*GetCaptchaRequest) ProtoMessage() {}
 
-func (x *GetCaptchaMessage) ProtoReflect() protoreflect.Message {
+func (x *GetCaptchaRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_api_gateway_proto_login_login_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -54,12 +54,12 @@ func (x *GetCaptchaMessage) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetCaptchaMessage.ProtoReflect.Descriptor instead.
-func (*GetCaptchaMessage) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetCaptchaRequest.ProtoReflect.Descriptor instead.
+func (*GetCaptchaRequest) Descriptor() ([]byte, []int) {
 	return file_api_gateway_proto_login_login_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GetCaptchaMessage) GetMobile() string {
+func (x *GetCaptchaRequest) GetMobile() string {
 	if x != nil {
 		return x.Mobile
 	}
@@ -68,7 +68,7 @@ func (x *GetCaptchaMessage) GetMobile() string {
 
 type GetCaptchaResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Captcha       string                 `protobuf:"bytes,1,opt,name=captcha,proto3" json:"captcha,omitempty"`
+	Code          string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -103,15 +103,15 @@ func (*GetCaptchaResponse) Descriptor() ([]byte, []int) {
 	return file_api_gateway_proto_login_login_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GetCaptchaResponse) GetCaptcha() string {
+func (x *GetCaptchaResponse) GetCode() string {
 	if x != nil {
-		return x.Captcha
+		return x.Code
 	}
 	return ""
 }
 
-// ------------------------------------register------------------------------------
-type RegisterMessage struct {
+// ---------------------------- Register ----------------------------
+type RegisterRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
@@ -122,20 +122,20 @@ type RegisterMessage struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *RegisterMessage) Reset() {
-	*x = RegisterMessage{}
+func (x *RegisterRequest) Reset() {
+	*x = RegisterRequest{}
 	mi := &file_api_gateway_proto_login_login_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *RegisterMessage) String() string {
+func (x *RegisterRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*RegisterMessage) ProtoMessage() {}
+func (*RegisterRequest) ProtoMessage() {}
 
-func (x *RegisterMessage) ProtoReflect() protoreflect.Message {
+func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_api_gateway_proto_login_login_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -147,40 +147,40 @@ func (x *RegisterMessage) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use RegisterMessage.ProtoReflect.Descriptor instead.
-func (*RegisterMessage) Descriptor() ([]byte, []int) {
+// Deprecated: Use RegisterRequest.ProtoReflect.Descriptor instead.
+func (*RegisterRequest) Descriptor() ([]byte, []int) {
 	return file_api_gateway_proto_login_login_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *RegisterMessage) GetEmail() string {
+func (x *RegisterRequest) GetEmail() string {
 	if x != nil {
 		return x.Email
 	}
 	return ""
 }
 
-func (x *RegisterMessage) GetName() string {
+func (x *RegisterRequest) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-func (x *RegisterMessage) GetPassword() string {
+func (x *RegisterRequest) GetPassword() string {
 	if x != nil {
 		return x.Password
 	}
 	return ""
 }
 
-func (x *RegisterMessage) GetMobile() string {
+func (x *RegisterRequest) GetMobile() string {
 	if x != nil {
 		return x.Mobile
 	}
 	return ""
 }
 
-func (x *RegisterMessage) GetCaptcha() string {
+func (x *RegisterRequest) GetCaptcha() string {
 	if x != nil {
 		return x.Captcha
 	}
@@ -223,30 +223,31 @@ func (*RegisterResponse) Descriptor() ([]byte, []int) {
 	return file_api_gateway_proto_login_login_proto_rawDescGZIP(), []int{3}
 }
 
-// ------------------------------------login------------------------------------
-type LoginMessage struct {
+// ---------------------------- Login ----------------------------
+type LoginRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Account       string                 `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
 	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	Token         string                 `protobuf:"bytes,3,opt,name=token,proto3" json:"token,omitempty"`
+	Ip            string                 `protobuf:"bytes,4,opt,name=ip,proto3" json:"ip,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *LoginMessage) Reset() {
-	*x = LoginMessage{}
+func (x *LoginRequest) Reset() {
+	*x = LoginRequest{}
 	mi := &file_api_gateway_proto_login_login_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *LoginMessage) String() string {
+func (x *LoginRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*LoginMessage) ProtoMessage() {}
+func (*LoginRequest) ProtoMessage() {}
 
-func (x *LoginMessage) ProtoReflect() protoreflect.Message {
+func (x *LoginRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_api_gateway_proto_login_login_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -258,28 +259,35 @@ func (x *LoginMessage) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use LoginMessage.ProtoReflect.Descriptor instead.
-func (*LoginMessage) Descriptor() ([]byte, []int) {
+// Deprecated: Use LoginRequest.ProtoReflect.Descriptor instead.
+func (*LoginRequest) Descriptor() ([]byte, []int) {
 	return file_api_gateway_proto_login_login_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *LoginMessage) GetAccount() string {
+func (x *LoginRequest) GetAccount() string {
 	if x != nil {
 		return x.Account
 	}
 	return ""
 }
 
-func (x *LoginMessage) GetPassword() string {
+func (x *LoginRequest) GetPassword() string {
 	if x != nil {
 		return x.Password
 	}
 	return ""
 }
 
-func (x *LoginMessage) GetToken() string {
+func (x *LoginRequest) GetToken() string {
 	if x != nil {
 		return x.Token
+	}
+	return ""
+}
+
+func (x *LoginRequest) GetIp() string {
+	if x != nil {
+		return x.Ip
 	}
 	return ""
 }
@@ -344,6 +352,225 @@ func (x *LoginResponse) GetTokenList() *Token {
 	return nil
 }
 
+// ---------------------------- TokenVerify ----------------------------
+type TokenVerifyRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Account       string                 `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
+	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	Token         string                 `protobuf:"bytes,3,opt,name=token,proto3" json:"token,omitempty"`
+	Ip            string                 `protobuf:"bytes,4,opt,name=ip,proto3" json:"ip,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TokenVerifyRequest) Reset() {
+	*x = TokenVerifyRequest{}
+	mi := &file_api_gateway_proto_login_login_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TokenVerifyRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TokenVerifyRequest) ProtoMessage() {}
+
+func (x *TokenVerifyRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_gateway_proto_login_login_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TokenVerifyRequest.ProtoReflect.Descriptor instead.
+func (*TokenVerifyRequest) Descriptor() ([]byte, []int) {
+	return file_api_gateway_proto_login_login_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *TokenVerifyRequest) GetAccount() string {
+	if x != nil {
+		return x.Account
+	}
+	return ""
+}
+
+func (x *TokenVerifyRequest) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+func (x *TokenVerifyRequest) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *TokenVerifyRequest) GetIp() string {
+	if x != nil {
+		return x.Ip
+	}
+	return ""
+}
+
+type TokenVerifyResponse struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	Member           *Member                `protobuf:"bytes,1,opt,name=member,proto3" json:"member,omitempty"`
+	OrganizationList []*Organization        `protobuf:"bytes,2,rep,name=organizationList,proto3" json:"organizationList,omitempty"`
+	TokenList        *Token                 `protobuf:"bytes,3,opt,name=tokenList,proto3" json:"tokenList,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *TokenVerifyResponse) Reset() {
+	*x = TokenVerifyResponse{}
+	mi := &file_api_gateway_proto_login_login_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TokenVerifyResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TokenVerifyResponse) ProtoMessage() {}
+
+func (x *TokenVerifyResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_gateway_proto_login_login_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TokenVerifyResponse.ProtoReflect.Descriptor instead.
+func (*TokenVerifyResponse) Descriptor() ([]byte, []int) {
+	return file_api_gateway_proto_login_login_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *TokenVerifyResponse) GetMember() *Member {
+	if x != nil {
+		return x.Member
+	}
+	return nil
+}
+
+func (x *TokenVerifyResponse) GetOrganizationList() []*Organization {
+	if x != nil {
+		return x.OrganizationList
+	}
+	return nil
+}
+
+func (x *TokenVerifyResponse) GetTokenList() *Token {
+	if x != nil {
+		return x.TokenList
+	}
+	return nil
+}
+
+// ---------------------------- GetOrgList ----------------------------
+type GetOrgListRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	MemberId      int64                  `protobuf:"varint,1,opt,name=memberId,proto3" json:"memberId,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetOrgListRequest) Reset() {
+	*x = GetOrgListRequest{}
+	mi := &file_api_gateway_proto_login_login_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetOrgListRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetOrgListRequest) ProtoMessage() {}
+
+func (x *GetOrgListRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_gateway_proto_login_login_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetOrgListRequest.ProtoReflect.Descriptor instead.
+func (*GetOrgListRequest) Descriptor() ([]byte, []int) {
+	return file_api_gateway_proto_login_login_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *GetOrgListRequest) GetMemberId() int64 {
+	if x != nil {
+		return x.MemberId
+	}
+	return 0
+}
+
+type GetOrgListResponse struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	OrganizationList []*Organization        `protobuf:"bytes,1,rep,name=organizationList,proto3" json:"organizationList,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *GetOrgListResponse) Reset() {
+	*x = GetOrgListResponse{}
+	mi := &file_api_gateway_proto_login_login_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetOrgListResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetOrgListResponse) ProtoMessage() {}
+
+func (x *GetOrgListResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_gateway_proto_login_login_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetOrgListResponse.ProtoReflect.Descriptor instead.
+func (*GetOrgListResponse) Descriptor() ([]byte, []int) {
+	return file_api_gateway_proto_login_login_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *GetOrgListResponse) GetOrganizationList() []*Organization {
+	if x != nil {
+		return x.OrganizationList
+	}
+	return nil
+}
+
+// ---------------------------- common ----------------------------
 type Member struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	Id               int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -368,7 +595,7 @@ type Member struct {
 
 func (x *Member) Reset() {
 	*x = Member{}
-	mi := &file_api_gateway_proto_login_login_proto_msgTypes[6]
+	mi := &file_api_gateway_proto_login_login_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -380,7 +607,7 @@ func (x *Member) String() string {
 func (*Member) ProtoMessage() {}
 
 func (x *Member) ProtoReflect() protoreflect.Message {
-	mi := &file_api_gateway_proto_login_login_proto_msgTypes[6]
+	mi := &file_api_gateway_proto_login_login_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -393,7 +620,7 @@ func (x *Member) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Member.ProtoReflect.Descriptor instead.
 func (*Member) Descriptor() ([]byte, []int) {
-	return file_api_gateway_proto_login_login_proto_rawDescGZIP(), []int{6}
+	return file_api_gateway_proto_login_login_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *Member) GetId() int64 {
@@ -529,7 +756,7 @@ type Organization struct {
 
 func (x *Organization) Reset() {
 	*x = Organization{}
-	mi := &file_api_gateway_proto_login_login_proto_msgTypes[7]
+	mi := &file_api_gateway_proto_login_login_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -541,7 +768,7 @@ func (x *Organization) String() string {
 func (*Organization) ProtoMessage() {}
 
 func (x *Organization) ProtoReflect() protoreflect.Message {
-	mi := &file_api_gateway_proto_login_login_proto_msgTypes[7]
+	mi := &file_api_gateway_proto_login_login_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -554,7 +781,7 @@ func (x *Organization) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Organization.ProtoReflect.Descriptor instead.
 func (*Organization) Descriptor() ([]byte, []int) {
-	return file_api_gateway_proto_login_login_proto_rawDescGZIP(), []int{7}
+	return file_api_gateway_proto_login_login_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *Organization) GetId() int64 {
@@ -660,7 +887,7 @@ type Token struct {
 
 func (x *Token) Reset() {
 	*x = Token{}
-	mi := &file_api_gateway_proto_login_login_proto_msgTypes[8]
+	mi := &file_api_gateway_proto_login_login_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -672,7 +899,7 @@ func (x *Token) String() string {
 func (*Token) ProtoMessage() {}
 
 func (x *Token) ProtoReflect() protoreflect.Message {
-	mi := &file_api_gateway_proto_login_login_proto_msgTypes[8]
+	mi := &file_api_gateway_proto_login_login_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -685,7 +912,7 @@ func (x *Token) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Token.ProtoReflect.Descriptor instead.
 func (*Token) Descriptor() ([]byte, []int) {
-	return file_api_gateway_proto_login_login_proto_rawDescGZIP(), []int{8}
+	return file_api_gateway_proto_login_login_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *Token) GetAccessToken() string {
@@ -716,134 +943,44 @@ func (x *Token) GetAccessTokenExp() int64 {
 	return 0
 }
 
-type TokenVerifyMessage struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Token         string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *TokenVerifyMessage) Reset() {
-	*x = TokenVerifyMessage{}
-	mi := &file_api_gateway_proto_login_login_proto_msgTypes[9]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *TokenVerifyMessage) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*TokenVerifyMessage) ProtoMessage() {}
-
-func (x *TokenVerifyMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_api_gateway_proto_login_login_proto_msgTypes[9]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use TokenVerifyMessage.ProtoReflect.Descriptor instead.
-func (*TokenVerifyMessage) Descriptor() ([]byte, []int) {
-	return file_api_gateway_proto_login_login_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *TokenVerifyMessage) GetToken() string {
-	if x != nil {
-		return x.Token
-	}
-	return ""
-}
-
-type TokenVerifyResponse struct {
-	state            protoimpl.MessageState `protogen:"open.v1"`
-	Id               int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name             string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	OrganizationCode string                 `protobuf:"bytes,3,opt,name=organizationCode,proto3" json:"organizationCode,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
-}
-
-func (x *TokenVerifyResponse) Reset() {
-	*x = TokenVerifyResponse{}
-	mi := &file_api_gateway_proto_login_login_proto_msgTypes[10]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *TokenVerifyResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*TokenVerifyResponse) ProtoMessage() {}
-
-func (x *TokenVerifyResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_gateway_proto_login_login_proto_msgTypes[10]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use TokenVerifyResponse.ProtoReflect.Descriptor instead.
-func (*TokenVerifyResponse) Descriptor() ([]byte, []int) {
-	return file_api_gateway_proto_login_login_proto_rawDescGZIP(), []int{10}
-}
-
-func (x *TokenVerifyResponse) GetId() int64 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
-}
-
-func (x *TokenVerifyResponse) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *TokenVerifyResponse) GetOrganizationCode() string {
-	if x != nil {
-		return x.OrganizationCode
-	}
-	return ""
-}
-
 var File_api_gateway_proto_login_login_proto protoreflect.FileDescriptor
 
 const file_api_gateway_proto_login_login_proto_rawDesc = "" +
 	"\n" +
-	"#api-gateway/proto/login/login.proto\x12\x10login.service.v1\"+\n" +
-	"\x11GetCaptchaMessage\x12\x16\n" +
-	"\x06mobile\x18\x01 \x01(\tR\x06mobile\".\n" +
-	"\x12GetCaptchaResponse\x12\x18\n" +
-	"\acaptcha\x18\x01 \x01(\tR\acaptcha\"\x89\x01\n" +
-	"\x0fRegisterMessage\x12\x14\n" +
+	"#api-gateway/proto/login/login.proto\x12\blogin.v1\"+\n" +
+	"\x11GetCaptchaRequest\x12\x16\n" +
+	"\x06mobile\x18\x01 \x01(\tR\x06mobile\"(\n" +
+	"\x12GetCaptchaResponse\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\tR\x04code\"\x89\x01\n" +
+	"\x0fRegisterRequest\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
 	"\bpassword\x18\x03 \x01(\tR\bpassword\x12\x16\n" +
 	"\x06mobile\x18\x04 \x01(\tR\x06mobile\x12\x18\n" +
 	"\acaptcha\x18\x05 \x01(\tR\acaptcha\"\x12\n" +
-	"\x10RegisterResponse\"Z\n" +
-	"\fLoginMessage\x12\x18\n" +
+	"\x10RegisterResponse\"j\n" +
+	"\fLoginRequest\x12\x18\n" +
 	"\aaccount\x18\x01 \x01(\tR\aaccount\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x14\n" +
-	"\x05token\x18\x03 \x01(\tR\x05token\"\xc4\x01\n" +
-	"\rLoginResponse\x120\n" +
-	"\x06member\x18\x01 \x01(\v2\x18.login.service.v1.MemberR\x06member\x12J\n" +
-	"\x10organizationList\x18\x02 \x03(\v2\x1e.login.service.v1.OrganizationR\x10organizationList\x125\n" +
-	"\ttokenList\x18\x03 \x01(\v2\x17.login.service.v1.TokenR\ttokenList\"\xa4\x03\n" +
+	"\x05token\x18\x03 \x01(\tR\x05token\x12\x0e\n" +
+	"\x02ip\x18\x04 \x01(\tR\x02ip\"\xac\x01\n" +
+	"\rLoginResponse\x12(\n" +
+	"\x06member\x18\x01 \x01(\v2\x10.login.v1.MemberR\x06member\x12B\n" +
+	"\x10organizationList\x18\x02 \x03(\v2\x16.login.v1.OrganizationR\x10organizationList\x12-\n" +
+	"\ttokenList\x18\x03 \x01(\v2\x0f.login.v1.TokenR\ttokenList\"p\n" +
+	"\x12TokenVerifyRequest\x12\x18\n" +
+	"\aaccount\x18\x01 \x01(\tR\aaccount\x12\x1a\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x14\n" +
+	"\x05token\x18\x03 \x01(\tR\x05token\x12\x0e\n" +
+	"\x02ip\x18\x04 \x01(\tR\x02ip\"\xb2\x01\n" +
+	"\x13TokenVerifyResponse\x12(\n" +
+	"\x06member\x18\x01 \x01(\v2\x10.login.v1.MemberR\x06member\x12B\n" +
+	"\x10organizationList\x18\x02 \x03(\v2\x16.login.v1.OrganizationR\x10organizationList\x12-\n" +
+	"\ttokenList\x18\x03 \x01(\v2\x0f.login.v1.TokenR\ttokenList\"/\n" +
+	"\x11GetOrgListRequest\x12\x1a\n" +
+	"\bmemberId\x18\x01 \x01(\x03R\bmemberId\"X\n" +
+	"\x12GetOrgListResponse\x12B\n" +
+	"\x10organizationList\x18\x01 \x03(\v2\x16.login.v1.OrganizationR\x10organizationList\"\xa4\x03\n" +
 	"\x06Member\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x16\n" +
@@ -885,19 +1022,15 @@ const file_api_gateway_proto_login_login_proto_rawDesc = "" +
 	"\vaccessToken\x18\x01 \x01(\tR\vaccessToken\x12\"\n" +
 	"\frefreshToken\x18\x02 \x01(\tR\frefreshToken\x12\x1c\n" +
 	"\ttokenType\x18\x03 \x01(\tR\ttokenType\x12&\n" +
-	"\x0eaccessTokenExp\x18\x04 \x01(\x03R\x0eaccessTokenExp\"*\n" +
-	"\x12TokenVerifyMessage\x12\x14\n" +
-	"\x05token\x18\x01 \x01(\tR\x05token\"e\n" +
-	"\x13TokenVerifyResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12*\n" +
-	"\x10organizationCode\x18\x03 \x01(\tR\x10organizationCode2\xe8\x02\n" +
-	"\fLoginService\x12Y\n" +
+	"\x0eaccessTokenExp\x18\x04 \x01(\x03R\x0eaccessTokenExp2\xf3\x02\n" +
+	"\fLoginService\x12I\n" +
 	"\n" +
-	"GetCaptcha\x12#.login.service.v1.GetCaptchaMessage\x1a$.login.service.v1.GetCaptchaResponse\"\x00\x12S\n" +
-	"\bRegister\x12!.login.service.v1.RegisterMessage\x1a\".login.service.v1.RegisterResponse\"\x00\x12J\n" +
-	"\x05Login\x12\x1e.login.service.v1.LoginMessage\x1a\x1f.login.service.v1.LoginResponse\"\x00\x12\\\n" +
-	"\vTokenVerify\x12$.login.service.v1.TokenVerifyMessage\x1a%.login.service.v1.TokenVerifyResponse\"\x00B:Z8github.com/Wafer233/msproject-be/api-gateway/proto/loginb\x06proto3"
+	"GetCaptcha\x12\x1b.login.v1.GetCaptchaRequest\x1a\x1c.login.v1.GetCaptchaResponse\"\x00\x12C\n" +
+	"\bRegister\x12\x19.login.v1.RegisterRequest\x1a\x1a.login.v1.RegisterResponse\"\x00\x12:\n" +
+	"\x05Login\x12\x16.login.v1.LoginRequest\x1a\x17.login.v1.LoginResponse\"\x00\x12L\n" +
+	"\vTokenVerify\x12\x1c.login.v1.TokenVerifyRequest\x1a\x1d.login.v1.TokenVerifyResponse\"\x00\x12I\n" +
+	"\n" +
+	"GetOrgList\x12\x1b.login.v1.GetOrgListRequest\x1a\x1c.login.v1.GetOrgListResponse\"\x00B:Z8github.com/Wafer233/msproject-be/api-gateway/proto/loginb\x06proto3"
 
 var (
 	file_api_gateway_proto_login_login_proto_rawDescOnce sync.Once
@@ -911,37 +1044,45 @@ func file_api_gateway_proto_login_login_proto_rawDescGZIP() []byte {
 	return file_api_gateway_proto_login_login_proto_rawDescData
 }
 
-var file_api_gateway_proto_login_login_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_api_gateway_proto_login_login_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_api_gateway_proto_login_login_proto_goTypes = []any{
-	(*GetCaptchaMessage)(nil),   // 0: login.service.v1.GetCaptchaMessage
-	(*GetCaptchaResponse)(nil),  // 1: login.service.v1.GetCaptchaResponse
-	(*RegisterMessage)(nil),     // 2: login.service.v1.RegisterMessage
-	(*RegisterResponse)(nil),    // 3: login.service.v1.RegisterResponse
-	(*LoginMessage)(nil),        // 4: login.service.v1.LoginMessage
-	(*LoginResponse)(nil),       // 5: login.service.v1.LoginResponse
-	(*Member)(nil),              // 6: login.service.v1.Member
-	(*Organization)(nil),        // 7: login.service.v1.Organization
-	(*Token)(nil),               // 8: login.service.v1.Token
-	(*TokenVerifyMessage)(nil),  // 9: login.service.v1.TokenVerifyMessage
-	(*TokenVerifyResponse)(nil), // 10: login.service.v1.TokenVerifyResponse
+	(*GetCaptchaRequest)(nil),   // 0: login.v1.GetCaptchaRequest
+	(*GetCaptchaResponse)(nil),  // 1: login.v1.GetCaptchaResponse
+	(*RegisterRequest)(nil),     // 2: login.v1.RegisterRequest
+	(*RegisterResponse)(nil),    // 3: login.v1.RegisterResponse
+	(*LoginRequest)(nil),        // 4: login.v1.LoginRequest
+	(*LoginResponse)(nil),       // 5: login.v1.LoginResponse
+	(*TokenVerifyRequest)(nil),  // 6: login.v1.TokenVerifyRequest
+	(*TokenVerifyResponse)(nil), // 7: login.v1.TokenVerifyResponse
+	(*GetOrgListRequest)(nil),   // 8: login.v1.GetOrgListRequest
+	(*GetOrgListResponse)(nil),  // 9: login.v1.GetOrgListResponse
+	(*Member)(nil),              // 10: login.v1.Member
+	(*Organization)(nil),        // 11: login.v1.Organization
+	(*Token)(nil),               // 12: login.v1.Token
 }
 var file_api_gateway_proto_login_login_proto_depIdxs = []int32{
-	6,  // 0: login.service.v1.LoginResponse.member:type_name -> login.service.v1.Member
-	7,  // 1: login.service.v1.LoginResponse.organizationList:type_name -> login.service.v1.Organization
-	8,  // 2: login.service.v1.LoginResponse.tokenList:type_name -> login.service.v1.Token
-	0,  // 3: login.service.v1.LoginService.GetCaptcha:input_type -> login.service.v1.GetCaptchaMessage
-	2,  // 4: login.service.v1.LoginService.Register:input_type -> login.service.v1.RegisterMessage
-	4,  // 5: login.service.v1.LoginService.Login:input_type -> login.service.v1.LoginMessage
-	9,  // 6: login.service.v1.LoginService.TokenVerify:input_type -> login.service.v1.TokenVerifyMessage
-	1,  // 7: login.service.v1.LoginService.GetCaptcha:output_type -> login.service.v1.GetCaptchaResponse
-	3,  // 8: login.service.v1.LoginService.Register:output_type -> login.service.v1.RegisterResponse
-	5,  // 9: login.service.v1.LoginService.Login:output_type -> login.service.v1.LoginResponse
-	10, // 10: login.service.v1.LoginService.TokenVerify:output_type -> login.service.v1.TokenVerifyResponse
-	7,  // [7:11] is the sub-list for method output_type
-	3,  // [3:7] is the sub-list for method input_type
-	3,  // [3:3] is the sub-list for extension type_name
-	3,  // [3:3] is the sub-list for extension extendee
-	0,  // [0:3] is the sub-list for field type_name
+	10, // 0: login.v1.LoginResponse.member:type_name -> login.v1.Member
+	11, // 1: login.v1.LoginResponse.organizationList:type_name -> login.v1.Organization
+	12, // 2: login.v1.LoginResponse.tokenList:type_name -> login.v1.Token
+	10, // 3: login.v1.TokenVerifyResponse.member:type_name -> login.v1.Member
+	11, // 4: login.v1.TokenVerifyResponse.organizationList:type_name -> login.v1.Organization
+	12, // 5: login.v1.TokenVerifyResponse.tokenList:type_name -> login.v1.Token
+	11, // 6: login.v1.GetOrgListResponse.organizationList:type_name -> login.v1.Organization
+	0,  // 7: login.v1.LoginService.GetCaptcha:input_type -> login.v1.GetCaptchaRequest
+	2,  // 8: login.v1.LoginService.Register:input_type -> login.v1.RegisterRequest
+	4,  // 9: login.v1.LoginService.Login:input_type -> login.v1.LoginRequest
+	6,  // 10: login.v1.LoginService.TokenVerify:input_type -> login.v1.TokenVerifyRequest
+	8,  // 11: login.v1.LoginService.GetOrgList:input_type -> login.v1.GetOrgListRequest
+	1,  // 12: login.v1.LoginService.GetCaptcha:output_type -> login.v1.GetCaptchaResponse
+	3,  // 13: login.v1.LoginService.Register:output_type -> login.v1.RegisterResponse
+	5,  // 14: login.v1.LoginService.Login:output_type -> login.v1.LoginResponse
+	7,  // 15: login.v1.LoginService.TokenVerify:output_type -> login.v1.TokenVerifyResponse
+	9,  // 16: login.v1.LoginService.GetOrgList:output_type -> login.v1.GetOrgListResponse
+	12, // [12:17] is the sub-list for method output_type
+	7,  // [7:12] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_api_gateway_proto_login_login_proto_init() }
@@ -955,7 +1096,7 @@ func file_api_gateway_proto_login_login_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_gateway_proto_login_login_proto_rawDesc), len(file_api_gateway_proto_login_login_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

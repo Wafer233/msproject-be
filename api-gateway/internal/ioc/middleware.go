@@ -1,11 +1,10 @@
 package ioc
 
 import (
-	"github.com/Wafer233/msproject-be/api-gateway/internal/infrastructure/grpc"
-	"github.com/Wafer233/msproject-be/api-gateway/internal/interfaces/rest/middleware"
-	"github.com/gin-gonic/gin"
+	"github.com/Wafer233/msproject-be/api-gateway/internal/client"
+	"github.com/Wafer233/msproject-be/api-gateway/internal/middleware"
 )
 
-func ProvideTokenVerifyMiddleware(clientMgr *grpc.GrpcClientManager) gin.HandlerFunc {
+func ProvideTokenVerifyMiddleware(clientMgr *client.GrpcClientManager) *middleware.TokenVerifyMiddleware {
 	return middleware.NewTokenVerifyMiddleware(clientMgr.LoginClient)
 }
