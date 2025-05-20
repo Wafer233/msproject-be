@@ -1,4 +1,4 @@
-package impl
+package dao
 
 import (
 	"context"
@@ -6,81 +6,88 @@ import (
 	"github.com/Wafer233/msproject-be/user-service/internal/domain/model"
 	"github.com/Wafer233/msproject-be/user-service/internal/domain/repository"
 	"github.com/Wafer233/msproject-be/user-service/internal/infrastructure/persistence/entity"
+	"github.com/jinzhu/copier"
 	"gorm.io/gorm"
 )
 
-type GORMMemberRepository struct {
+type GORMMemberDAO struct {
 	db *gorm.DB
 }
 
-func (gmr GORMMemberRepository) FindMemberById(ctx context.Context, id int64) (*model.Member, error) {
-	var entity entity.MemberEntity
-
-	err := gmr.db.WithContext(ctx).
-		Where("id = ?", id).
-		First(&entity).Error
-
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("user not found")
-		}
-		return nil, err
-	}
-
-	return entity.ToModel(), nil
-}
-
-func NewGORMMemberRepository(db *gorm.DB) repository.MemberRepository {
-	return &GORMMemberRepository{db: db}
-}
-
-func (gmr GORMMemberRepository) FindMemberByAccount(ctx context.Context, account string) (bool, error) {
+func (dao *GORMMemberDAO) ExistByEmail(ctx context.Context, email string) (bool, error) {
 	var count int64
-	err := gmr.db.WithContext(ctx).Model(&entity.MemberEntity{}).
+
+	err := dao.db.WithContext(ctx).
+		Model(&entity.Member{}).
+		Where("email = ?", email).
+		Count(&count).Error
+
+	return count > 0, err
+
+}
+
+func (dao *GORMMemberDAO) ExistByAccount(ctx context.Context, account string) (bool, error) {
+	var count int64
+
+	err := dao.db.WithContext(ctx).
+		Model(&entity.Member{}).
 		Where("account = ?", account).
 		Count(&count).Error
 
 	return count > 0, err
 }
 
-func (gmr GORMMemberRepository) SaveMember(ctx context.Context, member *model.Member) error {
-	var entity entity.MemberEntity
-	entity.FromModel(member)
+func (dao *GORMMemberDAO) ExistByMobile(ctx context.Context, mobile string) (bool, error) {
+	var count int64
 
-	err := gmr.db.WithContext(ctx).Create(&entity).Error
+	err := dao.db.WithContext(ctx).
+		Model(&entity.Member{}).
+		Where("mobile = ?", mobile).
+		Count(&count).Error
+
+	return count > 0, err
+}
+
+func (dao *GORMMemberDAO) Save(ctx context.Context, member *model.Member) error {
+	var entityMember entity.Member
+	err := copier.Copy(&entityMember, member)
 	if err != nil {
-		return err
+		return errors.New("member实体和领域模型转换错误")
 	}
 
-	// 更新ID
-	member.Id = entity.ID
+	err = dao.db.WithContext(ctx).
+		Model(&entity.Member{}).
+		Create(&entityMember).Error
+
+	if err != nil {
+		return errors.New("创建member失败")
+	}
+
 	return nil
 }
 
-func (gmr GORMMemberRepository) FindMember(ctx context.Context, account, password string) (*model.Member, error) {
-	var entity entity.MemberEntity
+func (dao *GORMMemberDAO) GetByCredentials(ctx context.Context, account string, password string) (*model.Member, error) {
 
-	err := gmr.db.WithContext(ctx).
-		Where("account = ?", account).
-		First(&entity).Error
+	var entityMember entity.Member
 
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("用户不存在")
-		}
-		return nil, err
-	}
-
-	err = gmr.db.WithContext(ctx).
+	err := dao.db.WithContext(ctx).
+		Model(&entity.Member{}).
 		Where("account = ? AND password = ?", account, password).
-		First(&entity).Error
+		First(&entityMember).Error
 
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("用户不存在或密码错误")
-		}
 		return nil, err
 	}
 
-	return entity.ToModel(), nil
+	var member model.Member
+	err = copier.Copy(&member, &entityMember)
+	if err != nil {
+		return nil, errors.New("member实体和领域模型转换错误")
+	}
+
+	return &member, nil
+}
+
+func NewGORMMemberRepository(db *gorm.DB) repository.MemberRepo {
+	return &GORMMemberDAO{db: db}
 }

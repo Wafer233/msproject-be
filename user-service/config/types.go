@@ -44,9 +44,10 @@ type RedisConfig struct {
 }
 
 type JWTConfig struct {
-	SecretKey            string
-	AccessTokenDuration  string
-	RefreshTokenDuration string
+	AccessExp     int64
+	RefreshExp    int64
+	AccessSecret  string
+	RefreshSecret string
 }
 
 type MetricsConfig struct {

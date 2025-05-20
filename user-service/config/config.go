@@ -78,9 +78,10 @@ func (cfg *Config) loadZap() {
 
 func (cfg *Config) loadJWT() {
 	cfg.JWT = JWTConfig{
-		SecretKey:            cfg.viper.GetString("jwt.secretKey"),
-		AccessTokenDuration:  cfg.viper.GetString("jwt.accessTokenDuration"),
-		RefreshTokenDuration: cfg.viper.GetString("jwt.refreshTokenDuration"),
+		AccessSecret:  cfg.viper.GetString("jwt.accessSecret"),
+		AccessExp:     cfg.viper.GetInt64("jwt.accessExp"),
+		RefreshExp:    cfg.viper.GetInt64("jwt.refreshExp"),
+		RefreshSecret: cfg.viper.GetString("jwt.refreshSecret"),
 	}
 }
 

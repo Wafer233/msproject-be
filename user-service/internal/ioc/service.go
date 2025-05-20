@@ -3,35 +3,28 @@ package ioc
 import (
 	"github.com/Wafer233/msproject-be/user-service/config"
 	"github.com/Wafer233/msproject-be/user-service/internal/application/service"
-	"github.com/Wafer233/msproject-be/user-service/internal/domain/repository"
-	domainService "github.com/Wafer233/msproject-be/user-service/internal/domain/service"
-	"time"
+	repo "github.com/Wafer233/msproject-be/user-service/internal/domain/repository"
+	domainSvc "github.com/Wafer233/msproject-be/user-service/internal/domain/service"
 )
 
-func ProvideDefaultCaptchaService(cr repository.CaptchaRepository) service.CaptchaService {
-	return service.NewDefaultCaptchaService(cr)
+func ProvideDefaultCaptchaService(captchaRepo repo.CaptchaRepo) service.CaptchaService {
+	return service.NewDefaultCaptchaService(captchaRepo)
 }
 
-func ProvideDefaultAuthService(
-	mr repository.MemberRepository,
-	or repository.OrganizationRepository,
-	ps *domainService.PasswordService,
-	cr repository.CaptchaRepository,
-	ts domainService.TokenService,
-) service.AuthService {
-	return service.NewDefaultAuthService(mr, or, ps, cr, ts)
+func ProvideDefaultTokenService(cfg *config.Config, tokenRepo repo.TokenRepo) domainSvc.TokenService {
+
+	return domainSvc.NewJWTTokenService(cfg, tokenRepo)
+
 }
 
-func ProvidePasswordService() *domainService.PasswordService {
-	return domainService.NewPasswordService()
+func ProvideDefaultLoginService(memberRepo repo.MemberRepo, organizationRepo repo.OrganizationRepo) service.LoginService {
+	return service.NewDefaultLoginService(memberRepo, organizationRepo)
 }
 
-func ProvideJWTTokenService(cfg *config.Config) domainService.TokenService {
-	accessDur, _ := time.ParseDuration(cfg.JWT.AccessTokenDuration)
-	refreshDur, _ := time.ParseDuration(cfg.JWT.RefreshTokenDuration)
-	return domainService.NewJWTTokenService(cfg.JWT.SecretKey, accessDur, refreshDur)
+func ProvideDefaultOrganizationService(organizationRepo repo.OrganizationRepo) service.OrganizationService {
+	return service.NewDefaultOrganizationService(organizationRepo)
 }
 
-func ProvideDefaultUserService(or repository.OrganizationRepository) service.UserService {
-	return service.NewDefaultUserService(or)
+func ProvideDefaultRegisterService(memberRepo repo.MemberRepo, organizationRepo repo.OrganizationRepo) service.RegisterService {
+	return service.NewDefaultRegisterService(memberRepo, organizationRepo)
 }

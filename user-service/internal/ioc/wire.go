@@ -9,27 +9,30 @@ import (
 func InitApp() *App {
 	wire.Build(
 		//cache
-		ProvideRedisCache,
+		ProvideRedisCaptchaCache,
+		ProvideRedisTokenCache,
 		//config
 		ProvideViperConfig,
 		//db
 		ProvideDB,
 		//grpc
-		ProvideGrpcServer,
+		ProvideUserServer,
+		ProvideServiceRegister,
+		//handler
+		ProvideLoginGRPCHandler,
 		//metrics
 		ProvideGORMMetrics,
 		//redis
 		ProvideRedisClient,
 		//repositories
-		ProvideRedisCaptchaRepository,
 		ProvideGORMMemberRepository,
 		ProvideGORMOrganizationRepository,
 		//services
 		ProvideDefaultCaptchaService,
-		ProvideDefaultAuthService,
-		ProvidePasswordService,
-		ProvideJWTTokenService,
-		ProvideDefaultUserService, // add for _getOrgList
+		ProvideDefaultTokenService,
+		ProvideDefaultLoginService,
+		ProvideDefaultOrganizationService,
+		ProvideDefaultRegisterService,
 
 		wire.Struct(new(App), "*"),
 	)

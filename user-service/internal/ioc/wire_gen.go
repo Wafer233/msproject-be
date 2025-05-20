@@ -10,21 +10,23 @@ package ioc
 
 func InitApp() *App {
 	config := ProvideViperConfig()
+	client := ProvideRedisClient(config)
+	captchaRepo := ProvideRedisCaptchaCache(client)
+	captchaService := ProvideDefaultCaptchaService(captchaRepo)
 	gormMetrics := ProvideGORMMetrics(config)
 	db := ProvideDB(config, gormMetrics)
-	memberRepository := ProvideGORMMemberRepository(db)
-	organizationRepository := ProvideGORMOrganizationRepository(db)
-	passwordService := ProvidePasswordService()
-	client := ProvideRedisClient(config)
-	redisCache := ProvideRedisCache(client)
-	captchaRepository := ProvideRedisCaptchaRepository(redisCache)
-	tokenService := ProvideJWTTokenService(config)
-	authService := ProvideDefaultAuthService(memberRepository, organizationRepository, passwordService, captchaRepository, tokenService)
-	captchaService := ProvideDefaultCaptchaService(captchaRepository)
-	userService := ProvideDefaultUserService(organizationRepository)
-	grpcServer := ProvideGrpcServer(config, authService, captchaService, userService, gormMetrics)
+	memberRepo := ProvideGORMMemberRepository(db)
+	organizationRepo := ProvideGORMOrganizationRepository(db)
+	loginService := ProvideDefaultLoginService(memberRepo, organizationRepo)
+	registerService := ProvideDefaultRegisterService(memberRepo, organizationRepo)
+	tokenRepo := ProvideRedisTokenCache(client)
+	tokenService := ProvideDefaultTokenService(config, tokenRepo)
+	organizationService := ProvideDefaultOrganizationService(organizationRepo)
+	loginGRPCHandler := ProvideLoginGRPCHandler(captchaService, loginService, registerService, tokenService, organizationService)
+	serviceRegister := ProvideServiceRegister(loginGRPCHandler)
+	userServer := ProvideUserServer(config, serviceRegister, gormMetrics)
 	app := &App{
-		GrpcServer: grpcServer,
+		GrpcServer: userServer,
 	}
 	return app
 }

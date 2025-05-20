@@ -5,9 +5,10 @@ import (
 	"github.com/Wafer233/msproject-be/user-service/internal/domain/model"
 )
 
-type MemberRepository interface {
-	FindMemberByAccount(ctx context.Context, account string) (bool, error)
-	SaveMember(ctx context.Context, member *model.Member) error
-	FindMember(ctx context.Context, account, password string) (*model.Member, error)
-	FindMemberById(ctx context.Context, id int64) (*model.Member, error)
+type MemberRepo interface {
+	ExistByEmail(ctx context.Context, email string) (bool, error)
+	ExistByAccount(ctx context.Context, account string) (bool, error)
+	ExistByMobile(ctx context.Context, mobile string) (bool, error)
+	Save(ctx context.Context, member *model.Member) error
+	GetByCredentials(ctx context.Context, account string, password string) (*model.Member, error)
 }

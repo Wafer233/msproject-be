@@ -1,51 +1,61 @@
-package impl
+package dao
 
 import (
 	"context"
+	"errors"
 	"github.com/Wafer233/msproject-be/user-service/internal/domain/model"
 	"github.com/Wafer233/msproject-be/user-service/internal/domain/repository"
 	"github.com/Wafer233/msproject-be/user-service/internal/infrastructure/persistence/entity"
+	"github.com/jinzhu/copier"
 	"gorm.io/gorm"
 )
 
-type GORMOrganizationRepository struct {
+type GORMOrganizationDAO struct {
 	db *gorm.DB
 }
 
-func NewGORMOrganizationRepository(db *gorm.DB) repository.OrganizationRepository {
-	return &GORMOrganizationRepository{db: db}
-}
+func (dao *GORMOrganizationDAO) Save(ctx context.Context, org *model.Organization) error {
 
-func (gor GORMOrganizationRepository) SaveOrganization(ctx context.Context, org *model.Organization) error {
-	var entity entity.OrganizationEntity
-	entity.FromModel(org)
+	var entityOrganization entity.Organization
 
-	err := gor.db.WithContext(ctx).Create(&entity).Error
+	err := copier.Copy(&entityOrganization, org)
 	if err != nil {
-		return err
+		return errors.New("组织模型与实体copy失败")
 	}
 
-	// 更新ID
-	org.Id = entity.ID
+	err = dao.db.Model(&entity.Organization{}).
+		Create(&entityOrganization).Error
+
+	if err != nil {
+		return errors.New("创建组织失败")
+	}
+
 	return nil
 }
 
-func (gor GORMOrganizationRepository) FindOrganizationsByMemberId(ctx context.Context, memberId int64) ([]model.Organization, error) {
-	var entities []entity.OrganizationEntity
-	err := gor.db.WithContext(ctx).
+func (dao *GORMOrganizationDAO) FindByMemberId(ctx context.Context, memberId int64) ([]*model.Organization, error) {
+
+	var domainOrganizations []*model.Organization
+
+	var entityOrganizations []*entity.Organization
+
+	err := dao.db.Model(&entity.Organization{}).
 		Where("member_id = ?", memberId).
-		Find(&entities).Error
+		Find(&entityOrganizations).Error
 
 	if err != nil {
-		return nil, err
+		return nil, errors.New("查询组织失败")
 	}
 
-	// 转换为领域模型
-	organizations := make([]model.Organization, len(entities))
-	for i, e := range entities {
-		org := e.ToModel()
-		organizations[i] = *org
+	er := copier.Copy(&domainOrganizations, &entityOrganizations)
+	if er != nil {
+		return nil, errors.New("组织模型与实体copy失败")
 	}
 
-	return organizations, nil
+	return domainOrganizations, nil
+
+}
+
+func NewGORMOrganizationRepository(db *gorm.DB) repository.OrganizationRepo {
+	return &GORMOrganizationDAO{db: db}
 }

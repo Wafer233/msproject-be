@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"fmt"
 	"github.com/Wafer233/msproject-be/api-gateway/internal/dto"
 	pb "github.com/Wafer233/msproject-be/api-gateway/proto/login"
 	"github.com/Wafer233/msproject-be/common"
@@ -87,7 +88,9 @@ func (handler *LoginHttpHandler) Register(ctx *gin.Context) {
 	result := &common.Result{}
 
 	dtoReq := &dto.RegisterRequest{}
-	err := ctx.ShouldBind(&dtoReq)
+	err := ctx.Bind(&dtoReq)
+
+	fmt.Print(dtoReq)
 	if err != nil {
 		ctx.JSON(http.StatusOK, result.Fail(common.LoginRegisterRequestBindFail, "注册请求绑定失败"))
 		return

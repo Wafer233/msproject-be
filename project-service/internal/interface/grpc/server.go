@@ -11,7 +11,7 @@ import (
 )
 
 // GrpcServer 处理gRPC服务器的设置和生命周期
-type GrpcServer struct {
+type UserServer struct {
 	server  *grpc.Server
 	address string
 

@@ -6,13 +6,13 @@ import (
 )
 
 func Verify(email, mobile, password1, password2 string) error {
-	if VerifyEmailFormat(email) {
+	if !VerifyEmailFormat(email) {
 		return errors.New("邮箱格式不正确")
 	}
-	if VerifyMobile(mobile) {
+	if !VerifyMobile(mobile) {
 		return errors.New("手机号格式不正确")
 	}
-	if VerifyPassword(password1, password2) {
+	if !VerifyPassword(password1, password2) {
 		return errors.New("两次密码输入不一致")
 	}
 	return nil
