@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/Wafer233/msproject-be/user-service/config"
 	"github.com/Wafer233/msproject-be/user-service/internal/domain/model"
 	repo "github.com/Wafer233/msproject-be/user-service/internal/domain/repository"
@@ -76,40 +75,36 @@ func (service *JWTTokenService) ValidateToken(ctx context.Context, req *model.Lo
 		return nil, nil, er
 	}
 
-	zap.L().Info("生成token成功")
+	zap.L().Info("验证token成功")
 	return domainMember, domainOrganizations, nil
 }
 
 func (service *JWTTokenService) ParseToken(ctx context.Context, req *model.LoginReq, tokenStr string) (string, error) {
-	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
-		// Don't forget to validate the alg is what you expect:
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
-		}
-
-		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
+	claims := &model.CustomClaims{}
+	token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(service.accessSecret), nil
 	})
+
 	if err != nil {
-		zap.L().Warn("jWT官方解析token失败")
-		return "", err
-	}
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		val := claims["token"].(string)
-		exp := int64(claims["exp"].(float64))
-		if exp <= time.Now().Unix() {
-			zap.L().Warn("token过期了")
-			return "", errors.New("token过期了")
-		}
-		if claims["ip"] != req.Ip {
-			zap.L().Warn("ip不合法")
-			return "", errors.New("ip不合法")
-		}
-		return val, nil
-	} else {
+		zap.L().Warn("解析token失败", zap.Error(err))
 		return "", err
 	}
 
+	if !token.Valid {
+		zap.L().Warn("token无效")
+		return "", errors.New("token无效")
+	}
+
+	zap.L().Info("token解析通过，签名&结构有效")
+
+	// 校验 IP
+	if claims.Ip != req.Ip {
+		zap.L().Warn("ip不合法")
+		return "", errors.New("ip不合法")
+	}
+
+	zap.L().Info("token全部校验通过，返回用户id")
+	return claims.Token, nil
 }
 
 func (service *JWTTokenService) GenerateToken(
@@ -121,55 +116,65 @@ func (service *JWTTokenService) GenerateToken(
 
 	memberIdStr := strconv.FormatInt(member.Id, 10)
 
-	// Create access token
-	accessExpTime := time.Duration(service.accessExp*3600*24) * time.Second
-	accessExp := time.Now().Add(accessExpTime).Unix()
-	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"token": memberIdStr,
-		"exp":   accessExp,
-		"ip":    req.Ip,
+	// 计算 access token 的过期时间（精确到时间对象）
+	accessExpDuration := time.Duration(service.accessExp*3600*24) * time.Second
+	accessExpTime := time.Now().Add(accessExpDuration)
+
+	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, &model.CustomClaims{
+		Token: memberIdStr,
+		Ip:    req.Ip,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(accessExpTime),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
+		},
 	})
 	accessTokenStr, err := accessToken.SignedString([]byte(service.accessSecret))
 	if err != nil {
-		zap.L().Warn("调用token进入密钥失败")
+		zap.L().Warn("生成 accessToken 签名失败", zap.Error(err))
 		return nil, err
 	}
 
-	// Create refresh token
-	refreshExpTime := time.Duration(service.refreshExp*3600*24) * time.Second
-	refreshExp := time.Now().Add(refreshExpTime).Unix()
-	refreshToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"token": memberIdStr,
-		"exp":   refreshExp,
+	// 计算 refresh token 的过期时间
+	refreshExpDuration := time.Duration(service.refreshExp*3600*24) * time.Second
+	refreshExpTime := time.Now().Add(refreshExpDuration)
+
+	refreshToken := jwt.NewWithClaims(jwt.SigningMethodHS256, &model.CustomClaims{
+		Token: memberIdStr,
+		Ip:    req.Ip,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(refreshExpTime),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
+		},
 	})
 	refreshTokenStr, err := refreshToken.SignedString([]byte(service.refreshSecret))
 	if err != nil {
-		zap.L().Warn("调用token更新密钥失败")
+		zap.L().Warn("生成 refreshToken 签名失败", zap.Error(err))
 		return nil, err
 	}
 
-	// Async cache write
+	// 异步写入缓存
 	go func() {
 		if memberJSON, err := json.Marshal(member); err == nil {
-			er := service.tokenRepo.Put(ctx, model.KeyMember+"::"+memberIdStr, string(memberJSON), accessExpTime)
+			er := service.tokenRepo.Put(ctx, model.KeyMember+"::"+memberIdStr, string(memberJSON), accessExpDuration)
 			if er != nil {
-				zap.L().Error("token缓存用户Id失败")
+				zap.L().Error("token缓存用户失败", zap.Error(er))
 			}
 		}
 		if orgJSON, err := json.Marshal(organizations); err == nil {
-			er := service.tokenRepo.Put(ctx, model.KeyOrganization+"::"+memberIdStr, string(orgJSON), accessExpTime)
+			er := service.tokenRepo.Put(ctx, model.KeyOrganization+"::"+memberIdStr, string(orgJSON), accessExpDuration)
 			if er != nil {
-				zap.L().Error("token缓存组织失败")
+				zap.L().Error("token缓存组织失败", zap.Error(er))
 			}
 		}
 	}()
 
 	zap.L().Info("生成token成功")
+
 	return &model.TokenPair{
 		AccessToken:  accessTokenStr,
 		RefreshToken: refreshTokenStr,
-		AccessExp:    accessExp,
-		RefreshExp:   refreshExp,
+		AccessExp:    accessExpTime.Unix(),
+		RefreshExp:   refreshExpTime.Unix(),
 	}, nil
 }
 

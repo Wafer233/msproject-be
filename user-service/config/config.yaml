@@ -20,9 +20,10 @@ mysql:
   dbname: "user-service"
 
 jwt:
-  secretKey: "wafer-secret"
-  accessTokenDuration: 15m
-  refreshTokenDuration: 168h
+  accessExp: 7
+  refreshExp: 14
+  accessSecret: wafer_access_secret
+  refreshSecret: wafer_refresh_secret
 
 grpc:
   addr: "127.0.0.1:8080"

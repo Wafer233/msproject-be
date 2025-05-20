@@ -22,9 +22,9 @@ func NewProjectRouter(
 }
 
 func (router *ProjectRouter) Register(engine *gin.Engine) {
-	engine.Use(router.middleware.TokenVerify())
-
-	engine.POST("/index", router.projHandler.Index)
-	engine.POST("/project/selfList", router.projHandler.SelfProject)
-	engine.POST("/project", router.projHandler.SelfProject)
+	group := engine.Group("/project")
+	group.Use(router.middleware.TokenVerify())
+	group.POST("/index", router.projHandler.Index)
+	group.POST("/project/selfList", router.projHandler.SelfProject)
+	group.POST("/project", router.projHandler.SelfProject)
 }

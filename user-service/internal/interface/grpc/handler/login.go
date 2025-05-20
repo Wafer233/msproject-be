@@ -156,7 +156,7 @@ func (handler *LoginGRPCHandler) TokenVerify(ctx context.Context, pbReq *pb.Toke
 
 	domainMember, domainOrganization, err := handler.tokenSvc.ValidateToken(ctx, domainReq)
 	if err != nil {
-		zap.L().Error("token服务失败", zap.Error(err))
+		zap.L().Warn("token服务失败", zap.Error(err))
 		return nil, errors.New("token服务失败")
 	}
 	pbMember := &pb.Member{}
