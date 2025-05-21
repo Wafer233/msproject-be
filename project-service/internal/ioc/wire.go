@@ -13,12 +13,15 @@ func InitApp() *App {
 		//db
 		ProvideDB,
 		//grpc
-		ProvideGrpcServer,
+		ProvideServiceRegister,
+		ProvideProjectServer,
+		//handler
+		ProvideProjectGRPCHandler,
 		//repositories
-		ProvideGORMMenuRepository,
-		ProvideGORMProjectRepository,
+		ProvideGORMMenuRepo,
+		ProvideGORMProjectRepo,
 		//services
-		ProvideDefaultMenuService,
+		ProvideDefaultIndexService,
 		ProvideDefaultProjectService,
 
 		wire.Struct(new(App), "*"),

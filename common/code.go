@@ -21,9 +21,10 @@ const (
 	LoginGetOrgListServiceFail    = 10032
 	LoginGetOrgListCopyFail       = 10033
 
-	ProjectIndexFail        = 20000
-	ProjectIndexServiceFail = 20001
-	ProjectIndexCopyFail    = 20002
+	ProjectIndexFail         = 20000
+	ProjectIndexServiceFail  = 20001
+	ProjectIndexCopyFail     = 20002
+	ProjectIndexPageBindFail = 20003
 
 	ProjectSelfProjectFail        = 20010
 	ProjectSelfProjectServiceFail = 20011

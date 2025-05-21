@@ -81,6 +81,7 @@ func (service *JWTTokenService) ValidateToken(ctx context.Context, req *model.Lo
 
 func (service *JWTTokenService) ParseToken(ctx context.Context, req *model.LoginReq, tokenStr string) (string, error) {
 	claims := &model.CustomClaims{}
+
 	token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(service.accessSecret), nil
 	})
@@ -169,7 +170,7 @@ func (service *JWTTokenService) GenerateToken(
 	}()
 
 	zap.L().Info("生成token成功")
-
+	zap.L().Info("token:" + accessTokenStr)
 	return &model.TokenPair{
 		AccessToken:  accessTokenStr,
 		RefreshToken: refreshTokenStr,

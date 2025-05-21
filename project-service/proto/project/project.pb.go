@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        v3.21.12
-// source: api-gateway/proto/project/project.proto
+// source: project-service/proto/project/project.proto
 
 package project
 
@@ -30,7 +30,7 @@ type IndexRequest struct {
 
 func (x *IndexRequest) Reset() {
 	*x = IndexRequest{}
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[0]
+	mi := &file_project_service_proto_project_project_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +42,7 @@ func (x *IndexRequest) String() string {
 func (*IndexRequest) ProtoMessage() {}
 
 func (x *IndexRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[0]
+	mi := &file_project_service_proto_project_project_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +55,7 @@ func (x *IndexRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IndexRequest.ProtoReflect.Descriptor instead.
 func (*IndexRequest) Descriptor() ([]byte, []int) {
-	return file_api_gateway_proto_project_project_proto_rawDescGZIP(), []int{0}
+	return file_project_service_proto_project_project_proto_rawDescGZIP(), []int{0}
 }
 
 type IndexResponse struct {
@@ -67,7 +67,7 @@ type IndexResponse struct {
 
 func (x *IndexResponse) Reset() {
 	*x = IndexResponse{}
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[1]
+	mi := &file_project_service_proto_project_project_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -79,7 +79,7 @@ func (x *IndexResponse) String() string {
 func (*IndexResponse) ProtoMessage() {}
 
 func (x *IndexResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[1]
+	mi := &file_project_service_proto_project_project_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -92,7 +92,7 @@ func (x *IndexResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IndexResponse.ProtoReflect.Descriptor instead.
 func (*IndexResponse) Descriptor() ([]byte, []int) {
-	return file_api_gateway_proto_project_project_proto_rawDescGZIP(), []int{1}
+	return file_project_service_proto_project_project_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *IndexResponse) GetMenus() []*Menu {
@@ -126,7 +126,7 @@ type SelfProjectRequest struct {
 
 func (x *SelfProjectRequest) Reset() {
 	*x = SelfProjectRequest{}
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[2]
+	mi := &file_project_service_proto_project_project_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -138,7 +138,7 @@ func (x *SelfProjectRequest) String() string {
 func (*SelfProjectRequest) ProtoMessage() {}
 
 func (x *SelfProjectRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[2]
+	mi := &file_project_service_proto_project_project_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -151,7 +151,7 @@ func (x *SelfProjectRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SelfProjectRequest.ProtoReflect.Descriptor instead.
 func (*SelfProjectRequest) Descriptor() ([]byte, []int) {
-	return file_api_gateway_proto_project_project_proto_rawDescGZIP(), []int{2}
+	return file_project_service_proto_project_project_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *SelfProjectRequest) GetMemberId() int64 {
@@ -269,7 +269,7 @@ type SelfProjectResponse struct {
 
 func (x *SelfProjectResponse) Reset() {
 	*x = SelfProjectResponse{}
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[3]
+	mi := &file_project_service_proto_project_project_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -281,7 +281,7 @@ func (x *SelfProjectResponse) String() string {
 func (*SelfProjectResponse) ProtoMessage() {}
 
 func (x *SelfProjectResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[3]
+	mi := &file_project_service_proto_project_project_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -294,7 +294,7 @@ func (x *SelfProjectResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SelfProjectResponse.ProtoReflect.Descriptor instead.
 func (*SelfProjectResponse) Descriptor() ([]byte, []int) {
-	return file_api_gateway_proto_project_project_proto_rawDescGZIP(), []int{3}
+	return file_project_service_proto_project_project_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *SelfProjectResponse) GetProjects() []*Project {
@@ -338,7 +338,7 @@ type Menu struct {
 
 func (x *Menu) Reset() {
 	*x = Menu{}
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[4]
+	mi := &file_project_service_proto_project_project_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -350,7 +350,7 @@ func (x *Menu) String() string {
 func (*Menu) ProtoMessage() {}
 
 func (x *Menu) ProtoReflect() protoreflect.Message {
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[4]
+	mi := &file_project_service_proto_project_project_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -363,7 +363,7 @@ func (x *Menu) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Menu.ProtoReflect.Descriptor instead.
 func (*Menu) Descriptor() ([]byte, []int) {
-	return file_api_gateway_proto_project_project_proto_rawDescGZIP(), []int{4}
+	return file_project_service_proto_project_project_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *Menu) GetId() int64 {
@@ -532,7 +532,7 @@ type Project struct {
 
 func (x *Project) Reset() {
 	*x = Project{}
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[5]
+	mi := &file_project_service_proto_project_project_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -544,7 +544,7 @@ func (x *Project) String() string {
 func (*Project) ProtoMessage() {}
 
 func (x *Project) ProtoReflect() protoreflect.Message {
-	mi := &file_api_gateway_proto_project_project_proto_msgTypes[5]
+	mi := &file_project_service_proto_project_project_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -557,7 +557,7 @@ func (x *Project) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Project.ProtoReflect.Descriptor instead.
 func (*Project) Descriptor() ([]byte, []int) {
-	return file_api_gateway_proto_project_project_proto_rawDescGZIP(), []int{5}
+	return file_project_service_proto_project_project_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *Project) GetId() int64 {
@@ -784,11 +784,11 @@ func (x *Project) GetCollected() int32 {
 	return 0
 }
 
-var File_api_gateway_proto_project_project_proto protoreflect.FileDescriptor
+var File_project_service_proto_project_project_proto protoreflect.FileDescriptor
 
-const file_api_gateway_proto_project_project_proto_rawDesc = "" +
+const file_project_service_proto_project_project_proto_rawDesc = "" +
 	"\n" +
-	"'api-gateway/proto/project/project.proto\x12\n" +
+	"+project-service/proto/project/project.proto\x12\n" +
 	"project.v1\"\x0e\n" +
 	"\fIndexRequest\"7\n" +
 	"\rIndexResponse\x12&\n" +
@@ -881,22 +881,22 @@ const file_api_gateway_proto_project_project_proto_rawDesc = "" +
 	"\tcollected\x18  \x01(\x05R\tcollected2\xa2\x01\n" +
 	"\x0eProjectService\x12>\n" +
 	"\x05Index\x12\x18.project.v1.IndexRequest\x1a\x19.project.v1.IndexResponse\"\x00\x12P\n" +
-	"\vSelfProject\x12\x1e.project.v1.SelfProjectRequest\x1a\x1f.project.v1.SelfProjectResponse\"\x00B<Z:github.com/Wafer233/msproject-be/api-gateway/proto/projectb\x06proto3"
+	"\vSelfProject\x12\x1e.project.v1.SelfProjectRequest\x1a\x1f.project.v1.SelfProjectResponse\"\x00B@Z>github.com/Wafer233/msproject-be/project-service/proto/projectb\x06proto3"
 
 var (
-	file_api_gateway_proto_project_project_proto_rawDescOnce sync.Once
-	file_api_gateway_proto_project_project_proto_rawDescData []byte
+	file_project_service_proto_project_project_proto_rawDescOnce sync.Once
+	file_project_service_proto_project_project_proto_rawDescData []byte
 )
 
-func file_api_gateway_proto_project_project_proto_rawDescGZIP() []byte {
-	file_api_gateway_proto_project_project_proto_rawDescOnce.Do(func() {
-		file_api_gateway_proto_project_project_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_gateway_proto_project_project_proto_rawDesc), len(file_api_gateway_proto_project_project_proto_rawDesc)))
+func file_project_service_proto_project_project_proto_rawDescGZIP() []byte {
+	file_project_service_proto_project_project_proto_rawDescOnce.Do(func() {
+		file_project_service_proto_project_project_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_project_service_proto_project_project_proto_rawDesc), len(file_project_service_proto_project_project_proto_rawDesc)))
 	})
-	return file_api_gateway_proto_project_project_proto_rawDescData
+	return file_project_service_proto_project_project_proto_rawDescData
 }
 
-var file_api_gateway_proto_project_project_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
-var file_api_gateway_proto_project_project_proto_goTypes = []any{
+var file_project_service_proto_project_project_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_project_service_proto_project_project_proto_goTypes = []any{
 	(*IndexRequest)(nil),        // 0: project.v1.IndexRequest
 	(*IndexResponse)(nil),       // 1: project.v1.IndexResponse
 	(*SelfProjectRequest)(nil),  // 2: project.v1.SelfProjectRequest
@@ -904,7 +904,7 @@ var file_api_gateway_proto_project_project_proto_goTypes = []any{
 	(*Menu)(nil),                // 4: project.v1.Menu
 	(*Project)(nil),             // 5: project.v1.Project
 }
-var file_api_gateway_proto_project_project_proto_depIdxs = []int32{
+var file_project_service_proto_project_project_proto_depIdxs = []int32{
 	4, // 0: project.v1.IndexResponse.menus:type_name -> project.v1.Menu
 	5, // 1: project.v1.SelfProjectResponse.projects:type_name -> project.v1.Project
 	4, // 2: project.v1.Menu.children:type_name -> project.v1.Menu
@@ -919,26 +919,26 @@ var file_api_gateway_proto_project_project_proto_depIdxs = []int32{
 	0, // [0:3] is the sub-list for field type_name
 }
 
-func init() { file_api_gateway_proto_project_project_proto_init() }
-func file_api_gateway_proto_project_project_proto_init() {
-	if File_api_gateway_proto_project_project_proto != nil {
+func init() { file_project_service_proto_project_project_proto_init() }
+func file_project_service_proto_project_project_proto_init() {
+	if File_project_service_proto_project_project_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_gateway_proto_project_project_proto_rawDesc), len(file_api_gateway_proto_project_project_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_project_service_proto_project_project_proto_rawDesc), len(file_project_service_proto_project_project_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_api_gateway_proto_project_project_proto_goTypes,
-		DependencyIndexes: file_api_gateway_proto_project_project_proto_depIdxs,
-		MessageInfos:      file_api_gateway_proto_project_project_proto_msgTypes,
+		GoTypes:           file_project_service_proto_project_project_proto_goTypes,
+		DependencyIndexes: file_project_service_proto_project_project_proto_depIdxs,
+		MessageInfos:      file_project_service_proto_project_project_proto_msgTypes,
 	}.Build()
-	File_api_gateway_proto_project_project_proto = out.File
-	file_api_gateway_proto_project_project_proto_goTypes = nil
-	file_api_gateway_proto_project_project_proto_depIdxs = nil
+	File_project_service_proto_project_project_proto = out.File
+	file_project_service_proto_project_project_proto_goTypes = nil
+	file_project_service_proto_project_project_proto_depIdxs = nil
 }

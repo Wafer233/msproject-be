@@ -5,14 +5,14 @@ type Project struct {
 	Cover              string
 	Name               string
 	Description        string
-	AccessControlType  string
+	AccessControlType  int
 	WhiteList          string
-	Order              int
+	Sort               int
 	Deleted            int
-	TemplateCode       string
+	TemplateCode       int
 	Schedule           float64
-	CreateTime         string
-	OrganizationCode   string
+	CreateTime         int64
+	OrganizationCode   int64
 	DeletedTime        string
 	Private            int
 	Prefix             string
@@ -27,7 +27,23 @@ type Project struct {
 	AutoUpdateSchedule int
 }
 
-// TableName 返回数据库表名
-func (*Project) TableName() string {
-	return "ms_project"
+func ToProjectMap(list []*Project) map[int64]*Project {
+	m := make(map[int64]*Project, len(list))
+	for _, v := range list {
+		m[v.Id] = v
+	}
+	return m
+}
+
+func (m *Project) GetAccessControlType() string {
+	if m.AccessControlType == 0 {
+		return "open"
+	}
+	if m.AccessControlType == 1 {
+		return "private"
+	}
+	if m.AccessControlType == 2 {
+		return "custom"
+	}
+	return ""
 }

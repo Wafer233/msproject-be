@@ -12,14 +12,14 @@ type LoginResponse struct {
 }
 
 type Member struct {
-	Name             string `json:"name"`
-	Mobile           string `json:"mobile"`
-	Status           int    `json:"status"`
-	Code             string `json:"code"`
-	Email            string `json:"email"`
-	CreateTime       string `json:"create_time"`
-	LastLoginTime    string `json:"last_login_time"`
-	OrganizationCode string `json:"organization_code"`
+	Name   string `json:"name"`
+	Mobile string `json:"mobile"`
+	Status int    `json:"status"`
+	Code   string `json:"code"`
+	//Email            string `json:"email"`
+	//CreateTime       string `json:"create_time"`
+	//LastLoginTime    string `json:"last_login_time"`
+	//OrganizationCode string `json:"organization_code"`
 }
 
 type TokenList struct {

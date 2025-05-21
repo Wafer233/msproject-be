@@ -25,8 +25,6 @@ func main() {
 	<-quit
 
 	zap.L().Info("Shutting down gRPC server...")
-
-	// 优雅关闭
 	app.GrpcServer.Stop()
 	zap.L().Info("Server exited")
 }

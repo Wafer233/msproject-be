@@ -1,6 +1,6 @@
 package model
 
-type ProjectCollectionModel struct {
+type ProjectCollection struct {
 	Id          int64
 	ProjectCode int64
 	MemberCode  int64

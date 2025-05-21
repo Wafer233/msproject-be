@@ -1,15 +1,15 @@
 package ioc
 
 import (
-	"github.com/Wafer233/msproject-be/project-service/internal/domain/repository"
-	impl "github.com/Wafer233/msproject-be/project-service/internal/infrastructure/repository"
+	repo "github.com/Wafer233/msproject-be/project-service/internal/domain/repository"
+	dao "github.com/Wafer233/msproject-be/project-service/internal/infrastructure/repository"
 	"gorm.io/gorm"
 )
 
-func ProvideGORMMenuRepository(db *gorm.DB) repository.MenuRepository {
-	return impl.NewGORMMenuRepository(db)
+func ProvideGORMMenuRepo(db *gorm.DB) repo.MenuRepo {
+	return dao.NewGORMMenuRepo(db)
 }
 
-func ProvideGORMProjectRepository(db *gorm.DB) repository.ProjectRepository {
-	return impl.NewGORMProjectRepository(db)
+func ProvideGORMProjectRepo(db *gorm.DB) repo.ProjectRepo {
+	return dao.NewGORMProjectRepo(db)
 }

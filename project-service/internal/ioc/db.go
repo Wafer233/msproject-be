@@ -22,7 +22,7 @@ func ProvideDB(cfg *config.Config) *gorm.DB {
 		panic("failed to connect to MySQL: " + err.Error())
 	}
 
-	// 可选自动迁移
+	// Auto-migrate tables
 	if err := entity.InitTable(db); err != nil {
 		panic("failed to auto-migrate tables: " + err.Error())
 	}

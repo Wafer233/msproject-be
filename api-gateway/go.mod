@@ -4,11 +4,16 @@ go 1.23.0
 
 toolchain go1.23.8
 
+replace github.com/Wafer233/msproject-be/api-gateway => ./
+
+replace github.com/Wafer233/msproject-be/common => ../common
+
 require (
 	github.com/Wafer233/msproject-be/common v0.0.0-20250422132014-04578749f2da
 	github.com/gin-gonic/gin v1.10.0
 	github.com/google/wire v0.6.0
 	github.com/jinzhu/copier v0.4.0
+	github.com/prometheus/client_golang v1.22.0
 	github.com/spf13/viper v1.20.1
 	go.uber.org/zap v1.27.0
 	google.golang.org/grpc v1.72.0
@@ -38,7 +43,6 @@ require (
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
-	github.com/prometheus/client_golang v1.22.0 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.62.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect

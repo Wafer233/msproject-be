@@ -11,13 +11,15 @@ package ioc
 func InitApp() *App {
 	config := ProvideViperConfig()
 	db := ProvideDB(config)
-	menuRepository := ProvideGORMMenuRepository(db)
-	menuService := ProvideDefaultMenuService(menuRepository)
-	projectRepository := ProvideGORMProjectRepository(db)
-	projectService := ProvideDefaultProjectService(projectRepository)
-	grpcServer := ProvideGrpcServer(config, menuService, projectService)
+	menuRepo := ProvideGORMMenuRepo(db)
+	indexService := ProvideDefaultIndexService(menuRepo)
+	projectRepo := ProvideGORMProjectRepo(db)
+	projectService := ProvideDefaultProjectService(projectRepo)
+	projectGRPCHandler := ProvideProjectGRPCHandler(indexService, projectService)
+	serviceRegister := ProvideServiceRegister(projectGRPCHandler)
+	projectServer := ProvideProjectServer(config, serviceRegister)
 	app := &App{
-		GrpcServer: grpcServer,
+		GrpcServer: projectServer,
 	}
 	return app
 }

@@ -63,6 +63,8 @@ func (dao *GORMMemberDAO) Save(ctx context.Context, member *model.Member) error 
 		return errors.New("创建member失败")
 	}
 
+	member.Id = entityMember.ID
+
 	return nil
 }
 

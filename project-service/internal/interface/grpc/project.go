@@ -1,50 +1,52 @@
 package grpc
 
 import (
-	"context"
-	"github.com/Wafer233/msproject-be/project-service/internal/application/service"
-	pb "github.com/Wafer233/msproject-be/project-service/proto/project"
-	"github.com/jinzhu/copier"
+	"fmt"
 	"go.uber.org/zap"
-	"strconv"
+	"google.golang.org/grpc"
+	"net"
 )
 
-type ProjectServiceServer struct {
-	pb.UnimplementedProjectServiceServer
-	projectService service.ProjectService
+type ProjectServer struct {
+	address  string
+	server   *grpc.Server
+	register *ServiceRegister
 }
 
-func NewProjectServiceServer(projectService service.ProjectService) *ProjectServiceServer {
-	return &ProjectServiceServer{
-		projectService: projectService,
+func NewProjectServer(
+	address string,
+	register *ServiceRegister,
+
+) *ProjectServer {
+	return &ProjectServer{
+		address:  address,
+		register: register,
 	}
 }
 
-func (s *ProjectServiceServer) GetProjectsByMemberId(ctx context.Context, req *pb.ProjectListRequest) (*pb.ProjectListResponse, error) {
-	// 调用应用服务
-	response, err := s.projectService.GetProjectsByMemberId(ctx, req.MemberId, req.Page, req.PageSize)
+func (s *ProjectServer) Start() error {
+	listener, err := net.Listen("tcp", s.address)
 	if err != nil {
-		zap.L().Error("获取用户项目失败", zap.Error(err))
-		return nil, err
+		return fmt.Errorf("failed to listen on %s: %w", s.address, err)
 	}
 
-	// 转换DTO到Proto
-	var pbProjects []*pb.ProjectMessage
-	for _, dto := range response.List {
-		pbProject := &pb.ProjectMessage{}
-		if err := copier.Copy(pbProject, dto); err != nil {
-			zap.L().Error("复制项目数据失败", zap.Error(err))
-			return nil, err
-		}
+	s.server = grpc.NewServer()
+	s.register.RegisterAll(s.server)
 
-		// 重要: 简化处理，直接将ID转为字符串赋值给Code
-		pbProject.Code = strconv.FormatInt(pbProject.Id, 10)
+	zap.L().Info("gRPC server started", zap.String("address", s.address))
 
-		pbProjects = append(pbProjects, pbProject)
+	// Serve 是阻塞的，正常运行时不会返回
+	if err := s.server.Serve(listener); err != nil {
+		zap.L().Fatal("gRPC server stopped unexpectedly", zap.Error(err))
+		return err
 	}
 
-	return &pb.ProjectListResponse{
-		List:  pbProjects,
-		Total: response.Total,
-	}, nil
+	return nil
+}
+
+func (s *ProjectServer) Stop() {
+	if s.server != nil {
+		zap.L().Info("Stopping gRPC server...")
+		s.server.GracefulStop()
+	}
 }
