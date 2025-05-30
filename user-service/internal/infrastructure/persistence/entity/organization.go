@@ -1,17 +1,17 @@
 package entity
 
 type Organization struct {
-	ID          int64  `gorm:"column:id;primaryKey;autoIncrement"`
-	Name        string `gorm:"column:name;type:varchar(255)"`
-	Avatar      string `gorm:"column:avatar;type:varchar(511)"`
-	Description string `gorm:"column:description;type:varchar(500)"`
-	MemberID    int64  `gorm:"column:member_id;type:bigint"`
-	CreateTime  int64  `gorm:"column:create_time;type:bigint"`
-	Personal    int8   `gorm:"column:personal;type:tinyint(1);default:0"`
-	Address     string `gorm:"column:address;type:varchar(100)"`
-	Province    int    `gorm:"column:province;type:int;default:0"`
-	City        int    `gorm:"column:city;type:int;default:0"`
-	Area        int    `gorm:"column:area;type:int;default:0"`
+	ID          int64  `gorm:"primaryKey;column:id;autoIncrement;comment:主键"`
+	Name        string `gorm:"type:varchar(255);comment:名称"`
+	Avatar      string `gorm:"type:varchar(511);comment:头像"`
+	Description string `gorm:"type:varchar(500);comment:描述"`
+	MemberID    int64  `gorm:"column:member_id;comment:拥有者"`    // 外键字段
+	CreateTime  int64  `gorm:"column:create_time;comment:创建时间"` // 保留时间戳类型
+	Personal    int32  `gorm:"type:tinyint(1);default:0;comment:是否个人项目"`
+	Address     string `gorm:"type:varchar(100);comment:地址"`
+	Province    int32  `gorm:"type:int;default:0;comment:省"`
+	City        int32  `gorm:"type:int;default:0;comment:市"`
+	Area        int32  `gorm:"type:int;default:0;comment:区"`
 }
 
 // 表名定义
